@@ -13,7 +13,8 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-whitelist-filter"         % "3.1.0-play-26",
     "uk.gov.hmrc"       %% "play-nunjucks"                 % "0.23.0-play-26",
     "uk.gov.hmrc"       %% "play-nunjucks-viewmodel"       % "0.8.0-play-26",
-    "org.webjars.npm"   % "govuk-frontend"                 % "3.3.0"
+    "org.webjars.npm"   % "govuk-frontend"                 % "3.3.0",
+    "com.lucidchart"    %% "xtract"                        % "2.2.1"
   )
 
   val test = Seq(
