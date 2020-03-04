@@ -18,7 +18,7 @@ package models
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import org.scalatest.{FreeSpec, MustMatchers}
 
-import scala.xml.XML
+import scala.xml.{Elem, XML}
 
 class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
@@ -34,6 +34,17 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
   private val traderWithWithoutEori = TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
 
+  private val goodsItem = GoodsItem(
+    itemNumber        = 1,
+    commodityCode     = None,
+    description       = "Flowers",
+    grossMass         = Some("1000"),
+    netMass           = Some("999"),
+    producedDocuments = Some(Seq(ProducedDocument("235", Some("Ref."), None)))
+  )
+
+  private val seal = Seals(1, Seq("Seals01"))
+
   "UnloadingPermission" - {
 
     "convert xml string into UnloadingPermission for mandatory values only" in {
@@ -47,9 +58,12 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            traderWithEori,
-            presentationOffice = "GB000060"
-          ))
+            traderAtDestination = traderWithEori,
+            presentationOffice = "GB000060",
+            seals = seal,
+            goodsItems = Seq(goodsItem)
+          )
+        )
     }
 
     "convert xml string into UnloadingPermission for all values" in {
@@ -63,14 +77,15 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            traderWithEori,
-            presentationOffice = "GB000060"
+            traderAtDestination = traderWithEori,
+            presentationOffice = "GB000060",
+            seals = seal,
+            goodsItems = Seq(goodsItem)
           ))
     }
-
   }
 
-  val fullXmlString = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
+  val fullXmlString: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                   |<SynVerNumMES2>3</SynVerNumMES2>
                   |<MesSenMES3>NTA.GB</MesSenMES3>
                   |<MesRecMES6>SYST17B-NCTS_EU_EXIT</MesRecMES6>
@@ -144,7 +159,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                   |</CC043A>
                   |""".stripMargin
 
-  val mandatoryXmlString = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
+  val mandatoryXmlString: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                         |<SynVerNumMES2>3</SynVerNumMES2>
                         |<MesSenMES3>NTA.GB</MesSenMES3>
                         |<MesRecMES6>SYST17B-NCTS_EU_EXIT</MesRecMES6>
@@ -216,7 +231,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                         |</CC043A>
                         |""".stripMargin
 
-  val fullXml      = XML.loadString(fullXmlString)
-  val mandatoryXml = XML.loadString(mandatoryXmlString)
+  val fullXml: Elem      = XML.loadString(fullXmlString)
+  val mandatoryXml: Elem = XML.loadString(mandatoryXmlString)
 
 }
