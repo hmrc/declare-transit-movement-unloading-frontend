@@ -20,18 +20,27 @@ import cats.syntax.all._
 
 //TODO: Add in mandatory fields and  update paths in xmlReader
 case class UnloadingPermission(
-  messageId: String,
-  mrn: String,
-  traderAtDestination: String,
-  customsOffice: String
+  movementReferenceNumber: String,
+  transportIdentity: Option[String],
+  transportCountry: Option[String],
+  numberOfItems: Int,
+  numberOfPackages: Int,
+  grossMass: String, //TODO:Does this need to be BigDecimal
+  // traderAtDestination: TraderAtDestination,
+  presentationOffice: String
+  // seals: Seq[String],
+  //goodsItems: NonEmptyList[GoodsItem]
 )
 
 object UnloadingPermission {
 
   implicit val xmlReader: XmlReader[UnloadingPermission] = (
-    (__ \ "messageId").read[String],
-    (__ \ "DocNumHEA5").read[String],
-    (__ \ "TRADESTRD" \ "NamTRD7").read[String],
-    (__ \ "<CUSOFFDEPEPT>" \ "<RefNumEPT1>").read[String]
+    (__ \ "HEAHEA" \ "DocNumHEA5").read[String],
+    (__ \ "HEAHEA" \ "IdeOfMeaOfTraAtDHEA78").read[String].optional,
+    (__ \ "HEAHEA" \ "NatOfMeaOfTraAtDHEA80").read[String].optional,
+    (__ \ "HEAHEA" \ "TotNumOfIteHEA305").read[Int],
+    (__ \ "HEAHEA" \ "TotNumOfPacHEA306").read[Int],
+    (__ \ "HEAHEA" \ "TotGroMasHEA307").read[String],
+    (__ \ "CUSOFFPREOFFRES" \ "RefNumRES1").read[String]
   ).mapN(apply _)
 }
