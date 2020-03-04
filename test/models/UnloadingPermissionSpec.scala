@@ -30,6 +30,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     * can we generate test xml strings?
     */
   val testXml = XML.loadString("<CC043A><MesTypMES20>ie047</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5></HEAHEA></CC043A>")
+  val traderWithEori = ("GB1639100770002",Some("The Luggage Carriers"),Some("225 Suedopolish Yard,"),Some("SS8 2BB"),Some(","),Some("GB"))
+  val traderWithWithoutEori = ("GB1639100770002",Some("The Luggage Carriers"),Some("225 Suedopolish Yard,"),Some("SS8 2BB"),Some(","),Some(GB"))
 
   "UnloadingPermission" - {
 
@@ -44,7 +46,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            presentationOffice      = "GB000060"
+            TraderAtDestinationWithEori(traderWithEori),
+            presentationOffice = "GB000060"
           ))
     }
 
@@ -59,7 +62,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            presentationOffice      = "GB000060"
+            TraderAtDestinationWithEori(traderWithWithoutEori),
+            presentationOffice = "GB000060"
           ))
     }
 

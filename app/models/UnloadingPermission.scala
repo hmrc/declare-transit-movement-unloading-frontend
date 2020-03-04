@@ -26,7 +26,7 @@ case class UnloadingPermission(
   numberOfItems: Int,
   numberOfPackages: Int,
   grossMass: String, //TODO:Does this need to be BigDecimal
-  // traderAtDestination: TraderAtDestination,
+  traderAtDestination: TraderAtDestination,
   presentationOffice: String
   // seals: Seq[String],
   //goodsItems: NonEmptyList[GoodsItem]
@@ -41,6 +41,10 @@ object UnloadingPermission {
     (__ \ "HEAHEA" \ "TotNumOfIteHEA305").read[Int],
     (__ \ "HEAHEA" \ "TotNumOfPacHEA306").read[Int],
     (__ \ "HEAHEA" \ "TotGroMasHEA307").read[String],
+    (__ \ "TRADESTRD").read[TraderAtDestination],
     (__ \ "CUSOFFPREOFFRES" \ "RefNumRES1").read[String]
-  ).mapN(apply _)
+  ).mapN(apply)
 }
+
+//TODO: Add TraderAtDestination in (copy from reference service)
+//Add xml reader etc, etc
