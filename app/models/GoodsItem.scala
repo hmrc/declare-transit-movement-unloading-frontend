@@ -27,10 +27,10 @@ final case class GoodsItem(
   description: String,
   grossMass: Option[String], //todo does this need to be a bigDecimal
   netMass: Option[String], //todo does this need to be a bigDecimal
-  producedDocuments: Option[Seq[ProducedDocument]]
+  producedDocuments: Option[Seq[ProducedDocument]],
+  containers: Option[Seq[String]],
+  packages: Packages
   /*
-  specialMentions: Seq[SpecialMention],
-  containers: Seq[String],
   packages: NonEmptyList[Package]
   <!-- Leaf: Sensitive goods code -->
 <!ELEMENT SenGooCodSD22 (#PCDATA)>
@@ -46,6 +46,8 @@ object GoodsItem {
     (__ \ "GooDesGDS23").read[String],
     (__ \ "GroMasGDS46").read[String].optional,
     (__ \ "NetMasGDS48").read[String].optional,
-    (__ \ "PRODOCDC2").read(seq[ProducedDocument]).optional
+    (__ \ "PRODOCDC2").read(seq[ProducedDocument]).optional,
+    (__ \ "ConNumNR21").read(seq[String]).optional,
+    (__ \ "PACGS2").read[Packages]
   ).mapN(apply)
 }

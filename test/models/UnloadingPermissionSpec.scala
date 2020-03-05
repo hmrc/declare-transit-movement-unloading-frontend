@@ -34,13 +34,17 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
   private val traderWithWithoutEori = TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
 
+  private val packages = Packages(Some("Ref."), "BX", Some(1), None)
+
   private val goodsItem = GoodsItem(
     itemNumber        = 1,
     commodityCode     = None,
     description       = "Flowers",
     grossMass         = Some("1000"),
     netMass           = Some("999"),
-    producedDocuments = Some(Seq(ProducedDocument("235", Some("Ref."), None)))
+    producedDocuments = Some(Seq(ProducedDocument("235", Some("Ref."), None))),
+    Some(Seq.empty),
+    packages
   )
 
   private val seal = Seals(1, Seq("Seals01"))
@@ -58,10 +62,10 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            traderAtDestination = traderWithEori,
-            presentationOffice = "GB000060",
-            seals = seal,
-            goodsItems = Seq(goodsItem)
+            traderAtDestination     = traderWithEori,
+            presentationOffice      = "GB000060",
+            seals                   = seal,
+            goodsItems              = Seq(goodsItem)
           )
         )
     }
@@ -77,10 +81,10 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            traderAtDestination = traderWithEori,
-            presentationOffice = "GB000060",
-            seals = seal,
-            goodsItems = Seq(goodsItem)
+            traderAtDestination     = traderWithEori,
+            presentationOffice      = "GB000060",
+            seals                   = seal,
+            goodsItems              = Seq(goodsItem)
           ))
     }
   }
