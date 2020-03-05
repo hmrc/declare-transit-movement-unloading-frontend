@@ -44,7 +44,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     netMass           = Some("999"),
     producedDocuments = Some(Seq(ProducedDocument("235", Some("Ref."), None))),
     Some(Seq.empty),
-    packages
+    packages,
+    Some(Seq.empty)
   )
 
   private val seal = Seals(1, Seq("Seals01"))
