@@ -15,6 +15,7 @@
  */
 
 package models
+import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import org.scalatest.{FreeSpec, MustMatchers}
 
@@ -66,7 +67,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             traderAtDestination     = traderWithEori,
             presentationOffice      = "GB000060",
             seals                   = seal,
-            goodsItems              = Seq(goodsItem)
+            goodsItems              = NonEmptyList(goodsItem, Nil)
           )
         )
     }
@@ -85,7 +86,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             traderAtDestination     = traderWithEori,
             presentationOffice      = "GB000060",
             seals                   = seal,
-            goodsItems              = Seq(goodsItem)
+            goodsItems              = NonEmptyList(goodsItem, Nil)
           ))
     }
   }
