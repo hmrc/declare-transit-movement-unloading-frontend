@@ -37,13 +37,15 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
   private val packages = Packages(Some("Ref."), "BX", Some(1), None)
 
+  private val producedDocuments = ProducedDocument("235", Some("Ref."), None)
+
   private val goodsItem = GoodsItem(
     itemNumber        = 1,
     commodityCode     = None,
     description       = "Flowers",
     grossMass         = Some("1000"),
     netMass           = Some("999"),
-    producedDocuments = Some(Seq(ProducedDocument("235", Some("Ref."), None))),
+    producedDocuments = NonEmptyList(producedDocuments, Nil),
     Some(Seq.empty),
     packages,
     Some(Seq.empty)
