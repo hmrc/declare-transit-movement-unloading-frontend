@@ -15,7 +15,10 @@
  */
 
 package models
+import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{__, XmlReader}
+import com.lucidchart.open.xtract.XmlReader._
+
 import cats.syntax.all._
 
 //TODO: Add in mandatory fields and  update paths in xmlReader
@@ -27,9 +30,9 @@ case class UnloadingPermission(
   numberOfPackages: Int,
   grossMass: String, //TODO:Does this need to be BigDecimal
   traderAtDestination: TraderAtDestination,
-  presentationOffice: String
-  // seals: Seq[String],
-  //goodsItems: NonEmptyList[GoodsItem]
+  presentationOffice: String,
+  seals: Seals,
+  goodsItems: Seq[GoodsItem] //TODO: This should be a nonempty list?
 )
 
 object UnloadingPermission {
@@ -42,7 +45,9 @@ object UnloadingPermission {
     (__ \ "HEAHEA" \ "TotNumOfPacHEA306").read[Int],
     (__ \ "HEAHEA" \ "TotGroMasHEA307").read[String],
     (__ \ "TRADESTRD").read[TraderAtDestination],
-    (__ \ "CUSOFFPREOFFRES" \ "RefNumRES1").read[String]
+    (__ \ "CUSOFFPREOFFRES" \ "RefNumRES1").read[String],
+    (__ \ "SEAINFSLI").read[Seals],
+    (__ \ "GOOITEGDS").read(seq[GoodsItem])
   ).mapN(apply)
 }
 

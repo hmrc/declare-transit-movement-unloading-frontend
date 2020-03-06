@@ -18,7 +18,7 @@ package models
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import org.scalatest.{FreeSpec, MustMatchers}
 
-import scala.xml.XML
+import scala.xml.{Elem, XML}
 
 class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
@@ -29,9 +29,26 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     * convert with optional values
     * can we generate test xml strings?
     */
-  val testXml = XML.loadString("<CC043A><MesTypMES20>ie047</MesTypMES20><HEAHEA><DocNumHEA5>19IT02110010007827</DocNumHEA5></HEAHEA></CC043A>")
-  val traderWithEori = ("GB1639100770002",Some("The Luggage Carriers"),Some("225 Suedopolish Yard,"),Some("SS8 2BB"),Some(","),Some("GB"))
-  val traderWithWithoutEori = ("GB1639100770002",Some("The Luggage Carriers"),Some("225 Suedopolish Yard,"),Some("SS8 2BB"),Some(","),Some(GB"))
+  private val traderWithEori =
+    TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
+
+  private val traderWithWithoutEori = TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
+
+  private val packages = Packages(Some("Ref."), "BX", Some(1), None)
+
+  private val goodsItem = GoodsItem(
+    itemNumber        = 1,
+    commodityCode     = None,
+    description       = "Flowers",
+    grossMass         = Some("1000"),
+    netMass           = Some("999"),
+    producedDocuments = Some(Seq(ProducedDocument("235", Some("Ref."), None))),
+    Some(Seq.empty),
+    packages,
+    Some(Seq.empty)
+  )
+
+  private val seal = Seals(1, Seq("Seals01"))
 
   "UnloadingPermission" - {
 
@@ -46,9 +63,12 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            TraderAtDestinationWithEori(traderWithEori),
-            presentationOffice = "GB000060"
-          ))
+            traderAtDestination     = traderWithEori,
+            presentationOffice      = "GB000060",
+            seals                   = seal,
+            goodsItems              = Seq(goodsItem)
+          )
+        )
     }
 
     "convert xml string into UnloadingPermission for all values" in {
@@ -62,14 +82,15 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             numberOfItems           = 1,
             numberOfPackages        = 1,
             grossMass               = "1000",
-            TraderAtDestinationWithEori(traderWithWithoutEori),
-            presentationOffice = "GB000060"
+            traderAtDestination     = traderWithEori,
+            presentationOffice      = "GB000060",
+            seals                   = seal,
+            goodsItems              = Seq(goodsItem)
           ))
     }
-
   }
 
-  val fullXmlString = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
+  val fullXmlString: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                   |<SynVerNumMES2>3</SynVerNumMES2>
                   |<MesSenMES3>NTA.GB</MesSenMES3>
                   |<MesRecMES6>SYST17B-NCTS_EU_EXIT</MesRecMES6>
@@ -143,7 +164,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                   |</CC043A>
                   |""".stripMargin
 
-  val mandatoryXmlString = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
+  val mandatoryXmlString: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                         |<SynVerNumMES2>3</SynVerNumMES2>
                         |<MesSenMES3>NTA.GB</MesSenMES3>
                         |<MesRecMES6>SYST17B-NCTS_EU_EXIT</MesRecMES6>
@@ -215,7 +236,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                         |</CC043A>
                         |""".stripMargin
 
-  val fullXml      = XML.loadString(fullXmlString)
-  val mandatoryXml = XML.loadString(mandatoryXmlString)
+  val fullXml: Elem      = XML.loadString(fullXmlString)
+  val mandatoryXml: Elem = XML.loadString(mandatoryXmlString)
 
 }
