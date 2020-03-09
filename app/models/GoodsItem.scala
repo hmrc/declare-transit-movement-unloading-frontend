@@ -16,10 +16,11 @@
 
 package models
 
+import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{__, XmlReader}
 import com.lucidchart.open.xtract.XmlReader._
-
 import cats.syntax.all._
+import xml.NonEmptyListOps
 
 final case class GoodsItem(
   itemNumber: Int,
@@ -27,7 +28,7 @@ final case class GoodsItem(
   description: String,
   grossMass: Option[String], //todo does this need to be a bigDecimal
   netMass: Option[String], //todo does this need to be a bigDecimal
-  producedDocuments: Option[Seq[ProducedDocument]], //todo this needs to be nonEmpty
+  producedDocuments: NonEmptyList[ProducedDocument], //todo this needs to be nonEmpty
   containers: Option[Seq[String]],
   packages: Packages,
   sensitiveGoodsInformation: Option[Seq[SensitiveGoodsInformation]]
@@ -40,7 +41,7 @@ object GoodsItem {
     (__ \ "GooDesGDS23").read[String],
     (__ \ "GroMasGDS46").read[String].optional,
     (__ \ "NetMasGDS48").read[String].optional,
-    (__ \ "PRODOCDC2").read(seq[ProducedDocument]).optional,
+    (__ \ "PRODOCDC2").read[NonEmptyList[ProducedDocument]](NonEmptyListOps.nonEmptyListReader),
     (__ \ "ConNumNR21").read(seq[String]).optional,
     (__ \ "PACGS2").read[Packages],
     (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation]).optional //todo find the correct path
