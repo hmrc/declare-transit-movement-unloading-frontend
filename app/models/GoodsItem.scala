@@ -43,6 +43,6 @@ object GoodsItem {
     (__ \ "PRODOCDC2").read(seq[ProducedDocument]).optional,
     (__ \ "ConNumNR21").read(seq[String]).optional,
     (__ \ "PACGS2").read[Packages],
-    (__ \ "gh").read(seq[SensitiveGoodsInformation]).optional //todo find the correct path
+    (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation]).optional //todo find the correct path
   ).mapN(apply)
 }

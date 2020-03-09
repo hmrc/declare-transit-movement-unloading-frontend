@@ -29,6 +29,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     * convert with only mandatory values
     * convert with optional values
     * can we generate test xml strings?
+    * add negative tests for missing goodsitems/produced documents
     */
   private val traderWithEori =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
