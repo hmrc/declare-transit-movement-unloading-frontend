@@ -19,6 +19,7 @@ package config
 import com.google.inject.AbstractModule
 import controllers.actions._
 import repositories.{DefaultSessionRepository, SessionRepository}
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class Module extends AbstractModule {
 
