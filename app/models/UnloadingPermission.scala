@@ -21,7 +21,6 @@ import com.lucidchart.open.xtract.XmlReader._
 import cats.syntax.all._
 import xml.NonEmptyListOps
 
-//TODO: Add in mandatory fields and  update paths in xmlReader
 case class UnloadingPermission(
   movementReferenceNumber: String,
   transportIdentity: Option[String],
@@ -32,7 +31,7 @@ case class UnloadingPermission(
   traderAtDestination: TraderAtDestination,
   presentationOffice: String,
   seals: Seals,
-  goodsItems: NonEmptyList[GoodsItem] //TODO: NonEmptyList for unloading permission
+  goodsItems: NonEmptyList[GoodsItem]
 )
 
 object UnloadingPermission {
@@ -50,6 +49,3 @@ object UnloadingPermission {
     (__ \ "GOOITEGDS").read[NonEmptyList[GoodsItem]](NonEmptyListOps.nonEmptyListReader)
   ).mapN(apply)
 }
-
-//TODO: Add TraderAtDestination in (copy from reference service)
-//Add xml reader etc, etc

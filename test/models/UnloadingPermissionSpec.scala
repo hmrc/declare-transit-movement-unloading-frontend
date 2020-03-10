@@ -23,18 +23,66 @@ import scala.xml.{Elem, XML}
 
 class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
+  "UnloadingPermission" - {
+
+    "parse xml into UnloadingPermission for mandatory values only" in {
+
+      XmlReader.of[UnloadingPermission].read(mandatoryXml) mustBe
+        ParseSuccess(
+          UnloadingPermission(
+            movementReferenceNumber = "19IT02110010007827",
+            transportIdentity       = None,
+            transportCountry        = None,
+            numberOfItems           = 1,
+            numberOfPackages        = 1,
+            grossMass               = "1000",
+            traderAtDestination     = traderWithoutEori,
+            presentationOffice      = "GB000060",
+            seals                   = seal,
+            goodsItems              = NonEmptyList(goodsItem, Nil)
+          )
+        )
+    }
+
+    "parse xml into UnloadingPermission for all values" in {
+
+      XmlReader.of[UnloadingPermission].read(fullXml) mustBe
+        ParseSuccess(
+          UnloadingPermission(
+            movementReferenceNumber = "19IT02110010007827",
+            transportIdentity       = Some("abcd"),
+            transportCountry        = Some("IT"),
+            numberOfItems           = 1,
+            numberOfPackages        = 1,
+            grossMass               = "1000",
+            traderAtDestination     = traderWithEori,
+            presentationOffice      = "GB000060",
+            seals                   = seal,
+            goodsItems              = NonEmptyList(goodsItem, Nil)
+          ))
+    }
+
+    "return ParseFailure when converting into UnloadingPermission with no goodsItem" in {
+
+      XmlReader.of[UnloadingPermission].read(xmlNoGoodsItem) mustBe
+        ParseFailure(List())
+    }
+
+    "return ParseFailure when converting into UnloadingPermission with no producedDocuments" in {
+
+      XmlReader.of[UnloadingPermission].read(xmlNoProducedDocuments) mustBe
+        ParseFailure(List())
+    }
+  }
+
   /**
-    * SHOULD -
-    * Convert xml string into UnloadingPermission
-    * convert with only mandatory values
-    * convert with optional values
+    * TODO -
     * can we generate test xml strings?
-    * add negative tests for missing goodsitems/produced documents
     */
   private val traderWithEori =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
 
-  private val traderWithWithoutEori = TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
+  private val traderWithoutEori = TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
 
   private val packages = Packages(Some("Ref."), "BX", Some(1), None)
 
@@ -53,58 +101,6 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
   )
 
   private val seal = Seals(1, Seq("Seals01"))
-
-  "UnloadingPermission" - {
-
-    "convert xml string into UnloadingPermission for mandatory values only" in {
-
-      XmlReader.of[UnloadingPermission].read(mandatoryXml) mustBe
-        ParseSuccess(
-          UnloadingPermission(
-            movementReferenceNumber = "19IT02110010007827",
-            transportIdentity       = None,
-            transportCountry        = None,
-            numberOfItems           = 1,
-            numberOfPackages        = 1,
-            grossMass               = "1000",
-            traderAtDestination     = traderWithEori,
-            presentationOffice      = "GB000060",
-            seals                   = seal,
-            goodsItems              = NonEmptyList(goodsItem, Nil)
-          )
-        )
-    }
-
-    "convert xml string into UnloadingPermission for all values" in {
-
-      XmlReader.of[UnloadingPermission].read(fullXml) mustBe
-        ParseSuccess(
-          UnloadingPermission(
-            movementReferenceNumber = "19IT02110010007827",
-            transportIdentity       = Some("abcd"),
-            transportCountry        = Some("IT"),
-            numberOfItems           = 1,
-            numberOfPackages        = 1,
-            grossMass               = "1000",
-            traderAtDestination     = traderWithEori,
-            presentationOffice      = "GB000060",
-            seals                   = seal,
-            goodsItems              = NonEmptyList(goodsItem, Nil)
-          ))
-    }
-
-    "return failure when converting into UnloadingPermission with no goodsItem" in {
-
-      XmlReader.of[UnloadingPermission].read(xmlNoGoodsItem) mustBe
-        ParseFailure(List())
-    }
-
-    "return failure when converting into UnloadingPermission with no producedDocuments" in {
-
-      XmlReader.of[UnloadingPermission].read(xmlNoProducedDocuments) mustBe
-        ParseFailure(List())
-    }
-  }
 
   val fullXmlString: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                   |<SynVerNumMES2>3</SynVerNumMES2>
@@ -180,7 +176,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                   |</CC043A>
                   |""".stripMargin
 
-  val xmlStringNoGoodsItem: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
+  val noGoodsItem: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                                 |<SynVerNumMES2>3</SynVerNumMES2>
                                 |<MesSenMES3>NTA.GB</MesSenMES3>
                                 |<MesRecMES6>SYST17B-NCTS_EU_EXIT</MesRecMES6>
@@ -289,7 +285,6 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                         |<PosCodTRD23>SS8 2BB</PosCodTRD23>
                         |<CitTRD24>,</CitTRD24>
                         |<CouTRD25>GB</CouTRD25>
-                        |<TINTRD59>GB163910077000</TINTRD59>
                         |</TRADESTRD>
                         |<CUSOFFDEPEPT><RefNumEPT1>IT021100</RefNumEPT1>
                         |</CUSOFFDEPEPT>
@@ -314,7 +309,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                         |</CC043A>
                         |""".stripMargin
 
-  val xmlStringNoProducedDocuments: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
+  val noProducedDocuments: String = """<CC043A><SynIdeMES1>UNOC</SynIdeMES1>
                                      |<SynVerNumMES2>3</SynVerNumMES2>
                                      |<MesSenMES3>NTA.GB</MesSenMES3>
                                      |<MesRecMES6>SYST17B-NCTS_EU_EXIT</MesRecMES6>
@@ -383,9 +378,9 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                                      |</CC043A>
                                      |""".stripMargin
 
-  val fullXml: Elem          = XML.loadString(fullXmlString)
-  val mandatoryXml: Elem     = XML.loadString(mandatoryXmlString)
-  val xmlNoGoodsItem         = XML.loadString((xmlStringNoGoodsItem))
-  val xmlNoProducedDocuments = XML.loadString((xmlStringNoProducedDocuments))
+  val fullXml: Elem                = XML.loadString(fullXmlString)
+  val mandatoryXml: Elem           = XML.loadString(mandatoryXmlString)
+  val xmlNoGoodsItem: Elem         = XML.loadString(noGoodsItem)
+  val xmlNoProducedDocuments: Elem = XML.loadString(noProducedDocuments)
 
 }
