@@ -16,16 +16,16 @@
 
 package connectors
 
-import com.google.inject.{Inject, Singleton}
+import com.google.inject.{ImplementedBy, Inject, Singleton}
 import config.FrontendAppConfig
 import models.Movement
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UnloadingConnector @Inject()(config: FrontendAppConfig, http: HttpClient) {
+class UnloadingConnectorImpl @Inject()(val config: FrontendAppConfig, val http: HttpClient) extends UnloadingConnector {
 
   def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Movement]] = {
 
@@ -45,5 +45,11 @@ class UnloadingConnector @Inject()(config: FrontendAppConfig, http: HttpClient) 
     //TODO: return movement
     // Some(Movement("test"))
   }
+
+}
+
+@ImplementedBy(classOf[UnloadingConnectorImpl])
+trait UnloadingConnector {
+  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Movement]]
 
 }

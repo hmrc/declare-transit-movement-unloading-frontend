@@ -17,6 +17,7 @@
 package config
 
 import com.google.inject.AbstractModule
+import connectors.{UnloadingConnector, UnloadingConnectorImpl}
 import controllers.actions._
 import repositories.{DefaultSessionRepository, SessionRepository}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -33,5 +34,7 @@ class Module extends AbstractModule {
     bind(classOf[IdentifierAction]).to(classOf[SessionIdentifierAction]).asEagerSingleton()
 
     bind(classOf[SessionRepository]).to(classOf[DefaultSessionRepository]).asEagerSingleton()
+
+    bind(classOf[UnloadingConnector]).to(classOf[UnloadingConnectorImpl]).asEagerSingleton()
   }
 }
