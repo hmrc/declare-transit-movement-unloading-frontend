@@ -27,29 +27,35 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class UnloadingConnectorImpl @Inject()(val config: FrontendAppConfig, val http: HttpClient) extends UnloadingConnector {
 
-  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Movement]] = {
+  /**
+    * Connector SHOULD
+    * - send MRN in uri
+    * - Consider returning more meaningful responses on failure
+    */
+
+  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]] = {
 
     val url = config.arrivalsBackend
 
     http
-      .GET[Movement](url)
+      .GET[Seq[Movement]](url)
       .map {
         x =>
-          Some(x)
+          if (x.isEmpty) {
+            None
+          } else {
+            Some(x)
+          }
       }
       .recover {
         case _ => None
       }
-    //TODO: Get get url from config
-    //TODO: call get on backend to pull bacxck movement
-    //TODO: return movement
-    // Some(Movement("test"))
   }
 
 }
 
 @ImplementedBy(classOf[UnloadingConnectorImpl])
 trait UnloadingConnector {
-  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Movement]]
+  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]]
 
 }

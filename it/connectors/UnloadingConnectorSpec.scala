@@ -20,9 +20,17 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
 
   private val unloadingJson: String =
                                  """
+                                   |[
                                    |{
                                    |"messages" :  "test"
                                    |}
+                                   |]
+                                   """.stripMargin
+
+  private val emptyObject: String =
+                                 """
+                                   |[
+                                   |]
                                    """.stripMargin
 
   private val uri = "/common-transit-convention-trader-at-destination/messages"
@@ -38,7 +46,7 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
             .willReturn(okJson(unloadingJson)
             ))
 
-        connector.get().futureValue mustBe Some(Movement("test"))
+        connector.get().futureValue mustBe Some(Seq(Movement("test")))
       }
 
       "should handle a 404 response" in {
@@ -46,6 +54,15 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
         server.stubFor(
           get(uri)
             .willReturn(notFound)
+        )
+        connector.get().futureValue mustBe None
+      }
+
+      "should return None when empty object is returned" in {
+
+        server.stubFor(
+          get(uri)
+            .willReturn(okJson(emptyObject))
         )
         connector.get().futureValue mustBe None
       }
