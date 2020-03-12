@@ -1,18 +1,18 @@
 package connectors
 
-import models.Movement
-import org.scalatest.{FreeSpec, MustMatchers}
-import uk.gov.hmrc.http.HeaderCarrier
 import com.github.tomakehurst.wiremock.client.WireMock._
+import models.Movement
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
   IntegrationPatience with WireMockSuite with MustMatchers  with ScalaCheckPropertyChecks {
 
-  override protected def portConfigKey: String = "microservice.services.arrivalsBackend.port"
+  override protected def portConfigKey: String = "microservice.services.arrivals-backend.port"
 
   private def connector: UnloadingConnector = app.injector.instanceOf[UnloadingConnector]
 
@@ -20,12 +20,12 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
 
   private val unloadingJson: String =
                                  """
-                                   |[
                                    |{
                                    |"messages" :  "test"
                                    |}
-                                   |]
-                                   |""".stripMargin
+                                   """.stripMargin
+
+  private val uri = "/common-transit-convention-trader-at-destination/messages"
 
   "UnloadingConnectorSpec" - {
 
@@ -34,11 +34,29 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
       "should retrieve unloading permission" in {
 
         server.stubFor(
-          get("/common-transit-convention-trader-at-destination/messages")
+          get(uri)
             .willReturn(okJson(unloadingJson)
             ))
 
-        connector.get.futureValue mustBe Some(Movement("test"))
+        connector.get().futureValue mustBe Some(Movement("test"))
+      }
+
+      "should handle a 404 response" in {
+
+        server.stubFor(
+          get(uri)
+            .willReturn(notFound)
+        )
+        connector.get().futureValue mustBe None
+      }
+
+      "should handle an exception" in {
+
+        server.stubFor(
+          get(uri)
+            .willReturn(serverError)
+        )
+        connector.get().futureValue mustBe None
       }
     }
   }
