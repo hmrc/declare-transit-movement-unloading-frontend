@@ -18,7 +18,7 @@ package connectors
 
 import com.google.inject.{ImplementedBy, Inject, Singleton}
 import config.FrontendAppConfig
-import models.Movement
+import models.{Movement, MovementReferenceNumber}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -29,13 +29,11 @@ class UnloadingConnectorImpl @Inject()(val config: FrontendAppConfig, val http: 
 
   /**
     * Connector SHOULD
-    * - send MRN in uri
     * - Consider returning more meaningful responses on failure
     */
+  def get(mrn: MovementReferenceNumber)(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]] = {
 
-  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]] = {
-
-    val url = config.arrivalsBackend
+    val url = config.arrivalsBackend ++ mrn.toString
 
     http
       .GET[Seq[Movement]](url)
@@ -56,6 +54,6 @@ class UnloadingConnectorImpl @Inject()(val config: FrontendAppConfig, val http: 
 
 @ImplementedBy(classOf[UnloadingConnectorImpl])
 trait UnloadingConnector {
-  def get()(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]]
+  def get(mrn: MovementReferenceNumber)(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]]
 
 }
