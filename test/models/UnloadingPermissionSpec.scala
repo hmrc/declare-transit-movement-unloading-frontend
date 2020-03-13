@@ -38,8 +38,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             grossMass               = "1000",
             traderAtDestination     = traderWithoutEori,
             presentationOffice      = "GB000060",
-            seals                   = seal,
-            goodsItems              = NonEmptyList(goodsItem, Nil)
+            seals                   = None,
+            goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
           )
         )
     }
@@ -57,7 +57,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             grossMass               = "1000",
             traderAtDestination     = traderWithEori,
             presentationOffice      = "GB000060",
-            seals                   = seal,
+            seals                   = Some(Seals(1, Seq("Seals01"))),
             goodsItems              = NonEmptyList(goodsItem, Nil)
           ))
     }
@@ -75,10 +75,6 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     }
   }
 
-  /**
-    * TODO -
-    * can we generate test xml strings?
-    */
   private val traderWithEori =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
 
@@ -88,7 +84,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
 
   private val producedDocuments = ProducedDocument("235", Some("Ref."), None)
 
-  private val goodsItem = GoodsItem(
+  private val goodsItemMandatory = GoodsItem(
     itemNumber        = 1,
     commodityCode     = None,
     description       = "Flowers",
@@ -98,6 +94,18 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     Some(Seq.empty),
     packages,
     Some(Seq.empty)
+  )
+
+  private val goodsItem = GoodsItem(
+    itemNumber                = 1,
+    commodityCode             = None,
+    description               = "Flowers",
+    grossMass                 = Some("1000"),
+    netMass                   = Some("999"),
+    producedDocuments         = NonEmptyList(producedDocuments, Nil),
+    containers                = Some(Seq("container 1", "container 2")),
+    packages                  = packages,
+    sensitiveGoodsInformation = Some(Seq(SensitiveGoodsInformation(Some(1), 1)))
   )
 
   private val seal = Seals(1, Seq("Seals01"))
@@ -168,6 +176,14 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                   |<PRODOCDC2><DocTypDC21>235</DocTypDC21>
                   |<DocRefDC23>Ref.</DocRefDC23>
                   |</PRODOCDC2>
+                  |<CONNR2>
+                  |<ConNumNR21>container 1</ConNumNR21>
+                  |<ConNumNR21>container 2</ConNumNR21>
+                  |</CONNR2>
+                  |<SGICODSD2>
+                  |<SenGooCodSD22>1</SenGooCodSD22>
+                  |<SenQuaSD23>1</SenQuaSD23>
+                  |</SGICODSD2>
                   |<PACGS2><MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
                   |<KinOfPacGS23>BX</KinOfPacGS23>
                   |<NumOfPacGS24>1</NumOfPacGS24>
@@ -290,10 +306,6 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                         |</CUSOFFDEPEPT>
                         |<CUSOFFPREOFFRES><RefNumRES1>GB000060</RefNumRES1>
                         |</CUSOFFPREOFFRES>
-                        |<SEAINFSLI><SeaNumSLI2>1</SeaNumSLI2>
-                        |<SEAIDSID><SeaIdeSID1>Seals01</SeaIdeSID1>
-                        |</SEAIDSID>
-                        |</SEAINFSLI>
                         |<GOOITEGDS><IteNumGDS7>1</IteNumGDS7>
                         |<GooDesGDS23>Flowers</GooDesGDS23>
                         |<GroMasGDS46>1000</GroMasGDS46>

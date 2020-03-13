@@ -42,7 +42,7 @@ object GoodsItem {
     (__ \ "GroMasGDS46").read[String].optional,
     (__ \ "NetMasGDS48").read[String].optional,
     (__ \ "PRODOCDC2").read[NonEmptyList[ProducedDocument]](NonEmptyListOps.nonEmptyListReader),
-    (__ \ "ConNumNR21").read(seq[String]).optional,
+    (__ \ "CONNR2" \ "ConNumNR21").read(seq[String]).optional, //TODO:Check this is the correct node values
     (__ \ "PACGS2").read[Packages],
     (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation]).optional
     //TODO: Are SensitiveGoodsInformation needed, do we need to do anything if we receive them in UnloadingPermission
