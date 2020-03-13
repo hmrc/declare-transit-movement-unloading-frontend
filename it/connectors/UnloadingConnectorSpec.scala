@@ -2,9 +2,10 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.Movement
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}k
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import play.api.libs.json.{JsArray, JsObject, JsString}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -18,20 +19,9 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
 
   implicit val hc = HeaderCarrier()
 
-  private val unloadingJson: String =
-                                 """
-                                   |[
-                                   |{
-                                   |"messages" :  "test"
-                                   |}
-                                   |]
-                                   """.stripMargin
+  private val unloadingJson = JsArray(Seq(JsObject(Map("messages" -> JsString("test"))))).toString
 
-  private val emptyObject: String =
-                                 """
-                                   |[
-                                   |]
-                                   """.stripMargin
+  private val emptyObject: String = JsObject.empty.toString()
 
   private val uri = "/common-transit-convention-trader-at-destination/messages"
 
