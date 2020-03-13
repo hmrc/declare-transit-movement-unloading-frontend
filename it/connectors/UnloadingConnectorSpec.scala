@@ -1,8 +1,8 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.Movement
-import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}k
+import models.{Movement, MovementReferenceNumber}
+import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsArray, JsObject, JsString}
@@ -20,23 +20,21 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
   implicit val hc = HeaderCarrier()
 
   private val unloadingJson = JsArray(Seq(JsObject(Map("messages" -> JsString("test"))))).toString
-
   private val emptyObject: String = JsObject.empty.toString()
-
-  private val uri = "/common-transit-convention-trader-at-destination/messages"
+  private val mrn = new MovementReferenceNumber("99","IT","9876AB88901209")
+  private val uri = s"/common-transit-convention-trader-at-destination/movements/$mrn"
 
   "UnloadingConnectorSpec" - {
 
     "GET" - {
 
       "should retrieve unloading permission" in {
-
         server.stubFor(
           get(uri)
             .willReturn(okJson(unloadingJson)
             ))
 
-        connector.get().futureValue mustBe Some(Seq(Movement("test")))
+        connector.get(mrn).futureValue mustBe Some(Seq(Movement("test")))
       }
 
       "should handle a 404 response" in {
@@ -45,7 +43,7 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
           get(uri)
             .willReturn(notFound)
         )
-        connector.get().futureValue mustBe None
+        connector.get(mrn).futureValue mustBe None
       }
 
       "should return None when empty object is returned" in {
@@ -54,7 +52,7 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
           get(uri)
             .willReturn(okJson(emptyObject))
         )
-        connector.get().futureValue mustBe None
+        connector.get(mrn).futureValue mustBe None
       }
 
       "should handle an exception" in {
@@ -63,7 +61,7 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
           get(uri)
             .willReturn(serverError)
         )
-        connector.get().futureValue mustBe None
+        connector.get(mrn).futureValue mustBe None
       }
     }
   }
