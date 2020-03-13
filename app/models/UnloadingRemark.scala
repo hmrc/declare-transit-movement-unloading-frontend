@@ -20,16 +20,4 @@ case class UnloadingRemark(
   traderAtDestination: String,
   customsOffice: String,
   unloadingRemark: String
-  /*
-                          ---RESULTS OF CONTROL	9x	D	C210
----SEALS INFO	1x	D	C200
-------SEALS ID	9999x	D	R206
----GOODS ITEM	9999x	D	C210 TR0007 TR0011
-------PRODUCED DOCUMENTS/CERTIFICATES	99x	D	TR0008
-------RESULTS OF CONTROL	199x	D	C210 TR0012 TR0013 TR0014
-------CONTAINERS	99x	D	TR0008
-------PACKAGES	99x	D	TR0008
-------SGI CODES	9x	O	R155 TR0008
-
- */
 )
