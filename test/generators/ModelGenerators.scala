@@ -17,9 +17,13 @@
 package generators
 
 import models._
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen.{choose, listOfN}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  self: Generators =>
 
   implicit lazy val arbitraryMovementReferenceNumber: Arbitrary[MovementReferenceNumber] =
     Arbitrary {
@@ -28,5 +32,23 @@ trait ModelGenerators {
         country <- Gen.pick(2, 'A' to 'Z')
         serial  <- Gen.pick(13, ('A' to 'Z') ++ ('0' to '9'))
       } yield MovementReferenceNumber(year, country.mkString, serial.mkString)
+    }
+
+  implicit lazy val arbitrarySensitiveGoodsInformation: Arbitrary[SensitiveGoodsInformation] =
+    Arbitrary {
+      for {
+        goodsCode <- Gen.option(Gen.choose(0: Int, 1000: Int))
+        quantity  <- Gen.choose(0: Int, 1000: Int)
+      } yield SensitiveGoodsInformation(goodsCode, quantity)
+    }
+
+  implicit lazy val packages: Arbitrary[Packages] =
+    Arbitrary {
+      for {
+        marksAndNumberOfPackages <- Gen.option(stringsWithMaxLength(23))
+        kindOfPackage            <- stringsWithMaxLength(23)
+        numberOfPackages         <- Gen.option(Gen.choose(0: Int, 100: Int))
+        numberOfPieces           <- Gen.option(Gen.choose(0: Int, 100: Int))
+      } yield Packages(marksAndNumberOfPackages, kindOfPackage, numberOfPackages, numberOfPieces)
     }
 }
