@@ -78,22 +78,23 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
   private val traderWithEori =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
 
-  private val traderWithoutEori = TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
+  private val traderWithoutEori =
+    TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
 
   private val packages = Packages(Some("Ref."), "BX", Some(1), None)
 
   private val producedDocuments = ProducedDocument("235", Some("Ref."), None)
 
   private val goodsItemMandatory = GoodsItem(
-    itemNumber        = 1,
-    commodityCode     = None,
-    description       = "Flowers",
-    grossMass         = Some("1000"),
-    netMass           = Some("999"),
-    producedDocuments = NonEmptyList(producedDocuments, Nil),
-    Some(Seq.empty),
-    packages,
-    Some(Seq.empty)
+    itemNumber                = 1,
+    commodityCode             = None,
+    description               = "Flowers",
+    grossMass                 = Some("1000"),
+    netMass                   = Some("999"),
+    producedDocuments         = NonEmptyList(producedDocuments, Nil),
+    containers                = Some(Seq.empty),
+    packages                  = packages,
+    sensitiveGoodsInformation = Some(Seq.empty)
   )
 
   private val goodsItem = GoodsItem(
