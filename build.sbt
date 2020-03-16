@@ -11,6 +11,9 @@ resolvers += "hmrc-releases" at "https://artefacts.tax.service.gov.uk/artifactor
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin, SbtArtifactory)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .configs(IntegrationTest)
+  .settings(inConfig(IntegrationTest)(itSettings): _*)
+  .settings(inConfig(IntegrationTest)(scalafmtSettings): _*)
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
@@ -57,6 +60,23 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   javaOptions ++= Seq(
     "-Dconfig.resource=test.application.conf"
   )
+)
+
+lazy val itSettings = Defaults.itSettings ++ Seq(
+  unmanagedSourceDirectories := Seq(
+    baseDirectory.value / "it",
+    baseDirectory.value / "test" / "generators"
+  ),
+  unmanagedResourceDirectories := Seq(
+    baseDirectory.value / "it" / "resources"
+  ),
+  parallelExecution := false,
+  fork              := true,
+  javaOptions ++= Seq(
+    "-Dconfig.resource=it.application.conf",
+    "-Dlogger.resource=it.logback.xml"
+  ),
+  scalafmtTestOnCompile in ThisBuild := true
 )
 
 dependencyOverrides ++= AppDependencies.overrides

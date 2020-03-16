@@ -16,8 +16,11 @@
 
 package models
 
-case class UnloadingRemark(
-  traderAtDestination: String,
-  customsOffice: String,
-  unloadingRemark: String
-)
+import play.api.libs.json.{Json, OFormat}
+
+case class Movement(messages: String)
+
+object Movement {
+  implicit val formats: OFormat[Movement] = Json.format[Movement]
+
+}
