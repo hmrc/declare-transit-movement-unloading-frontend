@@ -30,6 +30,9 @@ case class Packages(
 
 object Packages {
 
+  val marksAndNumberPackageLength = 42
+  val kindOfPackageLength         = 3
+
   implicit val xmlReader: XmlReader[Packages] = (
     (__ \ "MarNumOfPacGS21").read[String].optional,
     (__ \ "KinOfPacGS23").read[String],

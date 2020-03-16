@@ -42,13 +42,22 @@ trait ModelGenerators {
       } yield SensitiveGoodsInformation(goodsCode, quantity)
     }
 
-  implicit lazy val packages: Arbitrary[Packages] =
+  implicit lazy val arbitraryPackages: Arbitrary[Packages] =
     Arbitrary {
       for {
-        marksAndNumberOfPackages <- Gen.option(stringsWithMaxLength(23))
-        kindOfPackage            <- stringsWithMaxLength(23)
+        marksAndNumberOfPackages <- Gen.option(stringsWithMaxLength(Packages.marksAndNumberPackageLength))
+        kindOfPackage            <- stringsWithMaxLength(Packages.kindOfPackageLength)
         numberOfPackages         <- Gen.option(Gen.choose(0: Int, 100: Int))
         numberOfPieces           <- Gen.option(Gen.choose(0: Int, 100: Int))
       } yield Packages(marksAndNumberOfPackages, kindOfPackage, numberOfPackages, numberOfPieces)
+    }
+
+  implicit lazy val arbitraryProducedDocument: Arbitrary[ProducedDocument] =
+    Arbitrary {
+      for {
+        documentType            <- stringsWithMaxLength(ProducedDocument.documentTypeLength)
+        reference               <- Gen.option(stringsWithMaxLength(ProducedDocument.referenceLength))
+        complementOfInformation <- Gen.option(stringsWithMaxLength(ProducedDocument.complementOfInformationLength))
+      } yield ProducedDocument(documentType, reference, complementOfInformation)
     }
 }

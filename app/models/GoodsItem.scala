@@ -30,11 +30,19 @@ final case class GoodsItem(
   netMass: Option[String], //todo does this need to be a bigDecimal
   producedDocuments: NonEmptyList[ProducedDocument],
   containers: Option[Seq[String]],
-  packages: Packages,
+  packages: Packages, //todo should this be a nonEmptySeq
   sensitiveGoodsInformation: Option[Seq[SensitiveGoodsInformation]]
 )
 
 object GoodsItem {
+
+  val commodityCodeLength = 22
+  val descriptionLength   = 280
+  val maxDocuments        = 99
+  val maxContainers       = 99
+  val maxPackages         = 99
+  val maxSensitiveGoods   = 9
+
   implicit val xmlReader: XmlReader[GoodsItem] = (
     (__ \ "IteNumGDS7").read[Int],
     (__ \ "ComCodTarCodGDS10").read[String].optional,

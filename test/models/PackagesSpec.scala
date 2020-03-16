@@ -42,8 +42,6 @@ class PackagesSpec extends FreeSpec with MustMatchers with Generators with Scala
                 </MarNumOfPacGS21>
             }
 
-          val kindOfPackage = packages.kindOfPackage
-
           val numberOfPackage = packages.numberOfPackages
             .map {
               number =>
@@ -62,16 +60,12 @@ class PackagesSpec extends FreeSpec with MustMatchers with Generators with Scala
 
           val expectedResult = {
             <PACGS2>
-               {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
+              {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
               <KinOfPacGS23>
-                {kindOfPackage}
+                {packages.kindOfPackage}
               </KinOfPacGS23>
-              <NumOfPacGS24>
-                {numberOfPackage.getOrElse(NodeSeq.Empty)}
-              </NumOfPacGS24>
-              <NumOfPieGS25>
-                {numberOfPieces.getOrElse(NodeSeq.Empty)}
-              </NumOfPieGS25>
+              {numberOfPackage.getOrElse(NodeSeq.Empty)}
+              {numberOfPieces.getOrElse(NodeSeq.Empty)}
             </PACGS2>
           }
 
