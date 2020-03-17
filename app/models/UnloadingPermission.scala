@@ -36,6 +36,12 @@ case class UnloadingPermission(
 
 object UnloadingPermission {
 
+  val movementReferenceNumberLength = 21
+  val transportIdentityLength = 27
+  val transportCountryLength = 2
+  val presentationOfficeLength = 8
+  val maxGoodsItems = 999
+
   implicit val xmlReader: XmlReader[UnloadingPermission] = (
     (__ \ "HEAHEA" \ "DocNumHEA5").read[String],
     (__ \ "HEAHEA" \ "IdeOfMeaOfTraAtDHEA78").read[String].optional,
