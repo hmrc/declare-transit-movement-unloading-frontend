@@ -37,8 +37,8 @@ trait ModelGenerators {
   implicit lazy val arbitrarySensitiveGoodsInformation: Arbitrary[SensitiveGoodsInformation] =
     Arbitrary {
       for {
-        goodsCode <- Gen.option(Gen.choose(0: Int, 1000: Int))
-        quantity  <- Gen.choose(0: Int, 1000: Int)
+        goodsCode <- Gen.option(Gen.choose(1: Int, 1000: Int))
+        quantity  <- Gen.choose(1: Int, 1000: Int)
       } yield SensitiveGoodsInformation(goodsCode, quantity)
     }
 

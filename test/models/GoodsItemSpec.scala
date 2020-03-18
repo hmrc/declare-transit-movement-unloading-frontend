@@ -25,6 +25,46 @@ import scala.xml.Utility.trim
 
 class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with ScalaCheckPropertyChecks {
 
+  private def packages(goodsItem: GoodsItem) = {
+
+    val packages = goodsItem.packages
+
+    val marksAndNumberPackage = packages.marksAndNumberPackage
+      .map {
+        marksAndNumber =>
+          <MarNumOfPacGS21>
+            {marksAndNumber}
+          </MarNumOfPacGS21>
+      }
+
+    val numberOfPackage = packages.numberOfPackages
+      .map {
+        number =>
+          <NumOfPacGS24>
+            {number}
+          </NumOfPacGS24>
+      }
+
+    val numberOfPieces = packages.numberOfPieces
+      .map {
+        number =>
+          <NumOfPieGS25>
+            {number}
+          </NumOfPieGS25>
+      }
+
+    {
+      <PACGS2>
+        {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
+        <KinOfPacGS23>
+        {packages.kindOfPackage}
+      </KinOfPacGS23>
+        {numberOfPackage.getOrElse(NodeSeq.Empty)}
+        {numberOfPieces.getOrElse(NodeSeq.Empty)}
+      </PACGS2>
+    }
+  }
+
   private def producedDocument(goodsItem: GoodsItem) =
     goodsItem.producedDocuments.map {
 
@@ -68,9 +108,9 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
 
             {
               <SGICODSD2>
-              {goodsCode.getOrElse(NodeSeq.Empty)}<SenQuaSD23>
+              {goodsCode.getOrElse(NodeSeq.Empty)}
+                <SenQuaSD23>
               {sensitiveGoodsInformation.quantity}
-
             </SenQuaSD23>
             </SGICODSD2>
             }
@@ -117,7 +157,7 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
                 </CONNR2>
           }
 
-//          println(s"*********sensitiveGoods${sensitiveGoodsInformation(goodsItem)}")
+          println(s"*********======containers===$containers")
 
           val expectedResult = {
             <GOOITEGDS>
@@ -125,14 +165,12 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
                   {goodsItem.itemNumber}
                 </IteNumGDS7>{commodityCode.getOrElse(NodeSeq.Empty)}<GooDesGDS23>
                 {goodsItem.description}
-              </GooDesGDS23>{grossMass.getOrElse(NodeSeq.Empty)}{netMass.getOrElse(NodeSeq.Empty)}{producedDocument(goodsItem).toList}{containers.getOrElse(NodeSeq.Empty)}
-
-            {sensitiveGoodsInformation(goodsItem).getOrElse(NodeSeq.Empty)}
-                <PACGS2>
-                  <MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
-                  <KinOfPacGS23>BX</KinOfPacGS23>
-                  <NumOfPacGS24>1</NumOfPacGS24>
-                </PACGS2>
+              </GooDesGDS23>{grossMass.getOrElse(NodeSeq.Empty)}
+              {netMass.getOrElse(NodeSeq.Empty)}
+              {producedDocument(goodsItem).toList}
+              {containers.getOrElse(NodeSeq.Empty)}
+              {packages(goodsItem)}
+              {sensitiveGoodsInformation(goodsItem).getOrElse(NodeSeq.Empty)}
               </GOOITEGDS>
           }
 
