@@ -26,7 +26,7 @@ case class Seals(numberOfSeals: Int, SealId: Seq[String])
 
 object Seals {
 
-  val maxSeals = 9999
+  val maxSeals     = 9999
   val sealIdLength = 20
 
   implicit val xmlReader: XmlReader[Seals] = (

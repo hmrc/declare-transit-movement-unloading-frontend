@@ -126,6 +126,6 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def nonEmptyListWithMaxLength[A](maxLength: Int)(implicit a: Arbitrary[A]): Gen[NonEmptyList[A]] =
     for {
       length <- choose(1, maxLength)
-      seq    <- listOfN(length, arbitrary[A])
+      seq    <- nonEmptyListOf(length, arbitrary[A])
     } yield seq
 }

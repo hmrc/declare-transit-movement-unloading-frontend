@@ -18,7 +18,7 @@ package generators
 
 import models._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen.{choose, listOfN}
+import org.scalacheck.Gen.{choose, listOfN, nonEmptyListOf}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
@@ -64,14 +64,15 @@ trait ModelGenerators {
   implicit lazy val arbitraryGoodsItem: Arbitrary[GoodsItem] =
     Arbitrary {
       for {
-        itemNumber <- choose(min = 1: Int, 100: Int)
-        commodityCode <- Gen.option(stringsWithMaxLength(100: Int))
-        description <- stringsWithMaxLength(Packages.kindOfPackageLength)
-        grossMass <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
-        netMass <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
-        producedDocuments <- nonEmptyListWithMaxLength[ProducedDocument](10: Int)
-        containers <- Gen.option(listWithMaxLength[String](10: Int))
-        packages <-  arbitrary[Packages] //todo should this be a nonEmptySeq
+        itemNumber                <- choose(min = 1: Int, 100: Int)
+        commodityCode             <- Gen.option(stringsWithMaxLength(100: Int))
+        description               <- stringsWithMaxLength(Packages.kindOfPackageLength)
+        grossMass                 <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
+        netMass                   <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
+        producedDocuments         <- nonEmptyListOf(1, arbitrary[ProducedDocument])
+       // producedDocuments       <- nonEmptyListWithMaxLength[ProducedDocument](10: Int)
+        containers                <- Gen.option(listWithMaxLength[String](10: Int))
+        packages                  <- arbitrary[Packages] //todo should this be a nonEmptySeq
         sensitiveGoodsInformation <- Gen.option(listWithMaxLength[SensitiveGoodsInformation](10: Int))
       } yield GoodsItem(itemNumber, commodityCode, description, grossMass, netMass, producedDocuments, containers, packages, sensitiveGoodsInformation)
     }
