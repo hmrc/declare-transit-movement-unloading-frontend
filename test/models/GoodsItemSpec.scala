@@ -45,12 +45,35 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
 
         {
           <PRODOCDC2>
-            <DocTypDC21>
-              {producedDocument.documentType}
-            </DocTypDC21>
-            {reference.getOrElse(false)}
-            {complementOfInformation.getOrElse(false)}
-          </PRODOCDC2>
+          <DocTypDC21>
+            {producedDocument.documentType}
+          </DocTypDC21>{reference.getOrElse(false)}{complementOfInformation.getOrElse(false)}
+        </PRODOCDC2>
+        }
+    }
+
+  def sensitiveGoodsInformation(goodsItem: GoodsItem): Option[Any] =
+    goodsItem.sensitiveGoodsInformation.map {
+
+      x =>
+        x.map {
+          sensitiveGoodsInformation =>
+            val goodsCode = sensitiveGoodsInformation.goodsCode
+              .map {
+                code =>
+                  <SenGooCodSD22>
+                    {code}
+                  </SenGooCodSD22>
+              }
+
+            {
+              <SGICODSD2>
+              {goodsCode.getOrElse(NodeSeq.Empty)}<SenQuaSD23>
+              {sensitiveGoodsInformation.quantity}
+
+            </SenQuaSD23>
+            </SGICODSD2>
+            }
         }
     }
 
@@ -63,72 +86,57 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
         goodsItem =>
           val commodityCode = goodsItem.commodityCode.map {
             code =>
-              <ComCodTarCodGDS10>{code}</ComCodTarCodGDS10>
+              <ComCodTarCodGDS10>
+                  {code}
+                </ComCodTarCodGDS10>
           }
 
           val grossMass = goodsItem.grossMass.map {
             grossMass =>
-              <GroMasGDS46>{grossMass}</GroMasGDS46>
+              <GroMasGDS46>
+                  {grossMass}
+                </GroMasGDS46>
           }
 
           val netMass = goodsItem.netMass.map {
             netMass =>
-              <NetMasGDS48>{netMass}</NetMasGDS48>
+              <NetMasGDS48>
+                  {netMass}
+                </NetMasGDS48>
           }
 
           val containers = goodsItem.containers.map {
             x =>
               <CONNR2>
-            {
-              x.map {
-                value => <ConNumNR21>{value}</ConNumNR21>
-              }
-            }
-            </CONNR2>
+                  {x.map {
+                  value =>
+                    <ConNumNR21>
+                      {value}
+                    </ConNumNR21>
+                }}
+                </CONNR2>
           }
 
-          def sensitiveGoods(goodsItem: GoodsItem) = {
-
-            goodsItem.sensitiveGoodsInformation.map {
-              sensitiveGoodsInformation =>
-            val goodsCode = sensitiveGoodsInformation.goodsCode
-              .map {
-                code =>
-                  <SenGooCodSD22>{code}</SenGooCodSD22>
-              }
-
-            val result = {
-              <SGICODSD2>
-                {goodsCode.getOrElse(NodeSeq.Empty)}
-                <SenQuaSD23>{sensitiveGoodsInformation.quantity}</SenQuaSD23>
-              </SGICODSD2>
-            }
-          }
-
-          println(s"*********producedDocument${producedDocument(goodsItem)}")
+//          println(s"*********sensitiveGoods${sensitiveGoodsInformation(goodsItem)}")
 
           val expectedResult = {
             <GOOITEGDS>
-            <IteNumGDS7>{goodsItem.itemNumber}</IteNumGDS7>
-            {commodityCode.getOrElse(NodeSeq.Empty)}
-            <GooDesGDS23>{goodsItem.description}</GooDesGDS23>
-            {grossMass.getOrElse(NodeSeq.Empty)}
-            {netMass.getOrElse(NodeSeq.Empty)}
-            {producedDocument(goodsItem).toList}
-            {containers.getOrElse(NodeSeq.Empty)}
-            <SGICODSD2>
-              <SenGooCodSD22>1</SenGooCodSD22>
-              <SenQuaSD23>1</SenQuaSD23>
-            </SGICODSD2>
-            <PACGS2>
-              <MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
-              <KinOfPacGS23>BX</KinOfPacGS23>
-              <NumOfPacGS24>1</NumOfPacGS24>
-            </PACGS2>
-          </GOOITEGDS>
+                <IteNumGDS7>
+                  {goodsItem.itemNumber}
+                </IteNumGDS7>{commodityCode.getOrElse(NodeSeq.Empty)}<GooDesGDS23>
+                {goodsItem.description}
+              </GooDesGDS23>{grossMass.getOrElse(NodeSeq.Empty)}{netMass.getOrElse(NodeSeq.Empty)}{producedDocument(goodsItem).toList}{containers.getOrElse(NodeSeq.Empty)}
+
+            {sensitiveGoodsInformation(goodsItem).getOrElse(NodeSeq.Empty)}
+                <PACGS2>
+                  <MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
+                  <KinOfPacGS23>BX</KinOfPacGS23>
+                  <NumOfPacGS24>1</NumOfPacGS24>
+                </PACGS2>
+              </GOOITEGDS>
           }
 
-          println(s"Expecte Result:" + expectedResult)
+          println(s"Expected Result:" + expectedResult)
 
           XmlReader.of[GoodsItem].read(trim(expectedResult)) mustBe
             ParseSuccess(
@@ -147,5 +155,4 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
       }
     }
   }
-
 }
