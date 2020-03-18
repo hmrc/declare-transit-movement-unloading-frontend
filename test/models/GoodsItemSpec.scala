@@ -44,13 +44,13 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
         }
 
         {
-          <SGICODSD2>
+          <PRODOCDC2>
             <DocTypDC21>
               {producedDocument.documentType}
             </DocTypDC21>
             {reference.getOrElse(false)}
             {complementOfInformation.getOrElse(false)}
-          </SGICODSD2>
+          </PRODOCDC2>
         }
     }
 
@@ -87,6 +87,24 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
             </CONNR2>
           }
 
+          def sensitiveGoods(goodsItem: GoodsItem) = {
+
+            goodsItem.sensitiveGoodsInformation.map {
+              sensitiveGoodsInformation =>
+            val goodsCode = sensitiveGoodsInformation.goodsCode
+              .map {
+                code =>
+                  <SenGooCodSD22>{code}</SenGooCodSD22>
+              }
+
+            val result = {
+              <SGICODSD2>
+                {goodsCode.getOrElse(NodeSeq.Empty)}
+                <SenQuaSD23>{sensitiveGoodsInformation.quantity}</SenQuaSD23>
+              </SGICODSD2>
+            }
+          }
+
           println(s"*********producedDocument${producedDocument(goodsItem)}")
 
           val expectedResult = {
@@ -96,7 +114,7 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
             <GooDesGDS23>{goodsItem.description}</GooDesGDS23>
             {grossMass.getOrElse(NodeSeq.Empty)}
             {netMass.getOrElse(NodeSeq.Empty)}
-            <PRODOCDC2>{producedDocument(goodsItem).head}</PRODOCDC2>
+            {producedDocument(goodsItem).toList}
             {containers.getOrElse(NodeSeq.Empty)}
             <SGICODSD2>
               <SenGooCodSD22>1</SenGooCodSD22>
@@ -110,7 +128,9 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
           </GOOITEGDS>
           }
 
-          XmlReader.of[GoodsItem].read(expectedResult) mustBe
+          println(s"Expecte Result:" + expectedResult)
+
+          XmlReader.of[GoodsItem].read(trim(expectedResult)) mustBe
             ParseSuccess(
               GoodsItem(
                 goodsItem.itemNumber,
