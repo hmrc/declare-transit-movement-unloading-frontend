@@ -75,17 +75,17 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     }
   }
 
-  private val traderWithEori =
+  private lazy val traderWithEori =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
 
-  private val traderWithoutEori =
+  private lazy val traderWithoutEori =
     TraderAtDestinationWithoutEori("The Luggage Carriers", "225 Suedopolish Yard,", "SS8 2BB", ",", "GB")
 
-  private val packages = Packages(Some("Ref."), "BX", Some(1), None)
+  private lazy val packages = Packages(Some("Ref."), "BX", Some(1), None)
 
-  private val producedDocuments = ProducedDocument("235", Some("Ref."), None)
+  private lazy val producedDocuments = ProducedDocument("235", Some("Ref."), None)
 
-  private val goodsItemMandatory = GoodsItem(
+  private lazy val goodsItemMandatory = GoodsItem(
     itemNumber                = 1,
     commodityCode             = None,
     description               = "Flowers",
@@ -97,7 +97,7 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     sensitiveGoodsInformation = Some(Seq.empty)
   )
 
-  private val goodsItem = GoodsItem(
+  private lazy val goodsItem = GoodsItem(
     itemNumber                = 1,
     commodityCode             = None,
     description               = "Flowers",
@@ -391,9 +391,9 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                                      |</CC043A>
                                      |""".stripMargin
 
-  val fullXml: Elem                = XML.loadString(fullXmlString)
-  val mandatoryXml: Elem           = XML.loadString(mandatoryXmlString)
-  val xmlNoGoodsItem: Elem         = XML.loadString(noGoodsItem)
-  val xmlNoProducedDocuments: Elem = XML.loadString(noProducedDocuments)
+  lazy val fullXml: Elem                = XML.loadString(fullXmlString)
+  lazy val mandatoryXml: Elem           = XML.loadString(mandatoryXmlString)
+  lazy val xmlNoGoodsItem: Elem         = XML.loadString(noGoodsItem)
+  lazy val xmlNoProducedDocuments: Elem = XML.loadString(noProducedDocuments)
 
 }

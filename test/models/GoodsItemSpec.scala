@@ -15,14 +15,13 @@
  */
 
 package models
-import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-
-import scala.xml.{Elem, NodeSeq}
+import scala.xml.NodeSeq
+import scala.xml.Utility.trim
 
 class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with ScalaCheckPropertyChecks {
 
