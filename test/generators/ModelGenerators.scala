@@ -37,7 +37,7 @@ trait ModelGenerators {
   implicit lazy val arbitrarySensitiveGoodsInformation: Arbitrary[SensitiveGoodsInformation] =
     Arbitrary {
       for {
-        goodsCode <- Gen.option(Gen.choose(1: Int, 1000: Int))
+        goodsCode <- Gen.option(Gen.choose(0: Int, 1000: Int))
         quantity  <- Gen.choose(1: Int, 1000: Int)
       } yield SensitiveGoodsInformation(goodsCode, quantity)
     }
@@ -69,10 +69,10 @@ trait ModelGenerators {
         description               <- stringsWithMaxLength(Packages.kindOfPackageLength)
         grossMass                 <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
         netMass                   <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
-        producedDocuments         <- nonEmptyListWithMaxSize(10: Int, arbitrary[ProducedDocument])
-        containers                <- Gen.option(listWithMaxLength[String](10: Int))
+        producedDocuments         <- nonEmptyListWithMaxSize(2: Int, arbitrary[ProducedDocument])
+        containers                <- listWithMaxLength[String](2: Int)
         packages                  <- arbitrary[Packages] //todo should this be a nonEmptySeq
-        sensitiveGoodsInformation <- Gen.option(listWithMaxLength[SensitiveGoodsInformation](10: Int))
+        sensitiveGoodsInformation <- listWithMaxLength[SensitiveGoodsInformation](2: Int)
       } yield GoodsItem(itemNumber, commodityCode, description, grossMass, netMass, producedDocuments, containers, packages, sensitiveGoodsInformation)
     }
 }

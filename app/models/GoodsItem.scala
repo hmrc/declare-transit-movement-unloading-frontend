@@ -29,9 +29,9 @@ final case class GoodsItem(
   grossMass: Option[String], //todo does this need to be a bigDecimal
   netMass: Option[String], //todo does this need to be a bigDecimal
   producedDocuments: NonEmptyList[ProducedDocument],
-  containers: Option[Seq[String]],
+  containers: Seq[String],
   packages: Packages, //todo should this be a nonEmptySeq
-  sensitiveGoodsInformation: Option[Seq[SensitiveGoodsInformation]]
+  sensitiveGoodsInformation: Seq[SensitiveGoodsInformation]
 )
 
 object GoodsItem {
@@ -50,9 +50,10 @@ object GoodsItem {
     (__ \ "GroMasGDS46").read[String].optional,
     (__ \ "NetMasGDS48").read[String].optional,
     (__ \ "PRODOCDC2").read[NonEmptyList[ProducedDocument]](NonEmptyListOps.nonEmptyListReader),
-    (__ \ "CONNR2" \ "ConNumNR21").read(seq[String]).optional, //TODO:Check this is the correct node values
+    (__ \ "CONNR2" \ "ConNumNR21").read(strictReadSeq[String]), //TODO:Check this is the correct node values
+    //TODO: If the above isn't available a Some(Vector()) is returned
     (__ \ "PACGS2").read[Packages], //todo should this be a nonEmptySeq
-    (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation]).optional
+    (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation])
     //TODO: Are SensitiveGoodsInformation needed, do we need to do anything if we receive them in UnloadingPermission
   ).mapN(apply)
 }

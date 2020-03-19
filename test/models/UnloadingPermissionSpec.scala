@@ -92,9 +92,9 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     grossMass                 = Some("1000"),
     netMass                   = Some("999"),
     producedDocuments         = NonEmptyList(producedDocuments, Nil),
-    containers                = Some(Seq.empty),
+    containers                = Seq.empty,
     packages                  = packages,
-    sensitiveGoodsInformation = Some(Seq.empty)
+    sensitiveGoodsInformation = Seq.empty
   )
 
   private lazy val goodsItem = GoodsItem(
@@ -104,9 +104,9 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
     grossMass                 = Some("1000"),
     netMass                   = Some("999"),
     producedDocuments         = NonEmptyList(producedDocuments, Nil),
-    containers                = Some(Seq("container 1", "container 2")),
+    containers                = Seq("container 1", "container 2"),
     packages                  = packages,
-    sensitiveGoodsInformation = Some(Seq(SensitiveGoodsInformation(Some(1), 1)))
+    sensitiveGoodsInformation = Seq(SensitiveGoodsInformation(Some(1), 1))
   )
 
   private val seal = Seals(1, Seq("Seals01"))
