@@ -28,13 +28,21 @@ final case class GoodsItem(
   description: String,
   grossMass: Option[String], //todo does this need to be a bigDecimal
   netMass: Option[String], //todo does this need to be a bigDecimal
-  producedDocuments: NonEmptyList[ProducedDocument], //todo this needs to be nonEmpty
-  containers: Option[Seq[String]],
-  packages: Packages,
-  sensitiveGoodsInformation: Option[Seq[SensitiveGoodsInformation]]
+  producedDocuments: NonEmptyList[ProducedDocument],
+  containers: Seq[String],
+  packages: Packages, //todo should this be a nonEmptySeq
+  sensitiveGoodsInformation: Seq[SensitiveGoodsInformation]
 )
 
 object GoodsItem {
+
+  val commodityCodeLength = 22
+  val descriptionLength   = 280
+  val maxDocuments        = 99
+  val maxContainers       = 99
+  val maxPackages         = 99
+  val maxSensitiveGoods   = 9
+
   implicit val xmlReader: XmlReader[GoodsItem] = (
     (__ \ "IteNumGDS7").read[Int],
     (__ \ "ComCodTarCodGDS10").read[String].optional,
@@ -42,8 +50,10 @@ object GoodsItem {
     (__ \ "GroMasGDS46").read[String].optional,
     (__ \ "NetMasGDS48").read[String].optional,
     (__ \ "PRODOCDC2").read[NonEmptyList[ProducedDocument]](NonEmptyListOps.nonEmptyListReader),
-    (__ \ "ConNumNR21").read(seq[String]).optional,
-    (__ \ "PACGS2").read[Packages],
-    (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation]).optional //todo find the correct path
+    (__ \ "CONNR2" \ "ConNumNR21").read(strictReadSeq[String]), //TODO:Check this is the correct node values
+    //TODO: If the above isn't available a Some(Vector()) is returned
+    (__ \ "PACGS2").read[Packages], //todo should this be a nonEmptySeq
+    (__ \ "SGICODSD2").read(seq[SensitiveGoodsInformation])
+    //TODO: Are SensitiveGoodsInformation needed, do we need to do anything if we receive them in UnloadingPermission
   ).mapN(apply)
 }

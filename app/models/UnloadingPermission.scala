@@ -21,7 +21,6 @@ import com.lucidchart.open.xtract.XmlReader._
 import cats.syntax.all._
 import xml.NonEmptyListOps
 
-//TODO: Add in mandatory fields and  update paths in xmlReader
 case class UnloadingPermission(
   movementReferenceNumber: String,
   transportIdentity: Option[String],
@@ -31,11 +30,17 @@ case class UnloadingPermission(
   grossMass: String, //TODO: Does this need to be BigDecimal
   traderAtDestination: TraderAtDestination,
   presentationOffice: String,
-  seals: Seals,
-  goodsItems: NonEmptyList[GoodsItem] //TODO: NonEmptyList for unloading permission
+  seals: Option[Seals], //TODO: Double check this is optional
+  goodsItems: NonEmptyList[GoodsItem]
 )
 
 object UnloadingPermission {
+
+  val movementReferenceNumberLength = 21
+  val transportIdentityLength       = 27
+  val transportCountryLength        = 2
+  val presentationOfficeLength      = 8
+  val maxGoodsItems                 = 999
 
   implicit val xmlReader: XmlReader[UnloadingPermission] = (
     (__ \ "HEAHEA" \ "DocNumHEA5").read[String],
@@ -46,10 +51,7 @@ object UnloadingPermission {
     (__ \ "HEAHEA" \ "TotGroMasHEA307").read[String],
     (__ \ "TRADESTRD").read[TraderAtDestination],
     (__ \ "CUSOFFPREOFFRES" \ "RefNumRES1").read[String],
-    (__ \ "SEAINFSLI").read[Seals],
+    (__ \ "SEAINFSLI").read[Seals].optional,
     (__ \ "GOOITEGDS").read[NonEmptyList[GoodsItem]](NonEmptyListOps.nonEmptyListReader)
   ).mapN(apply)
 }
-
-//TODO: Add TraderAtDestination in (copy from reference service)
-//Add xml reader etc, etc

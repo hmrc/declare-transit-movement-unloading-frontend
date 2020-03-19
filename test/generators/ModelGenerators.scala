@@ -17,9 +17,13 @@
 package generators
 
 import models._
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalacheck.Gen.{choose, listOfN, nonEmptyListOf}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  self: Generators =>
 
   implicit lazy val arbitraryMovementReferenceNumber: Arbitrary[MovementReferenceNumber] =
     Arbitrary {
@@ -28,5 +32,47 @@ trait ModelGenerators {
         country <- Gen.pick(2, 'A' to 'Z')
         serial  <- Gen.pick(13, ('A' to 'Z') ++ ('0' to '9'))
       } yield MovementReferenceNumber(year, country.mkString, serial.mkString)
+    }
+
+  implicit lazy val arbitrarySensitiveGoodsInformation: Arbitrary[SensitiveGoodsInformation] =
+    Arbitrary {
+      for {
+        goodsCode <- Gen.option(Gen.choose(0: Int, 1000: Int))
+        quantity  <- Gen.choose(1: Int, 1000: Int)
+      } yield SensitiveGoodsInformation(goodsCode, quantity)
+    }
+
+  implicit lazy val arbitraryPackages: Arbitrary[Packages] =
+    Arbitrary {
+      for {
+        marksAndNumberOfPackages <- Gen.option(stringsWithMaxLength(Packages.marksAndNumberPackageLength))
+        kindOfPackage            <- stringsWithMaxLength(Packages.kindOfPackageLength)
+        numberOfPackages         <- Gen.option(Gen.choose(0: Int, 100: Int))
+        numberOfPieces           <- Gen.option(Gen.choose(0: Int, 100: Int))
+      } yield Packages(marksAndNumberOfPackages, kindOfPackage, numberOfPackages, numberOfPieces)
+    }
+
+  implicit lazy val arbitraryProducedDocument: Arbitrary[ProducedDocument] =
+    Arbitrary {
+      for {
+        documentType            <- stringsWithMaxLength(ProducedDocument.documentTypeLength)
+        reference               <- Gen.option(stringsWithMaxLength(ProducedDocument.referenceLength))
+        complementOfInformation <- Gen.option(stringsWithMaxLength(ProducedDocument.complementOfInformationLength))
+      } yield ProducedDocument(documentType, reference, complementOfInformation)
+    }
+
+  implicit lazy val arbitraryGoodsItem: Arbitrary[GoodsItem] =
+    Arbitrary {
+      for {
+        itemNumber                <- choose(min = 1: Int, 100: Int)
+        commodityCode             <- Gen.option(stringsWithMaxLength(100: Int))
+        description               <- stringsWithMaxLength(Packages.kindOfPackageLength)
+        grossMass                 <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
+        netMass                   <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
+        producedDocuments         <- nonEmptyListWithMaxSize(2: Int, arbitrary[ProducedDocument])
+        containers                <- listWithMaxLength[String](2: Int)
+        packages                  <- arbitrary[Packages] //todo should this be a nonEmptySeq
+        sensitiveGoodsInformation <- listWithMaxLength[SensitiveGoodsInformation](2: Int)
+      } yield GoodsItem(itemNumber, commodityCode, description, grossMass, netMass, producedDocuments, containers, packages, sensitiveGoodsInformation)
     }
 }

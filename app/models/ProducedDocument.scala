@@ -27,6 +27,10 @@ final case class ProducedDocument(
 
 object ProducedDocument {
 
+  val documentTypeLength            = 4
+  val referenceLength               = 35
+  val complementOfInformationLength = 26
+
   implicit val xmlReader: XmlReader[ProducedDocument] = (
     (__ \ "DocTypDC21").read[String],
     (__ \ "DocRefDC23").read[String].optional,

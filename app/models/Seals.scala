@@ -26,6 +26,9 @@ case class Seals(numberOfSeals: Int, SealId: Seq[String])
 
 object Seals {
 
+  val maxSeals     = 9999
+  val sealIdLength = 20
+
   implicit val xmlReader: XmlReader[Seals] = (
     (__ \ "SeaNumSLI2").read[Int],
     (__ \ "SEAIDSID" \ "SeaIdeSID1").read(seq[String])
