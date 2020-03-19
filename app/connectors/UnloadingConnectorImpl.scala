@@ -16,13 +16,11 @@
 
 package connectors
 
-import com.google.inject.{ImplementedBy, Inject, Singleton}
+import com.google.inject.{Inject, Singleton}
 import config.FrontendAppConfig
 import models.{Movement, MovementReferenceNumber}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import play.api.http.Status.OK
-import play.api.libs.json.JsError
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,27 +33,8 @@ class UnloadingConnectorImpl @Inject()(val config: FrontendAppConfig, val http: 
     */
   def get(mrn: MovementReferenceNumber)(implicit headerCarrier: HeaderCarrier, executionContext: ExecutionContext): Future[Option[Seq[Movement]]] = {
 
-//    implicit val httpReads: HttpReads[HttpResponse] =
-//      new HttpReads[HttpResponse] {
-//        override def read(method: String, url: String, response: HttpResponse): HttpResponse =
-//          response
-//      }
-
     val url = config.arrivalsBackend ++ mrn.toString
 
-//    http
-//      .GET[HttpResponse](url)
-//      .map {
-//        x =>
-//          x.status match {
-//            case OK =>
-//              x.json.validate[Seq[Movement]].asEither match {
-//                case Left(_)         => None
-//                case Right(movement) => Some(movement)
-//              }
-//            case _ => None
-//          }
-//      }
     http
       .GET[Seq[Movement]](url)
       .map {
