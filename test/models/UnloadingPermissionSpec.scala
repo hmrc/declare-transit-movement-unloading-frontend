@@ -51,13 +51,13 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
             movementReferenceNumber = "19IT02110010007827",
             transportIdentity       = Some("abcd"),
             transportCountry        = Some("IT"),
-            numberOfItems           = 1,
-            numberOfPackages        = 1,
+            numberOfItems           = 1, //TODO Increase quantity of items
+            numberOfPackages        = 1, //TODO Increase quantity of packages
             grossMass               = "1000",
             traderAtDestination     = traderWithEori,
             presentationOffice      = "GB000060",
-            seals                   = Some(Seals(1, Seq("Seals01"))),
-            goodsItems              = NonEmptyList(goodsItem, Nil)
+            seals                   = Some(Seals(1, Seq("Seals01"))), //TODO Increase quantity of seals
+            goodsItems              = NonEmptyList(goodsItem, Nil) //TODO Increase quantity of goodsItems
           ))
     }
 
@@ -182,14 +182,15 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                     |<CONNR2>
                     |<ConNumNR21>container 2</ConNumNR21>
                     |</CONNR2>
+                    |<PACGS2>
+                    |<MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
+                    |<KinOfPacGS23>BX</KinOfPacGS23>
+                    |<NumOfPacGS24>1</NumOfPacGS24>
+                    |</PACGS2>
                     |<SGICODSD2>
                     |<SenGooCodSD22>1</SenGooCodSD22>
                     |<SenQuaSD23>1</SenQuaSD23>
                     |</SGICODSD2>
-                    |<PACGS2><MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
-                    |<KinOfPacGS23>BX</KinOfPacGS23>
-                    |<NumOfPacGS24>1</NumOfPacGS24>
-                    |</PACGS2>
                     |</GOOITEGDS>
                     |</CC043A>
                   |""".stripMargin
@@ -315,7 +316,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                         |<PRODOCDC2><DocTypDC21>235</DocTypDC21>
                         |<DocRefDC23>Ref.</DocRefDC23>
                         |</PRODOCDC2>
-                        |<PACGS2><MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
+                        |<PACGS2>
+                        |<MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
                         |<KinOfPacGS23>BX</KinOfPacGS23>
                         |<NumOfPacGS24>1</NumOfPacGS24>
                         |</PACGS2>
@@ -384,7 +386,8 @@ class UnloadingPermissionSpec extends FreeSpec with MustMatchers {
                                      |<GooDesGDS23>Flowers</GooDesGDS23>
                                      |<GroMasGDS46>1000</GroMasGDS46>
                                      |<NetMasGDS48>999</NetMasGDS48>
-                                     |<PACGS2><MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
+                                     |<PACGS2>
+                                     |<MarNumOfPacGS21>Ref.</MarNumOfPacGS21>
                                      |<KinOfPacGS23>BX</KinOfPacGS23>
                                      |<NumOfPacGS24>1</NumOfPacGS24>
                                      |</PACGS2>
