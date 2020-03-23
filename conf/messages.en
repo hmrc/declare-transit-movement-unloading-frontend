@@ -182,3 +182,13 @@ additionalChangesInformation.error.length = AdditionalChangesInformation must be
 
 unloadingSummary.title = unloadingSummary
 unloadingSummary.heading = unloadingSummary
+
+vehicleUsed.title = Vehicle used
+changeVehicle.reference.label = Name, registration or reference
+changeVehicle.reference.change.hidden = name, registration or reference
+changeVehicle.registeredCountry.label = Registered
+changeVehicle.registeredCountry.change.hidden = registered
+
+changeSeal.title = Seals
+changeSeal.sealList.label = Seal {0}
+changeSeal.sealList.change.hidden = seal {0}
