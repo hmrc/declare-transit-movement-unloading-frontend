@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions._
 import javax.inject.Inject
 import models.MovementReferenceNumber
@@ -33,14 +34,15 @@ class ConfirmationController @Inject()(
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  appConfig: FrontendAppConfig
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val json = Json.obj("mrn" -> mrn)
+      val json = Json.obj("mrn" -> mrn, "manageTransitMovementsUrl" -> appConfig.manageTransitMovementsUrl)
 
       renderer.render("confirmation.njk", json).map(Ok(_))
   }

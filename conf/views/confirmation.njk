@@ -1,5 +1,5 @@
 {% extends "includes/layout.njk" %}
-
+{% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "macros/title.njk"                         import title %}
 
 
@@ -32,11 +32,8 @@
               {{ messages("confirmation.para2")}}
           </p>
           <p class="govuk-body">
-          <a href="manageTransitMovementsUrl">
-              {{ messages("confirmation.linkText")}}</a>
+              <a id="manage-transit-movements" href="{{ manageTransitMovementsUrl }}" class="govuk-link"> {{ messages("confirmation.linkText") }} </a>
               {{ messages("confirmation.para3")}}
-
-
 
       </div>
     </div>
