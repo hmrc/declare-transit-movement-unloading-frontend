@@ -23,6 +23,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
+import services.UnloadingPermissionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
@@ -33,7 +34,8 @@ class UnloadingSummaryController @Inject()(
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  unloadingPermissionService: UnloadingPermissionService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
