@@ -34,6 +34,20 @@ object UnloadingSumamaryHelper {
       )
     )
 
+  def items(index: Int, value: String) =
+    Row(
+      key   = Key(msg"changeItem.itemList.label".withArgs(index), classes = Seq("govuk-!-width-one-half")),
+      value = Value(lit"$value"),
+      actions = List(
+        Action(
+          content            = msg"site.edit",
+          href               = "#",
+          visuallyHiddenText = Some(msg"changeItem.itemList.change.hidden".withArgs(index)),
+          attributes         = Map("id" -> s"""change-item-$index""")
+        )
+      )
+    )
+
   def vehicleUsed(value: String) =
     Row(
       key   = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
@@ -58,6 +72,20 @@ object UnloadingSumamaryHelper {
           href               = "#",
           visuallyHiddenText = Some(msg"changeVehicle.registeredCountry.change.hidden"),
           attributes         = Map("id" -> s"""change-vehicle-reference""")
+        )
+      )
+    )
+
+  def grossMass(value: String) =
+    Row(
+      key   = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
+      value = Value(lit"$value"),
+      actions = List(
+        Action(
+          content            = msg"site.edit",
+          href               = "#",
+          visuallyHiddenText = Some(msg"changeItems.grossMass.change.hidden"),
+          attributes         = Map("id" -> s"""change-gross-mass""")
         )
       )
     )

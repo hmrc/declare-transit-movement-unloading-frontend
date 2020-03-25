@@ -192,3 +192,9 @@ changeVehicle.registeredCountry.change.hidden = registered
 changeSeal.title = Seals
 changeSeal.sealList.label = Seal {0}
 changeSeal.sealList.change.hidden = seal {0}
+
+changeItems.title = Items
+changeItems.grossMass.label = Total gross mass in kilograms
+changeItems.grossMass.change.hidden = total gross mass in kilograms
+changeItem.itemList.label = Seal {0}
+changeItem.itemList.change.hidden = seal {0}

@@ -55,44 +55,91 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
 
   "UnloadingSummaryViewModel" - {
 
-    "convert UnloadingPermission into UnloadingSummaryViewModel - no seals" in {
+    "seals section should" - {
+      "display no seals" in {
 
-      val data = UnloadingSummaryViewModel(unloadingPermission)
+        val data = UnloadingSummaryViewModel(unloadingPermission)
 
-      data.sections.length mustBe 0
+        data.sections.length mustBe 1
+      }
+
+      "display seals" in {
+
+        val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))))
+
+        val data = UnloadingSummaryViewModel(withSeals)
+
+        data.sections.length mustBe 2
+        data.sections.head.sectionTitle mustBe defined
+        data.sections.head.rows.length mustBe 2
+      }
+
+      "display seals with transport details" in {
+
+        val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))),
+                                                 transportCountry  = Some("registration"),
+                                                 transportIdentity = Some("registration"))
+
+        val data = UnloadingSummaryViewModel(withSeals)
+
+        data.sections.length mustBe 3
+        data.sections(0).sectionTitle mustBe defined
+        data.sections(0).rows.length mustBe 2
+        data.sections(1).sectionTitle mustBe defined
+        data.sections(1).rows.length mustBe 2
+        data.sections(2).sectionTitle mustBe defined
+        data.sections(2).rows.length mustBe 2
+      }
     }
 
-    "convert UnloadingPermission into UnloadingSummaryViewModel - with seals" in {
+    "vehicle section should" - {
 
-      val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))))
+      "display transportIdentity" in {
 
-      val data = UnloadingSummaryViewModel(withSeals)
+        val transportIdentity = unloadingPermission.copy(transportIdentity = Some("registration"))
 
-      data.sections.length mustBe 1
-      data.sections.head.sectionTitle mustBe defined
-      data.sections.head.rows.length mustBe 2
+        val data = UnloadingSummaryViewModel(transportIdentity)
+
+        data.sections.length mustBe 2
+        data.sections.head.sectionTitle mustBe defined
+        data.sections.head.rows.length mustBe 1
+      }
+
+      "display transportCountry" in {
+
+        val transportCountry = unloadingPermission.copy(transportCountry = Some("registration"))
+
+        val data = UnloadingSummaryViewModel(transportCountry)
+
+        data.sections.length mustBe 2
+        data.sections.head.sectionTitle mustBe defined
+        data.sections.head.rows.length mustBe 1
+      }
+
+      "display transportCountry and transportIdentity" in {
+
+        val transportCountry = unloadingPermission.copy(transportCountry = Some("registration"), transportIdentity = Some("registration"))
+
+        val data = UnloadingSummaryViewModel(transportCountry)
+
+        data.sections.length mustBe 2
+        data.sections.head.sectionTitle mustBe defined
+        data.sections.head.rows.length mustBe 2
+      }
+
     }
 
-    "convert UnloadingPermission into UnloadingSummaryViewModel - with transportIdentity" in {
+    "items section should" - {
 
-      val transportIdentity = unloadingPermission.copy(transportIdentity = Some("registration"))
+      "display total mass with single item" in {
 
-      val data = UnloadingSummaryViewModel(transportIdentity)
+        val data = UnloadingSummaryViewModel(unloadingPermission)
 
-      data.sections.length mustBe 1
-      data.sections.head.sectionTitle mustBe defined
-      data.sections.head.rows.length mustBe 1
-    }
+        data.sections.length mustBe 1
+        data.sections.head.sectionTitle mustBe defined
+        data.sections.head.rows.length mustBe 2
+      }
 
-    "convert UnloadingPermission into UnloadingSummaryViewModel - with transportCountry and transportIdentity" in {
-
-      val transportCountry = unloadingPermission.copy(transportCountry = Some("registration"), transportIdentity = Some("registration"))
-
-      val data = UnloadingSummaryViewModel(transportCountry)
-
-      data.sections.length mustBe 1
-      data.sections.head.sectionTitle mustBe defined
-      data.sections.head.rows.length mustBe 2
     }
 
   }

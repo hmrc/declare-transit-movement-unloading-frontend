@@ -25,30 +25,39 @@ case class UnloadingSummaryViewModel(sections: Seq[Section])
 
 object UnloadingSummaryViewModel {
 
-  def apply(unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel =
-    unloadingPermission.seals match {
-      case Some(seals) => {
+  def apply(unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel = {
 
-        val rows: Seq[Row] = seals.SealId.map(UnloadingSumamaryHelper.seals(1, _))
+    val grossMassRow: Seq[Row] =
+      Seq(UnloadingSumamaryHelper.grossMass(unloadingPermission.grossMass))
 
-        UnloadingSummaryViewModel(Seq(Section(msg"changeSeal.title", rows)))
+    val itemsRow: Seq[Row] =
+      unloadingPermission.goodsItems
+        .map(
+          item => UnloadingSumamaryHelper.items(1, item.description)
+        )
+        .toList
+
+    val itemsSection = Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow))
+
+    val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map(UnloadingSumamaryHelper.vehicleUsed(_)).toSeq
+    val transportCountry: Seq[Row]  = unloadingPermission.transportCountry.map(UnloadingSumamaryHelper.registeredCountry(_)).toSeq
+    val transport: Seq[Row]         = transportIdentity ++ transportCountry
+    val transportSection: Seq[Section] = transport match {
+      case _ :: _ => {
+        Seq(Section(msg"vehicleUsed.title", transport))
       }
-      case _ => {
-
-        val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map(UnloadingSumamaryHelper.vehicleUsed(_)).toSeq
-        val transportCountry: Seq[Row]  = unloadingPermission.transportCountry.map(UnloadingSumamaryHelper.registeredCountry(_)).toSeq
-
-        val transport = transportIdentity ++ transportCountry
-
-        transport match {
-          case _ :: _ => {
-            val section = Section(msg"vehicleUsed.title", transport)
-
-            UnloadingSummaryViewModel(Seq(section))
-          }
-          case _ => UnloadingSummaryViewModel(Seq.empty)
-        }
-      }
+      case _ => Nil
     }
+
+    val sealsSection: Seq[Section] = unloadingPermission.seals match {
+      case Some(seals) => {
+        val rows: Seq[Row] = seals.SealId.map(UnloadingSumamaryHelper.seals(1, _)) //TODO: index needs to change
+        Seq(Section(msg"changeSeal.title", rows))
+      }
+      case _ => Nil
+    }
+
+    UnloadingSummaryViewModel(sealsSection ++ transportSection ++ itemsSection)
+  }
 
 }
