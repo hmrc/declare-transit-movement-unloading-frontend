@@ -65,14 +65,14 @@ trait ModelGenerators {
     Arbitrary {
       for {
         itemNumber                <- choose(min = 1: Int, 100: Int)
-        commodityCode             <- Gen.option(stringsWithMaxLength(100: Int))
+        commodityCode             <- Gen.option(stringsWithMaxLength(GoodsItem.commodityCodeLength: Int))
         description               <- stringsWithMaxLength(Packages.kindOfPackageLength)
-        grossMass                 <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
-        netMass                   <- Gen.option(stringsWithMaxLength(100: Int)) //todo does this need to be a bigDecimal
-        producedDocuments         <- nonEmptyListWithMaxSize(2: Int, arbitrary[ProducedDocument])
-        containers                <- listWithMaxLength[String](2: Int)
+        grossMass                 <- Gen.option(stringsWithMaxLength(11: Int)) //todo does this need to be a bigDecimal
+        netMass                   <- Gen.option(stringsWithMaxLength(11: Int)) //todo does this need to be a bigDecimal
+        producedDocuments         <- nonEmptyListWithMaxSize(GoodsItem.maxDocuments: Int, arbitrary[ProducedDocument])
+        containers                <- listWithMaxLength[String](GoodsItem.maxContainers: Int)
         packages                  <- arbitrary[Packages] //todo should this be a nonEmptySeq
-        sensitiveGoodsInformation <- listWithMaxLength[SensitiveGoodsInformation](2: Int)
+        sensitiveGoodsInformation <- listWithMaxLength[SensitiveGoodsInformation](GoodsItem.maxSensitiveGoods: Int)
       } yield GoodsItem(itemNumber, commodityCode, description, grossMass, netMass, producedDocuments, containers, packages, sensitiveGoodsInformation)
     }
 }
