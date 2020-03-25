@@ -1,6 +1,7 @@
 {% extends "includes/layout.njk" %}
 
 {% from "macros/title.njk"                         import title %}
+{% from "macros/section.njk"                       import section as sectionMacro %}
 
 {% block pageTitle %}
   {{ title(messages("unloadingSummary.title")) }}
@@ -15,6 +16,10 @@
         <h1 class="govuk-heading-xl">
           {{ messages("unloadingSummary.heading") }}
         </h1>
+
+        {% for section in sections %}
+          {{ sectionMacro(section.sectionTitle, section.rows) }}
+        {% endfor %}
 
       </div>
     </div>

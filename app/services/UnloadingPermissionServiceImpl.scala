@@ -15,18 +15,50 @@
  */
 
 package services
+import cats.data.NonEmptyList
 import com.google.inject.{Inject, Singleton}
 import connectors.UnloadingConnector
-import models.UnloadingPermission
+import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission}
 
 @Singleton
 class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) extends UnloadingPermissionService {
 
+  private val trader =
+    TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
+
+  private lazy val packages = Packages(Some("Ref."), "BX", Some(1), None)
+
+  private lazy val producedDocuments = ProducedDocument("235", Some("Ref."), None)
+
+  private lazy val goodsItemMandatory = GoodsItem(
+    itemNumber                = 1,
+    commodityCode             = None,
+    description               = "Flowers",
+    grossMass                 = Some("1000"),
+    netMass                   = Some("999"),
+    producedDocuments         = NonEmptyList(producedDocuments, Nil),
+    containers                = Seq.empty,
+    packages                  = packages,
+    sensitiveGoodsInformation = Seq.empty
+  )
+
+  private val unloadingPermission = UnloadingPermission(
+    movementReferenceNumber = "19IT02110010007827",
+    transportIdentity       = None,
+    transportCountry        = None,
+    numberOfItems           = 1,
+    numberOfPackages        = 1,
+    grossMass               = "1000",
+    traderAtDestination     = trader,
+    presentationOffice      = "GB000060",
+    seals                   = None,
+    goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
+  )
+
   //TODO: This will call the connector but can initially hard code UnloadingPermission
   //TODO: to test the view
   def getUnloadingPermission(): Option[UnloadingPermission] =
-    None
-
+    Some(unloadingPermission)
 }
 
 trait UnloadingPermissionService {

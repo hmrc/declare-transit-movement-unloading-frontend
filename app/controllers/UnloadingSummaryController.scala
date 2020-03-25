@@ -25,6 +25,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import services.UnloadingPermissionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import viewModels.UnloadingSummaryViewModel
+import viewModels.sections.Section
 
 import scala.concurrent.ExecutionContext
 
@@ -43,7 +45,12 @@ class UnloadingSummaryController @Inject()(
   //TODO: Add service to pull in UnloadingPermssionViewModel
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val json = Json.obj("mrn" -> mrn)
+      //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
+      val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission() match {
+        case Some(unloadingPermission) => UnloadingSummaryViewModel(unloadingPermission).sections
+      }
+
+      val json = Json.obj("mrn" -> mrn, "sections" -> Json.toJson(sections))
 
       renderer.render("unloadingSummary.njk", json).map(Ok(_))
   }
