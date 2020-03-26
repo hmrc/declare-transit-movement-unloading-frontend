@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import javax.inject.Inject
+import play.api.libs.json.JsPath
 
-import forms.mappings.Mappings
-import play.api.data.Form
+case object CanSealsBeReadPage extends QuestionPage[Boolean] {
 
-class SealNumberFormProvider @Inject() extends Mappings {
+  override def path: JsPath = JsPath \ toString
 
-  def apply(): Form[String] =
-    Form(
-      "value" -> text("sealNumber.error.required")
-        .verifying(maxLength(100, "sealNumber.error.length"))
-    )
+  override def toString: String = "canSealsBeRead"
 }

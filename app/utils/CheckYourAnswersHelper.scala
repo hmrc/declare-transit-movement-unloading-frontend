@@ -29,6 +29,66 @@ import utils.CheckYourAnswersHelper._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messages) {
 
+  def changesToReport: Option[Row] = userAnswers.get(ChangesToReportPage) map {
+    answer =>
+      Row(
+        key   = Key(msg"changesToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$answer"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = routes.ChangesToReportController.onPageLoad(userAnswers.id, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changesToReport.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
+  def anythingElseToReport: Option[Row] = userAnswers.get(AnythingElseToReportPage) map {
+    answer =>
+      Row(
+        key   = Key(msg"anythingElseToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(yesOrNo(answer)),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = routes.AnythingElseToReportController.onPageLoad(userAnswers.id, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"anythingElseToReport.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
+  def areAnySealsBroken: Option[Row] = userAnswers.get(AreAnySealsBrokenPage) map {
+    answer =>
+      Row(
+        key   = Key(msg"areAnySealsBroken.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(yesOrNo(answer)),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = routes.AreAnySealsBrokenController.onPageLoad(userAnswers.id, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"areAnySealsBroken.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
+  def canSealsBeRead: Option[Row] = userAnswers.get(CanSealsBeReadPage) map {
+    answer =>
+      Row(
+        key   = Key(msg"canSealsBeRead.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(yesOrNo(answer)),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = routes.CanSealsBeReadController.onPageLoad(userAnswers.id, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"canSealsBeRead.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def additionalChangesInformation: Option[Row] = userAnswers.get(AdditionalChangesInformationPage) map {
     answer =>
       Row(
@@ -59,16 +119,16 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       )
   }
 
-  def sealNumber: Option[Row] = userAnswers.get(SealNumberPage) map {
+  def newSealNumber: Option[Row] = userAnswers.get(NewSealNumberPage) map {
     answer =>
       Row(
-        key   = Key(msg"sealNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key   = Key(msg"newSealNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
             content            = msg"site.edit",
-            href               = routes.SealNumberController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealNumber.checkYourAnswersLabel"))
+            href               = routes.NewSealNumberController.onPageLoad(userAnswers.id, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"newSealNumber.checkYourAnswersLabel"))
           )
         )
       )

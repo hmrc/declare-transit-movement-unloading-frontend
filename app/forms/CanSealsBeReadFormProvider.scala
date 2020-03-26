@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 
-package models.requests
+package forms
 
-import play.api.mvc.{Request, WrappedRequest}
+import javax.inject.Inject
 
-case class IdentifierRequest[A](request: Request[A], eoriNumber: String) extends WrappedRequest[A](request)
+import forms.mappings.Mappings
+import play.api.data.Form
+
+class CanSealsBeReadFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("canSealsBeRead.error.required")
+    )
+}

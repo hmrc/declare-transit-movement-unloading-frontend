@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import play.api.mvc.{Request, WrappedRequest}
+import play.api.libs.json.JsPath
 
-case class IdentifierRequest[A](request: Request[A], eoriNumber: String) extends WrappedRequest[A](request)
+case object AreAnySealsBrokenPage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "areAnySealsBroken"
+}

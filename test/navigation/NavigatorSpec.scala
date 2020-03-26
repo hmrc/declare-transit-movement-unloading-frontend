@@ -19,10 +19,10 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import generators.Generators
-import pages._
 import models._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import pages._
 
 class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
@@ -43,19 +43,153 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               .mustBe(routes.IndexController.onPageLoad())
         }
       }
-    }
 
-    "in Check mode" - {
-
-      "must go from a page that doesn't exist in the edit route map  to Check Your Answers" in {
-
-        case object UnknownPage extends Page
+      "must go from date goods unloaded page to can seals be read page" in {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
-              .nextPage(UnknownPage, CheckMode, answers)
+              .nextPage(DateGoodsUnloadedPage, NormalMode, answers)
+              .mustBe(routes.CanSealsBeReadController.onPageLoad(answers.id, NormalMode))
+        }
+      }
+
+      "must go from can seals be read page" - {
+        "to Are any seals broken page when answer is Yes" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.set(CanSealsBeReadPage, true).success.value
+              navigator
+                .nextPage(CanSealsBeReadPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.AreAnySealsBrokenController.onPageLoad(updatedUserAnswers.id, NormalMode))
+          }
+        }
+
+        "to session expired page when the answer is No" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.set(CanSealsBeReadPage, false).success.value
+              navigator
+                .nextPage(CanSealsBeReadPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+
+        "to session expired page when the answer is empty" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.remove(CanSealsBeReadPage).success.value
+              navigator
+                .nextPage(CanSealsBeReadPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+
+      "must go from are any seals broken page " - {
+        "to unloading summary page when the answer is No" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.set(AreAnySealsBrokenPage, false).success.value
+
+              navigator
+                .nextPage(AreAnySealsBrokenPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.UnloadingSummaryController.onPageLoad(updatedUserAnswers.id))
+          }
+        }
+
+        "to session expired page when the answer is Yes" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.set(AreAnySealsBrokenPage, true).success.value
+
+              navigator
+                .nextPage(AreAnySealsBrokenPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+
+        "to session expired page when the answer is empty" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.remove(AreAnySealsBrokenPage).success.value
+
+              navigator
+                .nextPage(AreAnySealsBrokenPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+          }
+        }
+      }
+
+      "must go from anything else to report page" - {
+        "to check your answers page when no is selected " in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.set(AnythingElseToReportPage, false).success.value
+
+              navigator
+                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.CheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
+          }
+        }
+        "to changes to report page when yes is selected" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.set(AnythingElseToReportPage, true).success.value
+
+              navigator
+                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.ChangesToReportController.onPageLoad(updatedUserAnswers.id, NormalMode))
+
+          }
+        }
+      }
+
+      "from changes to report page to check your answers page" - {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(ChangesToReportPage, NormalMode, answers)
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
+
+        }
+
+        "to session expired when there is no answer" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              val updatedUserAnswers = answers.remove(AnythingElseToReportPage).success.value
+
+              navigator
+                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
+                .mustBe(routes.SessionExpiredController.onPageLoad())
+
+          }
+        }
+
+      }
+
+      "in Check mode" - {
+
+        "must go from a page that doesn't exist in the edit route map  to Check Your Answers" in {
+
+          case object UnknownPage extends Page
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(UnknownPage, CheckMode, answers)
+                .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
+          }
         }
       }
     }

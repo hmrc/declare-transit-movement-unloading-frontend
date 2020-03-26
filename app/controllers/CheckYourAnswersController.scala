@@ -18,7 +18,7 @@ package controllers
 
 import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, DataRetrievalActionProvider, IdentifierAction}
-import models.MovementReferenceNumber
+import models.{MovementReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,14 +43,15 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val helper = new CheckYourAnswersHelper(request.userAnswers)
+      val helper      = new CheckYourAnswersHelper(request.userAnswers)
+      val redirectUrl = controllers.routes.ConfirmationController.onPageLoad(mrn)
 
       val answers: Seq[SummaryList.Row] = Seq()
 
       renderer
         .render(
           "check-your-answers.njk",
-          Json.obj("list" -> answers)
+          Json.obj("list" -> answers, "redirectUrl" -> redirectUrl.url)
         )
         .map(Ok(_))
   }

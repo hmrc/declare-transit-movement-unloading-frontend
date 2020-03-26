@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class SealNumberPageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  "SealNumberPage" - {
+class NewSealNumberFormProvider @Inject() extends Mappings {
 
-    beRetrievable[String](SealNumberPage)
-
-    beSettable[String](SealNumberPage)
-
-    beRemovable[String](SealNumberPage)
-  }
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("newSealNumber.error.required")
+        .verifying(maxLength(100, "newSealNumber.error.length"))
+    )
 }

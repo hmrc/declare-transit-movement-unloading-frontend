@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import play.api.mvc.{Request, WrappedRequest}
+import pages.behaviours.PageBehaviours
 
-case class IdentifierRequest[A](request: Request[A], eoriNumber: String) extends WrappedRequest[A](request)
+class AreAnySealsBrokenPageSpec extends PageBehaviours {
+
+  "AreAnySealsBrokenPage" - {
+
+    beRetrievable[Boolean](AreAnySealsBrokenPage)
+
+    beSettable[Boolean](AreAnySealsBrokenPage)
+
+    beRemovable[Boolean](AreAnySealsBrokenPage)
+  }
+}

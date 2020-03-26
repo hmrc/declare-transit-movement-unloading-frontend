@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import forms.SealNumberFormProvider
+import forms.ChangesToReportFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -25,7 +25,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.SealNumberPage
+import pages.ChangesToReportPage
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, JsString, Json}
 import play.api.mvc.Call
@@ -37,16 +37,16 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
-class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksSupport with JsonMatchers {
+class ChangesToReportControllerSpec extends SpecBase with MockitoSugar with NunjucksSupport with JsonMatchers {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SealNumberFormProvider()
+  val formProvider = new ChangesToReportFormProvider()
   val form         = formProvider()
 
-  lazy val sealNumberRoute = routes.SealNumberController.onPageLoad(mrn, NormalMode).url
+  lazy val changesToReportRoute = routes.ChangesToReportController.onPageLoad(mrn, NormalMode).url
 
-  "SealNumber Controller" - {
+  "ChangesToReport Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -54,7 +54,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
         .thenReturn(Future.successful(Html("")))
 
       val application    = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-      val request        = FakeRequest(GET, sealNumberRoute)
+      val request        = FakeRequest(GET, changesToReportRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -70,7 +70,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "sealNumber.njk"
+      templateCaptor.getValue mustEqual "changesToReport.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
       application.stop()
@@ -81,9 +81,9 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers    = UserAnswers(mrn).set(SealNumberPage, "answer").success.value
+      val userAnswers    = UserAnswers(mrn).set(ChangesToReportPage, "answer").success.value
       val application    = applicationBuilder(userAnswers = Some(userAnswers)).build()
-      val request        = FakeRequest(GET, sealNumberRoute)
+      val request        = FakeRequest(GET, changesToReportRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
@@ -101,7 +101,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "sealNumber.njk"
+      templateCaptor.getValue mustEqual "changesToReport.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
       application.stop()
@@ -122,7 +122,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
           .build()
 
       val request =
-        FakeRequest(POST, sealNumberRoute)
+        FakeRequest(POST, changesToReportRoute)
           .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value
@@ -139,7 +139,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
         .thenReturn(Future.successful(Html("")))
 
       val application    = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-      val request        = FakeRequest(POST, sealNumberRoute).withFormUrlEncodedBody(("value", ""))
+      val request        = FakeRequest(POST, changesToReportRoute).withFormUrlEncodedBody(("value", ""))
       val boundForm      = form.bind(Map("value" -> ""))
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
@@ -156,7 +156,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
         "mode" -> NormalMode
       )
 
-      templateCaptor.getValue mustEqual "sealNumber.njk"
+      templateCaptor.getValue mustEqual "changesToReport.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
       application.stop()
@@ -166,7 +166,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, sealNumberRoute)
+      val request = FakeRequest(GET, changesToReportRoute)
 
       val result = route(application, request).value
 
@@ -182,7 +182,7 @@ class SealNumberControllerSpec extends SpecBase with MockitoSugar with NunjucksS
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, sealNumberRoute)
+        FakeRequest(POST, changesToReportRoute)
           .withFormUrlEncodedBody(("value", "answer"))
 
       val result = route(application, request).value

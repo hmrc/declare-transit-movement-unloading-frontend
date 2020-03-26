@@ -16,32 +16,24 @@
 
 package forms
 
-import forms.behaviours.StringFieldBehaviours
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class SealNumberFormProviderSpec extends StringFieldBehaviours {
+class AreAnySealsBrokenFormProviderSpec extends BooleanFieldBehaviours {
 
-  val requiredKey = "sealNumber.error.required"
-  val lengthKey   = "sealNumber.error.length"
-  val maxLength   = 100
+  val requiredKey = "areAnySealsBroken.error.required"
+  val invalidKey  = "error.boolean"
 
-  val form = new SealNumberFormProvider()()
+  val form = new AreAnySealsBrokenFormProvider()()
 
   ".value" - {
 
     val fieldName = "value"
 
-    behave like fieldThatBindsValidData(
+    behave like booleanField(
       form,
       fieldName,
-      stringsWithMaxLength(maxLength)
-    )
-
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(

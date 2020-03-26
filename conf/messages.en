@@ -34,8 +34,8 @@ phaseBanner.1 = This is a new service – your
 phaseBanner.2 = feedback
 phaseBanner.3 = will help us to improve it.
 
-checkYourAnswers.title = Check your answers
-checkYourAnswers.heading = Check your answers
+checkYourAnswers.title = Check your answers before sending these unloading remarks
+checkYourAnswers.heading = Check your answers before sending these unloading remarks
 
 index.title = declare-transit-movement-unloading-frontend
 index.heading = declare-transit-movement-unloading-frontend
@@ -130,10 +130,11 @@ compliant.nine.p2.2=Digital Accessibility Centre
 compliant.nine.p2.3=The full service was tested by HMRC and included disabled users.
 compliant.nine.p3=This page was prepared on [date when it was first published]. It was last updated on [date when it was last updated].
 
-unloadingGuidance.title = You must unload all of the goods before you send any unloading remarks
-unloadingGuidance.heading = You must unload all of the goods before you send any unloading remarks
-unloadingGuidance.paragraph1 = View and print the unloading permissions accompanying document for movement reference {0}.
-unloadingGuidance.paragraph2 = You can use this document to check that the unloaded goods match the information in the transit declaration.
+unloadingGuidance.title = Unload the goods before you send the unloading remarks
+unloadingGuidance.heading = Unload the goods before you send the unloading remarks
+unloadingGuidance.para = You can:
+unloadingGuidance.bullet1 = view and print the unloading permissions accompanying document
+unloadingGuidance.bullet2 = check that the unloaded goods match the information in the transit declaration for movement reference {0}
 
 dateGoodsUnloaded.title = When were the goods unloaded?
 dateGoodsUnloaded.heading = When were the goods unloaded?
@@ -144,29 +145,29 @@ dateGoodsUnloaded.error.required.two = The date goods were unloaded must include
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
 dateGoodsUnloaded.error.invalid = Enter a real date
 
-vehicleNameRegistrationReference.title = vehicleNameRegistrationReference
-vehicleNameRegistrationReference.heading = vehicleNameRegistrationReference
-vehicleNameRegistrationReference.checkYourAnswersLabel = vehicleNameRegistrationReference
-vehicleNameRegistrationReference.error.required = Enter vehicleNameRegistrationReference
-vehicleNameRegistrationReference.error.length = VehicleNameRegistrationReference must be 100 characters or less
+vehicleNameRegistrationReference.title = What is the name, registration or reference of the new vehicle?
+vehicleNameRegistrationReference.heading = What is the name, registration or reference of the new vehicle?
+vehicleNameRegistrationReference.checkYourAnswersLabel = What is the name, registration or reference of the new vehicle?
+vehicleNameRegistrationReference.error.required = Enter the name, registration or reference of the new vehicle
+vehicleNameRegistrationReference.error.length = The name, registration or reference of the new vehicle must be 100 characters or less
 
-vehicleRegistrationCountry.title = vehicleRegistrationCountry
-vehicleRegistrationCountry.heading = vehicleRegistrationCountry
-vehicleRegistrationCountry.checkYourAnswersLabel = vehicleRegistrationCountry
-vehicleRegistrationCountry.error.required = Enter vehicleRegistrationCountry
-vehicleRegistrationCountry.error.length = VehicleRegistrationCountry must be 100 characters or less
+vehicleRegistrationCountry.title = Which country is the vehicle registered in?
+vehicleRegistrationCountry.heading = Which country is the vehicle registered in?
+vehicleRegistrationCountry.checkYourAnswersLabel = Which country is the vehicle registered in?
+vehicleRegistrationCountry.error.required = Enter which country the vehicle is registered in
+vehicleRegistrationCountry.error.length =  The country the vehicle is registered in must be 100 characters or less
 
-grossMassAmount.title = grossMassAmount
-grossMassAmount.heading = grossMassAmount
-grossMassAmount.checkYourAnswersLabel = grossMassAmount
-grossMassAmount.error.required = Enter grossMassAmount
-grossMassAmount.error.length = GrossMassAmount must be 100 characters or less
+grossMassAmount.title = What is the new total gross mass in kilograms?
+grossMassAmount.heading = What is the new total gross mass in kilograms?
+grossMassAmount.checkYourAnswersLabel = What is the new total gross mass in kilograms?
+grossMassAmount.error.required = Enter the new total gross mass in kilograms
+grossMassAmount.error.length = The new total gross mass in kilograms must be 100 characters or less
 
-sealNumber.title = sealNumber
-sealNumber.heading = sealNumber
-sealNumber.checkYourAnswersLabel = sealNumber
-sealNumber.error.required = Enter sealNumber
-sealNumber.error.length = SealNumber must be 100 characters or less
+newSealNumber.title = What is the new seal number or mark?
+newSealNumber.heading = What is the new seal number or mark?
+newSealNumber.checkYourAnswersLabel = What is the new seal number or mark?
+newSealNumber.error.required = Enter the new seal number or mark
+newSealNumber.error.length = Seal number or mark must be 100 characters or less
 
 sealsInformation.title = sealsInformation
 sealsInformation.heading = sealsInformation
@@ -198,3 +199,34 @@ changeItems.grossMass.label = Total gross mass in kilograms
 changeItems.grossMass.change.hidden = total gross mass in kilograms
 changeItem.itemList.label = Seal {0}
 changeItem.itemList.change.hidden = seal {0}
+
+canSealsBeRead.title = Can all of the seal numbers or marks be read?
+canSealsBeRead.heading = Can all of the seal numbers or marks be read?
+canSealsBeRead.checkYourAnswersLabel = Can all of the seal numbers or marks be read?
+canSealsBeRead.error.required = Select yes if all of the seals can be read
+
+areAnySealsBroken.title = Are any of the seals broken?
+areAnySealsBroken.heading = Are any of the seals broken?
+areAnySealsBroken.checkYourAnswersLabel = Are any of the seals broken?
+areAnySealsBroken.error.required = Select yes if any of the seals are broken
+
+anythingElseToReport.title = Is there anything else to report?
+anythingElseToReport.heading = Is there anything else to report?
+anythingElseToReport.checkYourAnswersLabel = Is there anything else to report?
+anythingElseToReport.error.required = Select yes if there is  anything else to report
+
+confirmation.title = confirmation
+confirmation.heading = Sent unloading remarks
+
+confirmation.para = for movement reference number
+confirmation.subHeading= What happens next
+confirmation.para2 = You must wait for the goods to be released.
+confirmation.linkText = Go to arrival notifications
+confirmation.para3 = to see the latest messages.
+
+
+changesToReport.title = What do you need to report?
+changesToReport.heading = What do you need to report?
+changesToReport.checkYourAnswersLabel = What do you need to report?
+changesToReport.error.required = Enter the changes 
+changesToReport.error.length = Changes to report must be 350 characters or less

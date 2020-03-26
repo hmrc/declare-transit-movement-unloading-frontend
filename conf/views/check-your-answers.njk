@@ -3,6 +3,8 @@
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk"  import govukSummaryList %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/button/macro.njk"        import govukButton %}
+
 
 {% block pageTitle %}
   {{ title(messages("checkYourAnswers.title")) }}
@@ -24,6 +26,12 @@
 
         {{ govukSummaryList({
           rows: list
+        }) }}
+
+        {{ govukButton({
+          text: messages("site.continue"),
+          href: redirectUrl,
+          attributes: {id:"submit"}
         }) }}
 
       </div>

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo ""
-echo "Applying migration SealsInformation"
+echo "Applying migration SealsInformationPageSealsInformation"
 
 echo "Adding routes to conf/app.routes"
 

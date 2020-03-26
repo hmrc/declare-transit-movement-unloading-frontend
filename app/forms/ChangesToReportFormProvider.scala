@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package models.requests
+package forms
 
-import play.api.mvc.{Request, WrappedRequest}
+import javax.inject.Inject
 
-case class IdentifierRequest[A](request: Request[A], eoriNumber: String) extends WrappedRequest[A](request)
+import forms.mappings.Mappings
+import play.api.data.Form
+
+class ChangesToReportFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("changesToReport.error.required")
+        .verifying(maxLength(350, "changesToReport.error.length"))
+    )
+}

@@ -14,8 +14,18 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import play.api.mvc.{Request, WrappedRequest}
+import pages.behaviours.PageBehaviours
 
-case class IdentifierRequest[A](request: Request[A], eoriNumber: String) extends WrappedRequest[A](request)
+class AnythingElseToReportPageSpec extends PageBehaviours {
+
+  "AnythingElseToReportPage" - {
+
+    beRetrievable[Boolean](AnythingElseToReportPage)
+
+    beSettable[Boolean](AnythingElseToReportPage)
+
+    beRemovable[Boolean](AnythingElseToReportPage)
+  }
+}

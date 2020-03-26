@@ -16,20 +16,55 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
+import com.google.inject.{Inject, Singleton}
+import controllers.routes
+import models.{CheckMode, Mode, NormalMode, UserAnswers}
+import pages._
 
 import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models._
 
 @Singleton
 class Navigator @Inject()() {
 
   private val normalRoutes: Page => UserAnswers => Call = {
+
+    case UnloadingGuidancePage =>
+      ua =>
+        routes.UnloadingGuidanceController.onPageLoad(ua.id)
+
+    case DateGoodsUnloadedPage =>
+      ua =>
+        routes.CanSealsBeReadController.onPageLoad(ua.id, NormalMode)
+
+    case CanSealsBeReadPage =>
+      ua =>
+        ua.get(CanSealsBeReadPage) match {
+          case Some(true) => routes.AreAnySealsBrokenController.onPageLoad(ua.id, NormalMode)
+          case _          => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
+        }
+
+    case AreAnySealsBrokenPage =>
+      ua =>
+        ua.get(AreAnySealsBrokenPage) match {
+          case Some(false) => routes.UnloadingSummaryController.onPageLoad(ua.id)
+          case _           => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
+        }
+
+    case AnythingElseToReportPage =>
+      ua =>
+        ua.get(AnythingElseToReportPage) match {
+          case Some(true)  => routes.ChangesToReportController.onPageLoad(ua.id, NormalMode)
+          case Some(false) => routes.CheckYourAnswersController.onPageLoad(ua.id)
+          case _           => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
+        }
+    case ChangesToReportPage =>
+      ua =>
+        routes.CheckYourAnswersController.onPageLoad(ua.id)
+
     case _ =>
       _ =>
         routes.IndexController.onPageLoad()
+
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
@@ -44,4 +79,5 @@ class Navigator @Inject()() {
     case CheckMode =>
       checkRouteMap(page)(userAnswers)
   }
+
 }

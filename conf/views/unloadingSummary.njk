@@ -2,6 +2,7 @@
 
 {% from "macros/title.njk"                         import title %}
 {% from "macros/section.njk"                       import section as sectionMacro %}
+{% from "govuk/components/button/macro.njk"        import govukButton %}
 
 {% block pageTitle %}
   {{ title(messages("unloadingSummary.title")) }}
@@ -20,6 +21,12 @@
         {% for section in sections %}
           {{ sectionMacro(section.sectionTitle, section.rows) }}
         {% endfor %}
+
+        {{ govukButton({
+          text: messages("site.continue"),
+          href: redirectUrl,
+          attributes: {id:"submit"}
+        }) }}
 
       </div>
     </div>

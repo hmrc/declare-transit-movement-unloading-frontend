@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions._
-import forms.SealNumberFormProvider
+import forms.AreAnySealsBrokenFormProvider
 import javax.inject.Inject
 import models.{Mode, MovementReferenceNumber}
 import navigation.Navigator
-import pages.SealNumberPage
+import pages.AreAnySealsBrokenPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SealNumberController @Inject()(
+class AreAnySealsBrokenController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: SealNumberFormProvider,
+  formProvider: AreAnySealsBrokenFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -51,18 +51,19 @@ class SealNumberController @Inject()(
 
   def onPageLoad(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(SealNumberPage) match {
+      val preparedForm = request.userAnswers.get(AreAnySealsBrokenPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
       val json = Json.obj(
-        "form" -> preparedForm,
-        "mrn"  -> mrn,
-        "mode" -> mode
+        "form"   -> preparedForm,
+        "mode"   -> mode,
+        "mrn"    -> mrn,
+        "radios" -> Radios.yesNo(preparedForm("value"))
       )
 
-      renderer.render("sealNumber.njk", json).map(Ok(_))
+      renderer.render("areAnySealsBroken.njk", json).map(Ok(_))
   }
 
   def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
@@ -73,18 +74,19 @@ class SealNumberController @Inject()(
           formWithErrors => {
 
             val json = Json.obj(
-              "form" -> formWithErrors,
-              "mrn"  -> mrn,
-              "mode" -> mode
+              "form"   -> formWithErrors,
+              "mode"   -> mode,
+              "mrn"    -> mrn,
+              "radios" -> Radios.yesNo(formWithErrors("value"))
             )
 
-            renderer.render("sealNumber.njk", json).map(BadRequest(_))
+            renderer.render("areAnySealsBroken.njk", json).map(BadRequest(_))
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(SealNumberPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(AreAnySealsBrokenPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SealNumberPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(AreAnySealsBrokenPage, mode, updatedAnswers))
         )
   }
 }

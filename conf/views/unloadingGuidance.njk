@@ -16,9 +16,15 @@
         <h1 class="govuk-heading-xl">
           {{ messages("unloadingGuidance.heading") }}
         </h1>
+          <p class="govuk-body">
+            {{messages("unloadingGuidance.para")}}
+          </p>
 
-        <p class = "govuk-body">{{ messages("unloadingGuidance.paragraph1", mrn) }}</p>
-        <p class = "govuk-body">{{ messages("unloadingGuidance.paragraph2") }}</p>
+             <ul class="govuk-list govuk-list--bullet">
+                  <li>{{ messages("unloadingGuidance.bullet1") }}</li>
+                  <li>{{ messages("unloadingGuidance.bullet2", mrn) }}</li>
+             </ul>
+
 
         {{ govukButton({
           text: messages("site.continue"),

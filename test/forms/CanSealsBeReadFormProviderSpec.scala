@@ -14,8 +14,32 @@
  * limitations under the License.
  */
 
-package models.requests
+package forms
 
-import play.api.mvc.{Request, WrappedRequest}
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-case class IdentifierRequest[A](request: Request[A], eoriNumber: String) extends WrappedRequest[A](request)
+class CanSealsBeReadFormProviderSpec extends BooleanFieldBehaviours {
+
+  val requiredKey = "canSealsBeRead.error.required"
+  val invalidKey  = "error.boolean"
+
+  val form = new CanSealsBeReadFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+}

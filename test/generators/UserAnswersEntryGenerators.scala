@@ -23,6 +23,38 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators {
 
+  implicit lazy val arbitraryChangesToReportEntry: Arbitrary[(ChangesToReportPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ChangesToReportPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryAnythingElseToReportUserAnswersEntry: Arbitrary[(AnythingElseToReportPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AnythingElseToReportPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryAreAnySealsBrokenUserAnswersEntry: Arbitrary[(AreAnySealsBrokenPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[AreAnySealsBrokenPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryCanSealsBeReadUserAnswersEntry: Arbitrary[(CanSealsBeReadPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[CanSealsBeReadPage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
   implicit lazy val arbitraryAdditionalChangesInformationReference: Arbitrary[(AdditionalChangesInformationPage.type, JsValue)] =
     Arbitrary {
       for {
@@ -39,10 +71,10 @@ trait UserAnswersEntryGenerators extends PageGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySealNumberReference: Arbitrary[(SealNumberPage.type, JsValue)] =
+  implicit lazy val arbitrarySealNumberReference: Arbitrary[(NewSealNumberPage.type, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[SealNumberPage.type]
+        page  <- arbitrary[NewSealNumberPage.type]
         value <- arbitrary[String].map(Json.toJson(_))
       } yield (page, value)
     }
