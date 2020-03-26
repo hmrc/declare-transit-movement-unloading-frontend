@@ -197,8 +197,8 @@ changeSeal.sealList.change.hidden = seal {0}
 changeItems.title = Items
 changeItems.grossMass.label = Total gross mass in kilograms
 changeItems.grossMass.change.hidden = total gross mass in kilograms
-changeItem.itemList.label = Seal {0}
-changeItem.itemList.change.hidden = seal {0}
+changeItem.itemList.label = Item {0}
+changeItem.itemList.change.hidden = Item {0}
 
 canSealsBeRead.title = Can all of the seal numbers or marks be read?
 canSealsBeRead.heading = Can all of the seal numbers or marks be read?
