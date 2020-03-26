@@ -35,6 +35,11 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val betaFeedbackUrl                = s"$contactHost/contact/beta-feedback"
   val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
 
+  lazy val loginUrl: String               = configuration.get[String]("microservice.services.auth.login")
+  lazy val loginContinueUrl: String       = configuration.get[String]("microservice.services.auth.loginContinue")
+  lazy val enrolmentKey: String           = configuration.get[String]("microservice.services.auth.enrolmentKey")
+  lazy val enrolmentIdentifierKey: String = configuration.get[String]("microservice.services.auth.enrolmentIdentifierKey")
+
   private val manageTransitMovementsHost = configuration.get[String]("manage-transit-movements-frontend.host")
   val manageTransitMovementsUrl          = s"$manageTransitMovementsHost/manage-transit-movements/"
 

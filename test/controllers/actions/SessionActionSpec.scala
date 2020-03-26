@@ -17,13 +17,21 @@
 package controllers.actions
 
 import base.SpecBase
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{BodyParsers, Results}
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthenticateHeaderParser, Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.http.SessionKeys
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{times, verify, when}
+import play.api.libs.json.JsResult.Exception
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class SessionActionSpec extends SpecBase {
+class SessionActionSpec extends SpecBase with MockitoSugar {
+
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
   class Harness(action: IdentifierAction) {
 
@@ -37,20 +45,23 @@ class SessionActionSpec extends SpecBase {
 
     "when there's no active session" - {
 
-      "must redirect to the session expired page" in {
+      "must redirect to the unAuthorise" in {
+
+        when(mockAuthConnector.authorise[Enrolments](any(), any())(any(), any())) thenReturn
+          Future.failed(AuthenticateHeaderParser.parse(Map("" -> Seq())))
 
         val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers)
+        val sessionAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers)
 
         val controller = new Harness(sessionAction)
 
         val result = controller.onPageLoad()(fakeRequest)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result).get must startWith(controllers.routes.SessionExpiredController.onPageLoad().url)
+        redirectLocation(result).get must startWith(controllers.routes.UnauthorisedController.onPageLoad().url)
       }
     }
 
@@ -58,11 +69,14 @@ class SessionActionSpec extends SpecBase {
 
       "must perform the action" in {
 
+        when(mockAuthConnector.authorise[Enrolments](any(), any())(any(), any())) thenReturn Future.successful(
+          Enrolments(Set(Enrolment("HMCE-NCTS-ORG", Seq(EnrolmentIdentifier("VATRegNoTURN", "")), "Active"))))
+
         val application = applicationBuilder(userAnswers = None).build()
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
 
-        val sessionAction = new SessionIdentifierAction(frontendAppConfig, bodyParsers)
+        val sessionAction = new AuthenticatedIdentifierAction(mockAuthConnector, frontendAppConfig, bodyParsers)
 
         val controller = new Harness(sessionAction)
 
