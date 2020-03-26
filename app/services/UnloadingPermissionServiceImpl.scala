@@ -55,10 +55,27 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
   )
 
+  private val unloadingPermissionwithNoChanges = UnloadingPermission(
+    movementReferenceNumber = "99IT9876AB88901209",
+    transportIdentity       = None,
+    transportCountry        = None,
+    numberOfItems           = 1,
+    numberOfPackages        = 1,
+    grossMass               = "1000",
+    traderAtDestination     = trader,
+    presentationOffice      = "GB000060",
+    seals                   = None,
+    goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
+  )
+
   //TODO: This will call the connector but can initially hard code UnloadingPermission
   //TODO: to test the view
   def getUnloadingPermission(): Option[UnloadingPermission] =
     Some(unloadingPermission)
+
+  def getUnloadingPermissionwithNoChangesToReport(): Option[UnloadingPermission] =
+    Some(unloadingPermissionwithNoChanges)
+
 }
 
 trait UnloadingPermissionService {
