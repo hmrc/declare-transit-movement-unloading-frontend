@@ -15,7 +15,7 @@
  */
 
 package viewModels
-import models.UnloadingPermission
+import models.{Index, UnloadingPermission}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSumamaryHelper
@@ -31,11 +31,7 @@ object UnloadingSummaryViewModel {
       Seq(UnloadingSumamaryHelper.grossMass(unloadingPermission.grossMass))
 
     val itemsRow: Seq[Row] =
-      unloadingPermission.goodsItems
-        .map(
-          item => UnloadingSumamaryHelper.items(1, item.description)
-        )
-        .toList
+      unloadingPermission.goodsItems.zipWithIndex.map(x => UnloadingSumamaryHelper.items(Index(x._2), x._1.description)).toList
 
     val itemsSection = Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow))
 
@@ -51,7 +47,9 @@ object UnloadingSummaryViewModel {
 
     val sealsSection: Seq[Section] = unloadingPermission.seals match {
       case Some(seals) => {
-        val rows: Seq[Row] = seals.SealId.map(UnloadingSumamaryHelper.seals(1, _)) //TODO: index needs to change
+
+//        val rows: Seq[Row] = seals.SealId.map(UnloadingSumamaryHelper.seals(1, _)) //TODO: index needs to change
+        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(x => UnloadingSumamaryHelper.seals(Index(x._2), x._1)) //TODO: index needs to change
         Seq(Section(msg"changeSeal.title", rows))
       }
       case _ => Nil

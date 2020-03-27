@@ -15,35 +15,36 @@
  */
 
 package utils
+import models.Index
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
 object UnloadingSumamaryHelper {
 
-  def seals(index: Int, value: String) =
+  def seals(index: Index, value: String) =
     Row(
-      key   = Key(msg"changeSeal.sealList.label".withArgs(index), classes = Seq("govuk-!-width-one-half")),
+      key   = Key(msg"changeSeal.sealList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
       value = Value(lit"$value"),
       actions = List(
         Action(
           content            = msg"site.edit",
           href               = "#",
-          visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index)),
-          attributes         = Map("id" -> s"""change-seal-$index""")
+          visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display)),
+          attributes         = Map("id" -> s"""change-seal-${index.position}""")
         )
       )
     )
 
-  def items(index: Int, value: String) =
+  def items(index: Index, value: String) =
     Row(
-      key   = Key(msg"changeItem.itemList.label".withArgs(index), classes = Seq("govuk-!-width-one-half")),
+      key   = Key(msg"changeItem.itemList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
       value = Value(lit"$value"),
       actions = List(
         Action(
           content            = msg"site.edit",
           href               = "#",
-          visuallyHiddenText = Some(msg"changeItem.itemList.change.hidden".withArgs(index)),
-          attributes         = Map("id" -> s"""change-item-$index""")
+          visuallyHiddenText = Some(msg"changeItem.itemList.change.hidden".withArgs(index.display)),
+          attributes         = Map("id" -> s"""change-item-${index.position}""")
         )
       )
     )

@@ -59,13 +59,13 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
     movementReferenceNumber = "19IT02110010007827",
     transportIdentity       = Some("NX56RTA"),
     transportCountry        = Some("UK"), //TODO: Do we need to call reference data for this
-    numberOfItems           = 1,
+    numberOfItems           = 2,
     numberOfPackages        = 1,
     grossMass               = "1000",
     traderAtDestination     = trader,
     presentationOffice      = "GB000060",
     seals                   = Some(Seals(1, Seq("Seals01", "Seals02"))),
-    goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
+    goodsItems              = NonEmptyList(goodsItemMandatory, List(goodsItemMandatory))
   )
 
   private val unloadingPermissionwithNoChanges = UnloadingPermission(
