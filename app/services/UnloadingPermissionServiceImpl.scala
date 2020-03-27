@@ -87,10 +87,6 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
     case "19IT02110010007827" => Some(unloadingPermissionSeals)
     case _                    => Some(unloadingPermission)
   }
-
-  def getUnloadingPermissionwithNoChangesToReport(): Option[UnloadingPermission] =
-    Some(unloadingPermissionwithNoChanges)
-
 }
 
 trait UnloadingPermissionService {

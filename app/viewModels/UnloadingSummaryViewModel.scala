@@ -47,8 +47,6 @@ object UnloadingSummaryViewModel {
 
     val sealsSection: Seq[Section] = unloadingPermission.seals match {
       case Some(seals) => {
-
-//        val rows: Seq[Row] = seals.SealId.map(UnloadingSumamaryHelper.seals(1, _)) //TODO: index needs to change
         val rows: Seq[Row] = seals.SealId.zipWithIndex.map(x => UnloadingSumamaryHelper.seals(Index(x._2), x._1)) //TODO: index needs to change
         Seq(Section(msg"changeSeal.title", rows))
       }
