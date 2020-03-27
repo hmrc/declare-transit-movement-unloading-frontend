@@ -24,6 +24,8 @@ import play.api.data.Form
 
 class DateGoodsUnloadedFormProvider @Inject() extends Mappings {
 
+  val dateNow = LocalDate.now()
+
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
@@ -31,6 +33,6 @@ class DateGoodsUnloadedFormProvider @Inject() extends Mappings {
         allRequiredKey = "dateGoodsUnloaded.error.required.all",
         twoRequiredKey = "dateGoodsUnloaded.error.required.two",
         requiredKey    = "dateGoodsUnloaded.error.required"
-      )
+      ).verifying(maxDate(dateNow, "dateGoodsUnloaded.error.max.date"))
     )
 }
