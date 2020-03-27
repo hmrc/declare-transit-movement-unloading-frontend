@@ -46,7 +46,7 @@ class UnloadingSummaryController @Inject()(
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
       //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
-      val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission() match {
+      val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission(mrn) match {
         case Some(unloadingPermission) => UnloadingSummaryViewModel(unloadingPermission).sections
       }
 

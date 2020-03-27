@@ -18,7 +18,7 @@ package services
 import cats.data.NonEmptyList
 import com.google.inject.{Inject, Singleton}
 import connectors.UnloadingConnector
-import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission}
+import models.{GoodsItem, MovementReferenceNumber, Packages, ProducedDocument, Seals, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
 
 @Singleton
 class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) extends UnloadingPermissionService {
@@ -55,6 +55,19 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
   )
 
+  private val unloadingPermissionSeals = UnloadingPermission(
+    movementReferenceNumber = "19IT02110010007827",
+    transportIdentity       = Some("NX56RTA"),
+    transportCountry        = Some("UK"), //TODO: Do we need to call reference data for this
+    numberOfItems           = 1,
+    numberOfPackages        = 1,
+    grossMass               = "1000",
+    traderAtDestination     = trader,
+    presentationOffice      = "GB000060",
+    seals                   = Some(Seals(1, Seq("Seals01", "Seals02"))),
+    goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
+  )
+
   private val unloadingPermissionwithNoChanges = UnloadingPermission(
     movementReferenceNumber = "99IT9876AB88901209",
     transportIdentity       = None,
@@ -70,8 +83,10 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
 
   //TODO: This will call the connector but can initially hard code UnloadingPermission
   //TODO: to test the view
-  def getUnloadingPermission(): Option[UnloadingPermission] =
-    Some(unloadingPermission)
+  def getUnloadingPermission(mrn: MovementReferenceNumber): Option[UnloadingPermission] = mrn.toString match {
+    case "99IT9876AB88901209" => Some(unloadingPermissionSeals)
+    case _                    => Some(unloadingPermission)
+  }
 
   def getUnloadingPermissionwithNoChangesToReport(): Option[UnloadingPermission] =
     Some(unloadingPermissionwithNoChanges)
@@ -79,5 +94,5 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
 }
 
 trait UnloadingPermissionService {
-  def getUnloadingPermission(): Option[UnloadingPermission]
+  def getUnloadingPermission(mrn: MovementReferenceNumber): Option[UnloadingPermission]
 }
