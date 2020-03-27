@@ -84,7 +84,7 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
   //TODO: This will call the connector but can initially hard code UnloadingPermission
   //TODO: to test the view
   def getUnloadingPermission(mrn: MovementReferenceNumber): Option[UnloadingPermission] = mrn.toString match {
-    case "99IT9876AB88901209" => Some(unloadingPermissionSeals)
+    case "19IT02110010007827" => Some(unloadingPermissionSeals)
     case _                    => Some(unloadingPermission)
   }
 
