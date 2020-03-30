@@ -16,7 +16,7 @@
 
 package services
 import connectors.UnloadingConnector
-import models.UnloadingPermission
+import models.{MovementReferenceNumber, UnloadingPermission}
 import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.mockito.MockitoSugar
 
@@ -29,9 +29,11 @@ class UnloadingPermissionServiceSpec extends FreeSpec with MustMatchers with Moc
     //TODO: This needs more tests adding when we're calling connector
     "must return UnloadingPermission" in {
 
+      val mrn = MovementReferenceNumber("99IT9876AB88901209")
+
       val service = new UnloadingPermissionServiceImpl(mockConnector)
 
-      service.getUnloadingPermission() mustBe a[Option[UnloadingPermission]]
+      service.getUnloadingPermission(mrn.get) mustBe a[Option[UnloadingPermission]]
     }
   }
 

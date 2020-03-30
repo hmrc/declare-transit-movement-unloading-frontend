@@ -38,16 +38,17 @@ class UnloadingSummaryController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   unloadingPermissionService: UnloadingPermissionService
+  //TODO: Pull in ReferenceConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  //TODO: Add service to pull in UnloadingPermssionViewModel
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
       //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
+      //TODO: Consider passing in referenceData into the UnloadingSummaryViewModel
       val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission(mrn) match {
-        case Some(unloadingPermission) => UnloadingSummaryViewModel(unloadingPermission).sections
+        case Some(unloadingPermission) => UnloadingSummaryViewModel()(unloadingPermission).sections
       }
 
       val redirectUrl = controllers.routes.AnythingElseToReportController.onPageLoad(mrn, NormalMode)
