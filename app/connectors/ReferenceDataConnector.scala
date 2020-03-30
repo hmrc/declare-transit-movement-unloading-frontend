@@ -26,8 +26,16 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataConnector @Inject()(config: FrontendAppConfig, http: HttpClient) {
 
-  def getCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
+  def getCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Seq[Country]]] = {
     val serviceUrl = s"${config.referenceDataUrl}/countries-full-list"
-    http.GET[Seq[Country]](serviceUrl)
+    http
+      .GET[Seq[Country]](serviceUrl)
+      .map {
+        case Nil => None
+        case x   => Some(x)
+      }
+      .recover {
+        case _ => None
+      }
   }
 }

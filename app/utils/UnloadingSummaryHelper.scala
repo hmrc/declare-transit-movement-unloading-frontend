@@ -19,7 +19,7 @@ import models.Index
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
-object UnloadingSumamaryHelper {
+object UnloadingSummaryHelper {
 
   def seals(index: Index, value: String) =
     Row(

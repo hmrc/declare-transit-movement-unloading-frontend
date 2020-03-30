@@ -42,7 +42,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   private val manageTransitMovementsHost = configuration.get[String]("manage-transit-movements-frontend.host")
   val manageTransitMovementsUrl          = s"$manageTransitMovementsHost/manage-transit-movements/"
-  lazy val referenceDataUrl: String      = configuration.get[Service]("microservice.services.referenceData").baseUrl
+
+  lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.reference-data").baseUrl ++
+    configuration.get[String]("microservice.services.reference-data.uri")
 
   lazy val arrivalsBackend: String = configuration.get[Service]("microservice.services.arrivals-backend").baseUrl ++
     configuration.get[String]("microservice.services.arrivals-backend.uri")
