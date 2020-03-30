@@ -32,51 +32,37 @@ import scala.concurrent.Future
 class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMockSuite
   with MustMatchers with ScalaCheckPropertyChecks with IntegrationPatience {
 
+  import ReferenceDataConnectorSpec._
+
   override protected def portConfigKey: String = "microservice.services.reference-data.port"
 
   private lazy val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]
 
-  private val uri = "/transit-movements-trader-reference-data/countries-full-list"
-
   implicit val hc = HeaderCarrier()
-
-  private val countryListResponseJson: String =
-    """
-      |[
-      | {
-      |   "code":"GB",
-      |   "state":"valid",
-      |   "description":"United Kingdom"
-      | },
-      | {
-      |   "code":"AD",
-      |   "state":"valid",
-      |   "description":"Andorra"
-      | }
-      |]
-      |""".stripMargin
-
-  val errorResponses: Gen[Int] = Gen.chooseNum(400, 599)
 
   "Reference Data" - {
 
-    "must return 'Country List' successfully" in {
-      server.stubFor(
-        get(urlEqualTo(uri))
-          .willReturn(okJson(countryListResponseJson))
-      )
+    "GET" - {
 
-      val expectedResult = Seq(
-        Country("valid", "GB", "United Kingdom"),
-        Country("valid", "AD", "Andorra")
-      )
+      //TODO: Look at reference data, what responses do we get from it
+      "should handle a 200 response" in {
+        server.stubFor(
+          get(urlEqualTo(uri))
+            .willReturn(okJson(countryListResponseJson))
+        )
 
-      connector.getCountryList.futureValue mustBe expectedResult
-    }
+        val expectedResult = Seq(
+          Country("valid", "GB", "United Kingdom"),
+          Country("valid", "AD", "Andorra")
+        )
 
-    "must return an exception when an error response is returned from getCountryList" in {
+        connector.getCountryList.futureValue mustBe expectedResult
+      }
 
-      checkErrorResponse(uri, connector.getCountryList)
+      "should handle client and server errors" in {
+
+        checkErrorResponse(uri, connector.getCountryList)
+      }
     }
   }
 
@@ -95,4 +81,27 @@ class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMoc
           _ mustBe an[Exception]
         }
     }
+}
+
+object ReferenceDataConnectorSpec {
+
+  private val uri = "/transit-movements-trader-reference-data/countries-full-list"
+
+  private val countryListResponseJson: String =
+    """
+      |[
+      | {
+      |   "code":"GB",
+      |   "state":"valid",
+      |   "description":"United Kingdom"
+      | },
+      | {
+      |   "code":"AD",
+      |   "state":"valid",
+      |   "description":"Andorra"
+      | }
+      |]
+      |""".stripMargin
+
+  val errorResponses: Gen[Int] = Gen.chooseNum(400: Int, 599: Int)
 }

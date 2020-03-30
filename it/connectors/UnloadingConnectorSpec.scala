@@ -18,7 +18,7 @@ class UnloadingConnectorSpec extends FreeSpec with ScalaFutures with
 
   override protected def portConfigKey: String = "microservice.services.arrivals-backend.port"
 
-  private def connector: UnloadingConnector = app.injector.instanceOf[UnloadingConnector]
+  private lazy val connector: UnloadingConnector = app.injector.instanceOf[UnloadingConnector]
 
   implicit val hc = HeaderCarrier()
 
