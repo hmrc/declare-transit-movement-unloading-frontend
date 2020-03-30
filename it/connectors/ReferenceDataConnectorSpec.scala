@@ -56,7 +56,7 @@ class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMoc
           Country("valid", "AD", "Andorra")
         )
 
-        connector.getCountryList.futureValue mustBe Some(expectedResult)
+        connector.getCountryList.futureValue mustBe expectedResult
       }
 
       "should handle client and server errors" in {
@@ -78,7 +78,7 @@ class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMoc
         )
 
         whenReady(result) {
-          _ mustBe None
+          _ mustBe Nil
         }
     }
 }

@@ -20,7 +20,7 @@ import com.google.inject.AbstractModule
 import connectors.{UnloadingConnector, UnloadingConnectorImpl}
 import controllers.actions._
 import repositories.{DefaultSessionRepository, SessionRepository}
-import services.{UnloadingPermissionService, UnloadingPermissionServiceImpl}
+import services.{ReferenceDataService, ReferenceDataServiceImpl, UnloadingPermissionService, UnloadingPermissionServiceImpl}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class Module extends AbstractModule {
@@ -39,5 +39,7 @@ class Module extends AbstractModule {
     bind(classOf[UnloadingConnector]).to(classOf[UnloadingConnectorImpl]).asEagerSingleton()
 
     bind(classOf[UnloadingPermissionService]).to(classOf[UnloadingPermissionServiceImpl]).asEagerSingleton()
+
+    bind(classOf[ReferenceDataService]).to(classOf[ReferenceDataServiceImpl]).asEagerSingleton()
   }
 }

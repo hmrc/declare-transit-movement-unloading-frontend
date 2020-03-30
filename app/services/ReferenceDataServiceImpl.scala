@@ -14,28 +14,24 @@
  * limitations under the License.
  */
 
-package connectors
-
-import config.FrontendAppConfig
-import javax.inject.Inject
+package services
+import com.google.inject.Inject
+import connectors.ReferenceDataConnector
 import models.reference.Country
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ReferenceDataConnector @Inject()(config: FrontendAppConfig, http: HttpClient) {
+class ReferenceDataServiceImpl @Inject()(connector: ReferenceDataConnector) extends ReferenceDataService {
 
-  def getCountryList()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] = {
-    val serviceUrl = s"${config.referenceDataUrl}/countries-full-list"
-    http
-      .GET[Seq[Country]](serviceUrl)
-      .map {
-        case Nil => Nil
-        case x   => x
-      }
-      .recover {
-        case _ => Nil
-      }
-  }
+  def getCountryByCode(code: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]] =
+    connector.getCountryList() map {
+      countries =>
+        countries.find(x => x.code.equals(code))
+    }
+
+}
+
+trait ReferenceDataService {
+  def getCountryByCode(code: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]]
 }

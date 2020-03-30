@@ -23,7 +23,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
-import services.UnloadingPermissionService
+import services.{ReferenceDataService, UnloadingPermissionService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import viewModels.UnloadingSummaryViewModel
 import viewModels.sections.Section
@@ -37,8 +37,8 @@ class UnloadingSummaryController @Inject()(
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
-  unloadingPermissionService: UnloadingPermissionService
-  //TODO: Pull in ReferenceConnector
+  unloadingPermissionService: UnloadingPermissionService,
+  referenceDataService: ReferenceDataService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -46,7 +46,6 @@ class UnloadingSummaryController @Inject()(
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
       //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
-      //TODO: Consider passing in referenceData into the UnloadingSummaryViewModel
       val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission(mrn) match {
         case Some(unloadingPermission) => UnloadingSummaryViewModel()(unloadingPermission).sections
       }
