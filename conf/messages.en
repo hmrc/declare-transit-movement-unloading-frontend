@@ -182,8 +182,8 @@ additionalChangesInformation.checkYourAnswersLabel = additionalChangesInformatio
 additionalChangesInformation.error.required = Enter additionalChangesInformation
 additionalChangesInformation.error.length = AdditionalChangesInformation must be 100 characters or less
 
-unloadingSummary.title = unloadingSummary
-unloadingSummary.heading = unloadingSummary
+unloadingSummary.title = Check what you found against the transit declaration
+unloadingSummary.heading = Check what you found against the transit declaration
 
 vehicleUsed.title = Vehicle used
 changeVehicle.reference.label = Name, registration or reference

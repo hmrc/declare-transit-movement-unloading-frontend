@@ -31,8 +31,7 @@ class ReferenceDataConnector @Inject()(config: FrontendAppConfig, http: HttpClie
     http
       .GET[Seq[Country]](serviceUrl)
       .map {
-        case Nil => Nil
-        case x   => x
+        case x => x
       }
       .recover {
         case _ => Nil

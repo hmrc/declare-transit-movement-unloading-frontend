@@ -22,8 +22,6 @@ import org.scalacheck.Gen
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.{Assertion, FreeSpec, MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +42,6 @@ class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMoc
 
     "GET" - {
 
-      //TODO: Look at reference data, what responses do we get from it
       "should handle a 200 response" in {
         server.stubFor(
           get(urlEqualTo(uri))
