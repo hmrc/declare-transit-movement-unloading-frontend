@@ -47,7 +47,7 @@ class UnloadingSummaryController @Inject()(
     implicit request =>
       //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
       val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission(mrn) match {
-        case Some(unloadingPermission) => UnloadingSummaryViewModel()(unloadingPermission).sections
+        case Some(unloadingPermission) => UnloadingSummaryViewModel(request.userAnswers)(unloadingPermission).sections
       }
 
       val redirectUrl = controllers.routes.AnythingElseToReportController.onPageLoad(mrn, NormalMode)

@@ -27,7 +27,7 @@ case class UnloadingSummaryViewModel(sections: Seq[Section])
 object UnloadingSummaryViewModel {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel =
-    UnloadingSummaryViewModel(sealsSection ++ transportSection ++ itemsSection)
+    UnloadingSummaryViewModel(sealsSection.apply(userAnswers) ++ transportSection.apply(userAnswers) ++ itemsSection.apply(userAnswers))
 
 }
 
