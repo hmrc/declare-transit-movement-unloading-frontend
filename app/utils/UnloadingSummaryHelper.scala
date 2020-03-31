@@ -15,11 +15,11 @@
  */
 
 package utils
-import models.Index
+import models.{CheckMode, Index, MovementReferenceNumber, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
-object UnloadingSummaryHelper {
+class UnloadingSummaryHelper(userAnswers: UserAnswers) {
 
   def seals(index: Index, value: String) =
     Row(
@@ -56,7 +56,7 @@ object UnloadingSummaryHelper {
       actions = List(
         Action(
           content            = msg"site.edit",
-          href               = "#",
+          href               = controllers.routes.VehicleNameRegistrationReferenceController.onPageLoad(mrn, CheckMode).url,
           visuallyHiddenText = Some(msg"changeVehicle.reference.change.hidden"),
           attributes         = Map("id" -> s"""change-vehicle-reference""")
         )
@@ -90,4 +90,5 @@ object UnloadingSummaryHelper {
         )
       )
     )
+  def mrn: MovementReferenceNumber = userAnswers.id
 }

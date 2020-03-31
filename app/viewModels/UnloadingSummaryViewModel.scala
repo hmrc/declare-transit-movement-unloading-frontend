@@ -15,42 +15,61 @@
  */
 
 package viewModels
-import models.{Index, UnloadingPermission}
+import models.{Index, UnloadingPermission, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSummaryHelper
+import viewModels.sealsSection.{itemsSection, transportSection}
 import viewModels.sections.Section
 
 case class UnloadingSummaryViewModel(sections: Seq[Section])
 
 object UnloadingSummaryViewModel {
 
-  def apply()(implicit unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel =
+  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel =
     UnloadingSummaryViewModel(sealsSection ++ transportSection ++ itemsSection)
 
-  private def sealsSection()(implicit unloadingPermission: UnloadingPermission): Seq[Section] = unloadingPermission.seals match {
-    case Some(seals) =>
-      val rows: Seq[Row] = seals.SealId.zipWithIndex.map(x => UnloadingSummaryHelper.seals(Index(x._2), x._1))
-      Seq(Section(msg"changeSeal.title", rows))
-    case _ => Nil
-  }
+}
 
-  private def transportSection()(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
-    val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map(UnloadingSummaryHelper.vehicleUsed(_)).toSeq
-    val transportCountry: Seq[Row]  = unloadingPermission.transportCountry.map(UnloadingSummaryHelper.registeredCountry(_)).toSeq
+object sealsSection {
 
-    transportIdentity ++ transportCountry match {
-      case transport if transport.nonEmpty =>
-        Seq(Section(msg"vehicleUsed.title", transport))
+  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
+    val helper = new UnloadingSummaryHelper(userAnswers)
+    unloadingPermission.seals match {
+      case Some(seals) => {
+        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(x => helper.seals(Index(x._2), x._1))
+        Seq(Section(msg"changeSeal.title", rows))
+      }
       case _ => Nil
     }
   }
 
-  private def itemsSection()(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
-    val grossMassRow: Seq[Row] = Seq(UnloadingSummaryHelper.grossMass(unloadingPermission.grossMass))
-    val itemsRow: Seq[Row]     = unloadingPermission.goodsItems.zipWithIndex.map(x => UnloadingSummaryHelper.items(Index(x._2), x._1.description)).toList
+  object transportSection {
 
-    Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow))
+    def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
+      val helper                      = new UnloadingSummaryHelper(userAnswers)
+      val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map(helper.vehicleUsed(_)).toSeq
+      val transportCountry: Seq[Row]  = unloadingPermission.transportCountry.map(helper.registeredCountry(_)).toSeq
+
+      transportIdentity ++ transportCountry match {
+        case transport if transport.nonEmpty =>
+          Seq(Section(msg"vehicleUsed.title", transport))
+        case _ => Nil
+      }
+
+    }
+  }
+
+  object itemsSection {
+
+    def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
+      val helper                 = new UnloadingSummaryHelper(userAnswers)
+      val grossMassRow: Seq[Row] = Seq(helper.grossMass(unloadingPermission.grossMass))
+      val itemsRow: Seq[Row]     = unloadingPermission.goodsItems.zipWithIndex.map(x => helper.items(Index(x._2), x._1.description)).toList
+
+      Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow))
+    }
+
   }
 
 }
