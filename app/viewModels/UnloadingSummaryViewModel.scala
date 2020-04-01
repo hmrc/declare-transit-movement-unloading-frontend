@@ -15,18 +15,25 @@
  */
 
 package viewModels
+import com.google.inject.{Inject, Singleton}
+import models.reference.Country
 import models.{Index, UnloadingPermission}
+import services.{ReferenceDataService, UnloadingPermissionService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSummaryHelper
 import viewModels.sections.Section
 
-case class UnloadingSummaryViewModel(sections: Seq[Section])
+import scala.concurrent.{ExecutionContext, Future}
 
-object UnloadingSummaryViewModel {
+//case class UnloadingSummaryViewModel(sections: Seq[Section])
 
-  def apply()(implicit unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel =
-    UnloadingSummaryViewModel(sealsSection ++ transportSection ++ itemsSection)
+@Singleton
+class UnloadingSummaryViewModel @Inject()(referenceDataService: ReferenceDataService) {
+
+  def apply()(implicit unloadingPermission: UnloadingPermission, ec: ExecutionContext, hc: HeaderCarrier): Seq[Section] =
+    sealsSection ++ transportSection ++ itemsSection
 
   private def sealsSection()(implicit unloadingPermission: UnloadingPermission): Seq[Section] = unloadingPermission.seals match {
     case Some(seals) =>
@@ -35,8 +42,17 @@ object UnloadingSummaryViewModel {
     case _ => Nil
   }
 
-  private def transportSection()(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
+  private def transportSection()(implicit unloadingPermission: UnloadingPermission, ec: ExecutionContext, hc: HeaderCarrier): Seq[Section] = {
     val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map(UnloadingSummaryHelper.vehicleUsed(_)).toSeq
+
+
+    val country: Option[Country] = for {
+      countryString <- unloadingPermission.transportCountry
+      country <- referenceDataService.getCountryByCode(countryString)
+    } yield  {
+      country
+    }.getOrElse(None)
+
     val transportCountry: Seq[Row]  = unloadingPermission.transportCountry.map(UnloadingSummaryHelper.registeredCountry(_)).toSeq
 
     transportIdentity ++ transportCountry match {
