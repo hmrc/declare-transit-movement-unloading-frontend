@@ -17,8 +17,10 @@
 package controllers
 
 import base.SpecBase
+import connectors.ReferenceDataConnector
 import forms.VehicleRegistrationCountryFormProvider
 import matchers.JsonMatchers
+import models.reference.Country
 import models.{NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
@@ -26,6 +28,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.VehicleRegistrationCountryPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.libs.json.{JsObject, JsString, Json}
 import play.api.mvc.Call
@@ -41,10 +44,12 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new VehicleRegistrationCountryFormProvider()
-  val form         = formProvider()
-
-  lazy val vehicleRegistrationCountryRoute = routes.VehicleRegistrationCountryController.onPageLoad(mrn, NormalMode).url
+  val formProvider                                       = new VehicleRegistrationCountryFormProvider()
+  private val country: Country                           = Country("valid", "GB", "United Kingdom")
+  val countries                                          = Seq(country)
+  val form: Form[Country]                                = formProvider(countries)
+  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
+  lazy val vehicleRegistrationCountryRoute               = routes.VehicleRegistrationCountryController.onPageLoad(mrn, NormalMode).url
 
   "VehicleRegistrationCountry Controller" - {
 
@@ -81,7 +86,11 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers    = UserAnswers(mrn).set(VehicleRegistrationCountryPage, "answer").success.value
+      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(
+        Future.successful(countries)
+      )
+
+      val userAnswers    = UserAnswers(mrn).set(VehicleRegistrationCountryPage, country).success.value
       val application    = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val request        = FakeRequest(GET, vehicleRegistrationCountryRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -95,6 +104,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
 
       val filledForm = form.bind(Map("value" -> "answer"))
 
+      //TODO add countries to expectedJson
       val expectedJson = Json.obj(
         "form" -> filledForm,
         "mrn"  -> mrn,

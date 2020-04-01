@@ -17,15 +17,18 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.reference.Country
+import org.scalatest.MustMatchers
 import play.api.data.FormError
 
 class VehicleRegistrationCountryFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "vehicleRegistrationCountry.error.required"
   val lengthKey   = "vehicleRegistrationCountry.error.length"
-  val maxLength   = 100
+  val maxLength   = 2
 
-  val form = new VehicleRegistrationCountryFormProvider()()
+  val countries = Seq(Country("valid", "AD", "Andorra"))
+  val form      = new VehicleRegistrationCountryFormProvider()(countries)
 
   ".value" - {
 
@@ -37,17 +40,24 @@ class VehicleRegistrationCountryFormProviderSpec extends StringFieldBehaviours {
       stringsWithMaxLength(maxLength)
     )
 
-    behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength   = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-    )
-
     behave like mandatoryField(
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    "not bind if country code does not exist in the country list" in {
+
+      val boundForm = form.bind(Map("value" -> "foobar"))
+      val field     = boundForm("value")
+      field.errors shouldNot be(empty)
+    }
+
+    "bind a country code which is in the list" in {
+
+      val boundForm = form.bind(Map("value" -> "AD"))
+      val field     = boundForm("value")
+      field.errors should be(empty)
+    }
   }
 }

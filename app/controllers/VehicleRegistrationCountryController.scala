@@ -16,15 +16,18 @@
 
 package controllers
 
+import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.VehicleRegistrationCountryFormProvider
 import javax.inject.Inject
+import models.reference.Country
 import models.{Mode, MovementReferenceNumber}
 import navigation.Navigator
 import pages.VehicleRegistrationCountryPage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.libs.json.{JsObject, Json}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result, Results}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -40,6 +43,7 @@ class VehicleRegistrationCountryController @Inject()(
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: VehicleRegistrationCountryFormProvider,
+  referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -47,44 +51,64 @@ class VehicleRegistrationCountryController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
-  private val form = formProvider()
+  // private val form = formProvider(Country)
 
   def onPageLoad(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(VehicleRegistrationCountryPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
+      referenceDataConnector.getCountryList() flatMap {
+        countries =>
+          val form = formProvider(countries)
+          val preparedForm = request.userAnswers.get(VehicleRegistrationCountryPage) match {
+            case None        => form
+            case Some(value) => form.fill(value)
+          }
+          renderPage(mrn, mode, preparedForm, countries, Results.Ok)
       }
 
-      val json = Json.obj(
-        "form" -> preparedForm,
-        "mrn"  -> mrn,
-        "mode" -> mode
-      )
-
-      renderer.render("vehicleRegistrationCountry.njk", json).map(Ok(_))
   }
 
-  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
+  private def renderPage(mrn: MovementReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(
+    implicit request: Request[AnyContent]): Future[Result] = {
+    val json = Json.obj(
+      "form"      -> form,
+      "mrn"       -> mrn,
+      "mode"      -> mode,
+      "countries" -> countryJsonList(form.value, countries)
+    )
 
-            val json = Json.obj(
-              "form" -> formWithErrors,
-              "mrn"  -> mrn,
-              "mode" -> mode
-            )
-
-            renderer.render("vehicleRegistrationCountry.njk", json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(VehicleRegistrationCountryPage, mode, updatedAnswers))
-        )
+    renderer.render("vehicleRegistrationCountry.njk", json).map(status(_))
   }
+
+  private def countryJsonList(value: Option[Country], countries: Seq[Country]): Seq[JsObject] = {
+    val countryJsonList = countries.map {
+      country =>
+        Json.obj("text" -> country.description, "value" -> country.code, "selected" -> value.contains(country))
+    }
+
+    Json.obj("value" -> "", "text" -> "") +: countryJsonList
+  }
+
+  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = ???
+//  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
+////    implicit request =>
+////      form
+////        .bindFromRequest()
+////        .fold(
+////          formWithErrors => {
+////
+////            val json = Json.obj(
+////              "form" -> formWithErrors,
+////              "mrn"  -> mrn,
+////              "mode" -> mode
+////            )
+////
+////            renderer.render("vehicleRegistrationCountry.njk", json).map(BadRequest(_))
+////          },
+////          value =>
+////            for {
+////              updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))
+////              _              <- sessionRepository.set(updatedAnswers)
+////            } yield Redirect(navigator.nextPage(VehicleRegistrationCountryPage, mode, updatedAnswers))
+////        )
+//  }
 }

@@ -17,6 +17,7 @@
 package generators
 
 import models._
+import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen.{choose, listOfN, nonEmptyListOf}
 import org.scalacheck.{Arbitrary, Gen}
@@ -75,4 +76,14 @@ trait ModelGenerators {
         sensitiveGoodsInformation <- listWithMaxLength[SensitiveGoodsInformation](GoodsItem.maxSensitiveGoods: Int)
       } yield GoodsItem(itemNumber, commodityCode, description, grossMass, netMass, producedDocuments, containers, packages, sensitiveGoodsInformation)
     }
+
+  implicit lazy val arbitraryCountry: Arbitrary[Country] = {
+    Arbitrary {
+      for {
+        state <- Gen.oneOf(Seq("Valid", "Invalid"))
+        code  <- Gen.pick(2, 'A' to 'Z')
+        name  <- arbitrary[String]
+      } yield Country(state, code.mkString, name)
+    }
+  }
 }
