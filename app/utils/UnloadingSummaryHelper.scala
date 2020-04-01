@@ -70,7 +70,7 @@ class UnloadingSummaryHelper(userAnswers: UserAnswers) {
       actions = List(
         Action(
           content            = msg"site.edit",
-          href               = "#",
+          href               = controllers.routes.VehicleRegistrationCountryController.onPageLoad(mrn, CheckMode).url,
           visuallyHiddenText = Some(msg"changeVehicle.registeredCountry.change.hidden"),
           attributes         = Map("id" -> s"""change-vehicle-reference""")
         )
