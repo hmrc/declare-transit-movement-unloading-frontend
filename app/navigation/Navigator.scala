@@ -74,6 +74,9 @@ class Navigator @Inject()() {
     case VehicleRegistrationCountryPage =>
       ua =>
         routes.UnloadingSummaryController.onPageLoad(ua.id)
+    case GrossMassAmountPage =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
     case _ =>
       ua =>
         routes.CheckYourAnswersController.onPageLoad(ua.id)

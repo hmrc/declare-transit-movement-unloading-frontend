@@ -84,7 +84,7 @@ class UnloadingSummaryHelper(userAnswers: UserAnswers) {
       actions = List(
         Action(
           content            = msg"site.edit",
-          href               = "#",
+          href               = controllers.routes.GrossMassAmountController.onPageLoad(mrn, CheckMode).url,
           visuallyHiddenText = Some(msg"changeItems.grossMass.change.hidden"),
           attributes         = Map("id" -> s"""change-gross-mass""")
         )

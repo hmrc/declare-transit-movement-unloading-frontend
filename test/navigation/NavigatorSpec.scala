@@ -211,6 +211,16 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
                 .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
           }
         }
+
+        "must go from Gross mass amount page to unloading summary page" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(GrossMassAmountPage, CheckMode, answers)
+                .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+          }
+        }
       }
     }
   }
