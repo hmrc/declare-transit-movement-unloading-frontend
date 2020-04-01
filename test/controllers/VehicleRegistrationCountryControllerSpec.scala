@@ -95,14 +95,17 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
       val request        = FakeRequest(GET, vehicleRegistrationCountryRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
       val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = route(application, request).value
+      val result         = route(application, request).value
+      val countriesJson = Seq(
+        Json.obj("text" -> "", "value"               -> ""),
+        Json.obj("text" -> "United Kingdom", "value" -> "GB", "selected" -> true)
+      )
 
       status(result) mustEqual OK
 
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
-      val filledForm = form.bind(Map("value" -> "answer"))
+      val filledForm = form.bind(Map("value" -> "GB"))
 
       //TODO add countries to expectedJson
       val expectedJson = Json.obj(
@@ -110,7 +113,6 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
         "mrn"  -> mrn,
         "mode" -> NormalMode
       )
-
       templateCaptor.getValue mustEqual "vehicleRegistrationCountry.njk"
       jsonCaptor.getValue must containJson(expectedJson)
 
@@ -133,7 +135,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
 
       val request =
         FakeRequest(POST, vehicleRegistrationCountryRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+          .withFormUrlEncodedBody(("value", "GB"))
 
       val result = route(application, request).value
 

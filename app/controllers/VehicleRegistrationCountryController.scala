@@ -75,7 +75,6 @@ class VehicleRegistrationCountryController @Inject()(
       "mode"      -> mode,
       "countries" -> countryJsonList(form.value, countries)
     )
-
     renderer.render("vehicleRegistrationCountry.njk", json).map(status(_))
   }
 
@@ -88,27 +87,23 @@ class VehicleRegistrationCountryController @Inject()(
     Json.obj("value" -> "", "text" -> "") +: countryJsonList
   }
 
-  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = ???
-//  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
-////    implicit request =>
-////      form
-////        .bindFromRequest()
-////        .fold(
-////          formWithErrors => {
-////
-////            val json = Json.obj(
-////              "form" -> formWithErrors,
-////              "mrn"  -> mrn,
-////              "mode" -> mode
-////            )
-////
-////            renderer.render("vehicleRegistrationCountry.njk", json).map(BadRequest(_))
-////          },
-////          value =>
-////            for {
-////              updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))
-////              _              <- sessionRepository.set(updatedAnswers)
-////            } yield Redirect(navigator.nextPage(VehicleRegistrationCountryPage, mode, updatedAnswers))
-////        )
-//  }
+  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
+    implicit request =>
+      referenceDataConnector.getCountryList() flatMap {
+        countries =>
+          val form = formProvider(countries)
+          form
+            .bindFromRequest()
+            .fold(
+              formWithErrors => {
+                renderPage(mrn, mode, formWithErrors, countries, Results.BadRequest)
+              },
+              value =>
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(VehicleRegistrationCountryPage, mode, updatedAnswers))
+            )
+      }
+  }
 }
