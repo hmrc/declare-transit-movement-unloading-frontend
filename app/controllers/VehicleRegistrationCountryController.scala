@@ -51,8 +51,6 @@ class VehicleRegistrationCountryController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
-  // private val form = formProvider(Country)
-
   def onPageLoad(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
       referenceDataConnector.getCountryList() flatMap {
