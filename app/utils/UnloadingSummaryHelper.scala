@@ -28,7 +28,7 @@ class UnloadingSummaryHelper(userAnswers: UserAnswers) {
       actions = List(
         Action(
           content            = msg"site.edit",
-          href               = "#",
+          href               = controllers.routes.NewSealNumberController.onPageLoad(mrn, CheckMode).url,
           visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display)),
           attributes         = Map("id" -> s"""change-seal-${index.position}""")
         )
