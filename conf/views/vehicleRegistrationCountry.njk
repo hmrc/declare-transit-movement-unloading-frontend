@@ -10,6 +10,12 @@
   {{ title(messages("vehicleRegistrationCountry.title"), form.errors) }}
 {% endblock %}
 
+{% block pageHead %}
+  <!--[if gt IE 8]><!-->
+  <link href="{{ routes.controllers.Assets.versioned("stylesheets/accessible-autocomplete.min.css").url }}" media="screen" rel="stylesheet" type="text/css" />
+  <!--<![endif]-->
+{% endblock %}
+
 {% block mainContent %}
 
   {{ govukBackLink({
