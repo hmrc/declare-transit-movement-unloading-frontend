@@ -16,6 +16,7 @@
 
 package generators
 
+import models.Index
 import org.scalacheck.Arbitrary
 import pages._
 
@@ -39,8 +40,8 @@ trait PageGenerators {
   implicit lazy val arbitrarySealsInformationPage: Arbitrary[SealsInformationPage.type] =
     Arbitrary(SealsInformationPage)
 
-  implicit lazy val arbitrarySealNumberPage: Arbitrary[NewSealNumberPage.type] =
-    Arbitrary(NewSealNumberPage)
+  implicit lazy val arbitrarySealNumberPage: Arbitrary[NewSealNumberPage] =
+    Arbitrary(NewSealNumberPage(Index(0)))
 
   implicit lazy val arbitraryGrossMassAmountPage: Arbitrary[GrossMassAmountPage.type] =
     Arbitrary(GrossMassAmountPage)

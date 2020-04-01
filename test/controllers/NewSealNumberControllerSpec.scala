@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import forms.NewSealNumberFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UserAnswers}
+import models.{Index, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
@@ -43,8 +43,9 @@ class NewSealNumberControllerSpec extends SpecBase with MockitoSugar with Nunjuc
 
   val formProvider = new NewSealNumberFormProvider()
   val form         = formProvider()
+  val index        = Index(0)
 
-  lazy val newSealNumberRoute = routes.NewSealNumberController.onPageLoad(mrn, NormalMode).url
+  lazy val newSealNumberRoute = routes.NewSealNumberController.onPageLoad(mrn, index, NormalMode).url
 
   "NewSealNumber Controller" - {
 
@@ -81,7 +82,7 @@ class NewSealNumberControllerSpec extends SpecBase with MockitoSugar with Nunjuc
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers    = UserAnswers(mrn).set(NewSealNumberPage, "answer").success.value
+      val userAnswers    = UserAnswers(mrn).set(NewSealNumberPage(index), "answer").success.value
       val application    = applicationBuilder(userAnswers = Some(userAnswers)).build()
       val request        = FakeRequest(GET, newSealNumberRoute)
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])

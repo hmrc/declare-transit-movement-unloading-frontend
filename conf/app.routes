@@ -36,10 +36,10 @@ POST       /:mrn/gross-mass-amount                         controllers.GrossMass
 GET        /:mrn/change-gross-mass-amount                  controllers.GrossMassAmountController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
 POST       /:mrn/change-gross-mass-amount                   controllers.GrossMassAmountController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
 
-GET        /:mrn/new-seal-number                        controllers.NewSealNumberController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-POST       /:mrn/new-seal-number                        controllers.NewSealNumberController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-GET        /:mrn/change-new-seal-number                 controllers.NewSealNumberController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
-POST       /:mrn/change-new-seal-number                 controllers.NewSealNumberController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
+GET        /:mrn/seal/:index/new-seal-number                        controllers.NewSealNumberController.onPageLoad(mrn: MovementReferenceNumber, index: Index, mode: Mode = NormalMode)
+POST       /:mrn/seal/:index/new-seal-number                        controllers.NewSealNumberController.onSubmit(mrn: MovementReferenceNumber, index: Index, mode: Mode = NormalMode)
+GET        /:mrn/seal/:index/change-new-seal-number                 controllers.NewSealNumberController.onPageLoad(mrn: MovementReferenceNumber, index: Index, mode: Mode = CheckMode)
+POST       /:mrn/seal/:index/change-new-seal-number                 controllers.NewSealNumberController.onSubmit(mrn: MovementReferenceNumber, index: Index, mode: Mode = CheckMode)
 
 GET        /:mrn/seals-information                      controllers.SealsInformationController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
 POST       /:mrn/seals-information                      controllers.SealsInformationController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
