@@ -16,16 +16,19 @@
 
 package pages
 
+import models.Index
 import pages.behaviours.PageBehaviours
 
 class NewSealNumberPageSpec extends PageBehaviours {
 
+  var index = Index(0)
+
   "NewSealNumberPage" - {
 
-    beRetrievable[String](NewSealNumberPage)
+    beRetrievable[String](NewSealNumberPage(index))
 
-    beSettable[String](NewSealNumberPage)
+    beSettable[String](NewSealNumberPage(index))
 
-    beRemovable[String](NewSealNumberPage)
+    beRemovable[String](NewSealNumberPage(index))
   }
 }

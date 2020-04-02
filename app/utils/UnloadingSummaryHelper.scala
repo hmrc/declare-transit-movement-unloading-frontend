@@ -28,7 +28,7 @@ class UnloadingSummaryHelper(userAnswers: UserAnswers) {
       actions = List(
         Action(
           content            = msg"site.edit",
-          href               = controllers.routes.NewSealNumberController.onPageLoad(mrn, CheckMode).url,
+          href               = controllers.routes.NewSealNumberController.onPageLoad(mrn, index, CheckMode).url,
           visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display)),
           attributes         = Map("id" -> s"""change-seal-${index.position}""")
         )
@@ -37,16 +37,9 @@ class UnloadingSummaryHelper(userAnswers: UserAnswers) {
 
   def items(index: Index, value: String) =
     Row(
-      key   = Key(msg"changeItem.itemList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
-      value = Value(lit"$value"),
-      actions = List(
-        Action(
-          content            = msg"site.edit",
-          href               = "#",
-          visuallyHiddenText = Some(msg"changeItem.itemList.change.hidden".withArgs(index.display)),
-          attributes         = Map("id" -> s"""change-item-${index.position}""")
-        )
-      )
+      key     = Key(msg"changeItem.itemList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+      value   = Value(lit"$value"),
+      actions = Nil
     )
 
   def vehicleUsed(value: String) =

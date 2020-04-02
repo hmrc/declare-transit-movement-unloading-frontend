@@ -1,4 +1,4 @@
-$govuk-assets-path: "/declare-transit-movement-unloading-frontend/assets/lib/govuk-frontend/govuk/assets/";
+$govuk-assets-path: "/common-transit-convention-unloading-arrival/assets/lib/govuk-frontend/govuk/assets/";
 
 @import "lib/govuk-frontend/govuk/all-ie8.scss";
-@import "language-toggles.scss";
+@import "partials/language-toggles";

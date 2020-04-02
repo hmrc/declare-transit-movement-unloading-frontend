@@ -227,7 +227,7 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
           forAll(arbitrary[UserAnswers]) {
             answers =>
               navigator
-                .nextPage(NewSealNumberPage, CheckMode, answers)
+                .nextPage(NewSealNumberPage(Index(0)), CheckMode, answers)
                 .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
           }
         }

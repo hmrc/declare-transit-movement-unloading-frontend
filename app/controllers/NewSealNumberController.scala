@@ -19,7 +19,7 @@ package controllers
 import controllers.actions._
 import forms.NewSealNumberFormProvider
 import javax.inject.Inject
-import models.{Mode, MovementReferenceNumber}
+import models.{Index, Mode, MovementReferenceNumber}
 import navigation.Navigator
 import pages.NewSealNumberPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -49,9 +49,9 @@ class NewSealNumberController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
+  def onPageLoad(mrn: MovementReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(NewSealNumberPage) match {
+      val preparedForm = request.userAnswers.get(NewSealNumberPage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
@@ -65,7 +65,7 @@ class NewSealNumberController @Inject()(
       renderer.render("newSealNumber.njk", json).map(Ok(_))
   }
 
-  def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
+  def onSubmit(mrn: MovementReferenceNumber, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
@@ -82,9 +82,9 @@ class NewSealNumberController @Inject()(
           },
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(NewSealNumberPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(NewSealNumberPage(index), value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(NewSealNumberPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(NewSealNumberPage(index), mode, updatedAnswers))
         )
   }
 }
