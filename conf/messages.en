@@ -144,7 +144,7 @@ dateGoodsUnloaded.error.required.all = Enter when the goods were unloaded
 dateGoodsUnloaded.error.required.two = The date goods were unloaded must include {0} and {1}
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
 dateGoodsUnloaded.error.invalid = Enter a real date
-dateGoodsUnloaded.error.max.date = The date goods were unloaded must be no later than today
+dateGoodsUnloaded.error.max.date = When the goods were unloaded must be today or in the past
 
 vehicleNameRegistrationReference.title = What is the name, registration or reference of the new vehicle?
 vehicleNameRegistrationReference.heading = What is the name, registration or reference of the new vehicle?
