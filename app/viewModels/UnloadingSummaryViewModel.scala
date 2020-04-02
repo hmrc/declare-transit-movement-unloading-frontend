@@ -16,6 +16,7 @@
 
 package viewModels
 import models.{Index, UnloadingPermission, UserAnswers}
+import pages.NewSealNumberPage
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSummaryHelper
@@ -36,7 +37,14 @@ object SealsSection {
     val helper = new UnloadingSummaryHelper(userAnswers)
     unloadingPermission.seals match {
       case Some(seals) => {
-        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(x => helper.seals(Index(x._2), x._1))
+
+        //TODO: If user has changed this, pull out user  answer and  pass it  in as 2nd argument
+
+        val frank: Option[String] = userAnswers.get(NewSealNumberPage(Index(1)))
+
+        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
+          x => helper.seals(Index(x._2), x._1) //TODO: x._1 needs to be UserAnswers value if it exists
+        )
         Seq(Section(msg"changeSeal.title", rows))
       }
       case _ => Nil

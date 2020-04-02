@@ -94,7 +94,10 @@ class DateGoodsUnloadedController @Inject()(
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(mrn)).set(DateGoodsUnloadedPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers))
+            } yield {
+              //TODO: THis needs to redirect to summary page if no seals exist
+              Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers))
+          }
         )
   }
 }
