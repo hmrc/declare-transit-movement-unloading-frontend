@@ -71,10 +71,10 @@ trait UserAnswersEntryGenerators extends PageGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySealNumberReference: Arbitrary[(NewSealNumberPage.type, JsValue)] =
+  implicit lazy val arbitrarySealNumberReference: Arbitrary[(NewSealNumberPage, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[NewSealNumberPage.type]
+        page  <- arbitrary[NewSealNumberPage]
         value <- arbitrary[String].map(Json.toJson(_))
       } yield (page, value)
     }

@@ -77,7 +77,7 @@ class Navigator @Inject()() {
     case GrossMassAmountPage =>
       ua =>
         routes.UnloadingSummaryController.onPageLoad(ua.id)
-    case NewSealNumberPage =>
+    case NewSealNumberPage(_) =>
       ua =>
         routes.UnloadingSummaryController.onPageLoad(ua.id)
     case _ =>
