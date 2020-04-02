@@ -137,12 +137,14 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with MockitoSuga
       val mockSessionRepository = mock[SessionRepository]
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[SessionRepository].toInstance(mockSessionRepository)
+            bind[SessionRepository].toInstance(mockSessionRepository),
+            bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector)
           )
           .build()
 
