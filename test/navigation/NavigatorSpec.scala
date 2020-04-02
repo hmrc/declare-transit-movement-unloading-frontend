@@ -44,16 +44,6 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "must go from date goods unloaded page to can seals be read page" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(DateGoodsUnloadedPage, NormalMode, answers)
-              .mustBe(routes.CanSealsBeReadController.onPageLoad(answers.id, NormalMode))
-        }
-      }
-
       "must go from can seals be read page" - {
         "to Are any seals broken page when answer is Yes" in {
 

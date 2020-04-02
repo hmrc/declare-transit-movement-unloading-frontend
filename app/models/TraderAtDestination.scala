@@ -46,6 +46,15 @@ object TraderAtDestinationWithEori {
     (__ \ "CitTRD24").read[String].optional,
     (__ \ "CouTRD25").read[String].optional
   ).mapN(apply)
+
+  object Constants {
+    val eoriLength            = 17
+    val nameLength            = 35
+    val streetAndNumberLength = 35
+    val postCodeLength        = 9
+    val cityLength            = 35
+    val countryCodeLength     = 2
+  }
 }
 
 final case class TraderAtDestinationWithoutEori(
@@ -65,5 +74,13 @@ object TraderAtDestinationWithoutEori {
     (__ \ "CitTRD24").read[String],
     (__ \ "CouTRD25").read[String]
   ).mapN(apply)
+
+  object Constants {
+    val nameLength            = 35
+    val streetAndNumberLength = 35
+    val postCodeLength        = 9
+    val cityLength            = 35
+    val countryCodeLength     = 2
+  }
 
 }

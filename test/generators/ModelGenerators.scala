@@ -16,7 +16,7 @@
 
 package generators
 
-import models._
+import models.{UnloadingPermission, _}
 import models.reference.Country
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen.{choose, listOfN, nonEmptyListOf}
@@ -62,6 +62,68 @@ trait ModelGenerators {
       } yield ProducedDocument(documentType, reference, complementOfInformation)
     }
 
+  implicit lazy val arbitraryTraderWithEori: Arbitrary[TraderAtDestinationWithEori] =
+    Arbitrary {
+      for {
+        eori            <- stringsWithMaxLength(TraderAtDestinationWithEori.Constants.eoriLength)
+        name            <- Gen.option(stringsWithMaxLength(TraderAtDestinationWithEori.Constants.nameLength))
+        streetAndNumber <- Gen.option(stringsWithMaxLength(TraderAtDestinationWithEori.Constants.streetAndNumberLength))
+        postCode        <- Gen.option(stringsWithMaxLength(TraderAtDestinationWithEori.Constants.postCodeLength))
+        city            <- Gen.option(stringsWithMaxLength(TraderAtDestinationWithEori.Constants.cityLength))
+        countryCode     <- Gen.option(stringsWithMaxLength(TraderAtDestinationWithEori.Constants.countryCodeLength))
+      } yield TraderAtDestinationWithEori(eori, name, streetAndNumber, postCode, city, countryCode)
+    }
+
+  implicit lazy val arbitraryTraderWithoutEori: Arbitrary[TraderAtDestinationWithoutEori] =
+    Arbitrary {
+      for {
+        name            <- stringsWithMaxLength(TraderAtDestinationWithoutEori.Constants.nameLength)
+        streetAndNumber <- stringsWithMaxLength(TraderAtDestinationWithoutEori.Constants.streetAndNumberLength)
+        postCode        <- stringsWithMaxLength(TraderAtDestinationWithoutEori.Constants.postCodeLength)
+        city            <- stringsWithMaxLength(TraderAtDestinationWithoutEori.Constants.cityLength)
+        countryCode     <- stringsWithMaxLength(TraderAtDestinationWithoutEori.Constants.countryCodeLength)
+      } yield TraderAtDestinationWithoutEori(name, streetAndNumber, postCode, city, countryCode)
+    }
+
+  //TODO: Check spec and add correct max sizes as constants
+  implicit lazy val arbitraryUnloadingPermission: Arbitrary[UnloadingPermission] =
+    Arbitrary {
+      for {
+        movementReferenceNumber <- stringsWithMaxLength(10: Int)
+        transportIdentity       <- Gen.option(stringsWithMaxLength(11: Int))
+        transportCountry        <- Gen.option(stringsWithMaxLength(11: Int))
+        numberOfItems           <- choose(min = 1: Int, 2: Int)
+        numberOfPackages        <- choose(min = 1: Int, 2: Int)
+        grossMass               <- stringsWithMaxLength(2: Int)
+        traderAtDestination     <- Gen.oneOf(arbitrary[TraderAtDestinationWithEori], arbitrary[TraderAtDestinationWithoutEori])
+        presentationOffice      <- stringsWithMaxLength(2: Int)
+        seals                   <- Gen.option(arbitrary[Seals])
+        goodsItems              <- nonEmptyListWithMaxSize(2: Int, arbitrary[GoodsItem])
+      } yield
+        UnloadingPermission(
+          movementReferenceNumber,
+          transportIdentity,
+          transportCountry,
+          numberOfItems,
+          numberOfPackages,
+          grossMass,
+          traderAtDestination,
+          presentationOffice,
+          seals,
+          goodsItems
+        )
+    }
+
+  //TODO: Check spec and add correct max sizes as constants
+  implicit lazy val arbitrarySeals: Arbitrary[Seals] =
+    Arbitrary {
+      for {
+        numberOfSeals <- choose(min = 1: Int, 3: Int)
+        sealId        <- listWithMaxLength[String](3: Int)
+      } yield Seals(numberOfSeals, sealId)
+    }
+
+  //TODO: Check spec and add correct max sizes as constants
   implicit lazy val arbitraryGoodsItem: Arbitrary[GoodsItem] =
     Arbitrary {
       for {

@@ -18,10 +18,16 @@ package navigation
 
 import play.api.mvc.Call
 import pages._
-import models.{Mode, NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UnloadingPermission, UserAnswers}
 
 class FakeNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends Navigator {
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
+    desiredRoute
+}
+
+class FakeUnloadingPermissionNavigator(desiredRoute: Call, mode: Mode = NormalMode) extends NavigatorUnloadingPermission {
+
+  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, unloadingPermission: Option[UnloadingPermission]): Call =
     desiredRoute
 }
