@@ -16,7 +16,7 @@
 
 package viewModels
 import models.{Index, UnloadingPermission, UserAnswers}
-import pages.{NewSealNumberPage, VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
+import pages.{GrossMassAmountPage, NewSealNumberPage, VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSummaryHelper
@@ -86,10 +86,14 @@ object ItemsSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
     val helper = new UnloadingSummaryHelper(userAnswers)
-    //TODO: Add v and show user answers for gross mass if entered
-    val grossMassRow: Seq[Row] = Seq(helper.grossMass(unloadingPermission.grossMass))
-    val itemsRow: Seq[Row]     = unloadingPermission.goodsItems.zipWithIndex.map(x => helper.items(Index(x._2), x._1.description)).toList
+    val grossMassRow =
+      userAnswers.get(GrossMassAmountPage) match {
+        case Some(grossMass) => helper.grossMass(grossMass)
+        case None            => helper.grossMass(unloadingPermission.grossMass)
+      }
+    Seq(helper.grossMass(unloadingPermission.grossMass))
+    val itemsRow: Seq[Row] = unloadingPermission.goodsItems.zipWithIndex.map(x => helper.items(Index(x._2), x._1.description)).toList
 
-    Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow))
+    Seq(Section(msg"changeItems.title", Seq(grossMassRow) ++ itemsRow))
   }
 }

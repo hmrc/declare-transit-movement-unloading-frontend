@@ -18,13 +18,12 @@ package viewModels
 
 import base.SpecBase
 import cats.data.NonEmptyList
-import models.reference.Country
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission}
-import pages.{VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
+import pages.GrossMassAmountPage
 import uk.gov.hmrc.viewmodels.Text.Literal
 import viewModels.sections.Section
 
-class TransportSectionSpec extends SpecBase {
+class ItemsSectionSpec extends SpecBase {
 
   private val trader =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
@@ -58,50 +57,27 @@ class TransportSectionSpec extends SpecBase {
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
   )
 
-  "TransportSection" - {
-
+  "ItemsSection" - {
     "Must display" - {
-      "correct transport Indentity number when no changes have been made" in {
+      "Correct Gross mass when no changes have been made" in {
 
-        val regNumber          = unloadingPermission.copy(transportIdentity = Some("RegNumber1"))
-        val data: Seq[Section] = TransportSection(emptyUserAnswers)(regNumber)
-        data.head.rows.head.value.content mustBe Literal("RegNumber1")
-      }
-      "correct transport country when no changes have been made " in {
-        val regNumber          = unloadingPermission.copy(transportCountry = Some("France"))
-        val data: Seq[Section] = TransportSection(emptyUserAnswers)(regNumber)
-        data.head.rows.head.value.content mustBe Literal("France")
-
+        val grossMassAmount    = unloadingPermission.copy(grossMass = "1000")
+        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(grossMassAmount)
+        data.head.rows.head.value.content mustBe Literal("1000")
       }
 
-    }
-    "When items changed from user answers must " - {
-      "display correct transport identity when change has been made" in {
+      "Correct Gross mass when change has been made" in {
+        val grossMassAmount = unloadingPermission.copy(grossMass = "1000")
 
-        val regNumber = unloadingPermission.copy(transportIdentity = Some("RegNumber1"))
-
-        val updatedUserAnswers = emptyUserAnswers
-          .set(VehicleNameRegistrationReferencePage, "RegNumber2")
+        val updatedAnswers = emptyUserAnswers
+          .set(GrossMassAmountPage, "2000")
           .success
           .value
 
-        val data: Seq[Section] = TransportSection(updatedUserAnswers)(regNumber)
-        data.head.rows.head.value.content mustBe Literal("RegNumber2")
-      }
-
-      "display correct transport vehicle registration country when change has been made" in {
-
-        val regCountry = unloadingPermission.copy(transportCountry = Some("United Kingdom"))
-
-        val updatedUserAnswers = emptyUserAnswers
-          .set(VehicleRegistrationCountryPage, Country("valid", "FR", "France"))
-          .success
-          .value
-
-        val data: Seq[Section] = TransportSection(updatedUserAnswers)(regCountry)
-        data.head.rows.head.value.content mustBe Literal("France")
+        val data: Seq[Section] = ItemsSection(updatedAnswers)(grossMassAmount)
+        data.head.rows.head.value.content mustBe Literal("2000")
       }
     }
-
   }
+
 }
