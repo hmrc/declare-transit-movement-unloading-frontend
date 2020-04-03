@@ -16,7 +16,7 @@
 
 package viewModels
 import models.{Index, UnloadingPermission, UserAnswers}
-import pages.NewSealNumberPage
+import pages.{NewSealNumberPage, VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSummaryHelper
@@ -55,23 +55,37 @@ object SealsSection {
 object TransportSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
-    val helper                      = new UnloadingSummaryHelper(userAnswers)
-    val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map(helper.vehicleUsed).toSeq
-    val transportCountry: Seq[Row]  = unloadingPermission.transportCountry.map(helper.registeredCountry).toSeq
+    val helper = new UnloadingSummaryHelper(userAnswers)
+    val transportIdentity: Seq[Row] = unloadingPermission.transportIdentity.map {
+      transportIdentity =>
+        userAnswers.get(VehicleNameRegistrationReferencePage) match {
+          case Some(identity) => helper.vehicleUsed(identity)
+          case None           => helper.vehicleUsed(transportIdentity)
+        }
+
+    }.toSeq
+
+    val transportCountry: Seq[Row] = unloadingPermission.transportCountry.map {
+      transportCountry =>
+        userAnswers.get(VehicleRegistrationCountryPage) match {
+          case Some(country) => helper.registeredCountry(country.description)
+          case None          => helper.registeredCountry(transportCountry)
+
+        }
+    }.toSeq
 
     transportIdentity ++ transportCountry match {
       case transport if transport.nonEmpty =>
         Seq(Section(msg"vehicleUsed.title", transport))
       case _ => Nil
     }
-
   }
 }
 
 object ItemsSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
-    val helper                 = new UnloadingSummaryHelper(userAnswers)
+    val helper = new UnloadingSummaryHelper(userAnswers)
     //TODO: Add v and show user answers for gross mass if entered
     val grossMassRow: Seq[Row] = Seq(helper.grossMass(unloadingPermission.grossMass))
     val itemsRow: Seq[Row]     = unloadingPermission.goodsItems.zipWithIndex.map(x => helper.items(Index(x._2), x._1.description)).toList
