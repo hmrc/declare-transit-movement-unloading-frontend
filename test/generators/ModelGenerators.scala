@@ -16,10 +16,10 @@
 
 package generators
 
-import models.{UnloadingPermission, _}
 import models.reference.Country
+import models.{UnloadingPermission, _}
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen.{choose, listOfN, nonEmptyListOf}
+import org.scalacheck.Gen.choose
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {

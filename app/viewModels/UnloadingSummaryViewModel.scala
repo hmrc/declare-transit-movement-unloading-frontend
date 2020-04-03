@@ -37,13 +37,12 @@ object SealsSection {
     val helper = new UnloadingSummaryHelper(userAnswers)
     unloadingPermission.seals match {
       case Some(seals) => {
-
-        //TODO: If user has changed this, pull out user  answer and  pass it  in as 2nd argument
-
-        val frank: Option[String] = userAnswers.get(NewSealNumberPage(Index(1)))
-
         val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
-          x => helper.seals(Index(x._2), x._1) //TODO: x._1 needs to be UserAnswers value if it exists
+          seals =>
+            userAnswers.get(NewSealNumberPage(Index(seals._2))) match {
+              case Some(sealValue) => helper.seals(Index(seals._2), sealValue)
+              case None            => helper.seals(Index(seals._2), seals._1)
+          }
         )
         Seq(Section(msg"changeSeal.title", rows))
       }
@@ -52,6 +51,7 @@ object SealsSection {
   }
 }
 
+//TODO: Add TransportSectionSpec and show user answers if entered
 object TransportSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
@@ -72,6 +72,7 @@ object ItemsSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
     val helper                 = new UnloadingSummaryHelper(userAnswers)
+    //TODO: Add v and show user answers for gross mass if entered
     val grossMassRow: Seq[Row] = Seq(helper.grossMass(unloadingPermission.grossMass))
     val itemsRow: Seq[Row]     = unloadingPermission.goodsItems.zipWithIndex.map(x => helper.items(Index(x._2), x._1.description)).toList
 
