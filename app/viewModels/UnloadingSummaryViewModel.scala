@@ -39,18 +39,18 @@ object UnloadingSummaryViewModel {
 object SealsSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Seq[Section] =
-    unloadingPermission.seals
-      .map {
-        seals =>
-          val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
-            unloadingPermissionValue => {
-              val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
-              SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(unloadingSummaryRow.seals)
-            }
-          )
-          Seq(Section(msg"changeSeal.title", rows))
-      }
-      .getOrElse(Nil)
+    unloadingPermission.seals match {
+      case Some(seals) =>
+        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
+          unloadingPermissionValue => {
+            val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
+            SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(unloadingSummaryRow.seals)
+          }
+        )
+        Seq(Section(msg"changeSeal.title", rows))
+
+      case None => Seq.empty
+    }
 }
 
 object TransportSection {
@@ -81,8 +81,8 @@ object ItemsSection {
       .map {
         unloadingPermissionValue =>
           {
-            val itemAnswer = None //TODO: Call get on UserAnswers when this is available
-            SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(itemAnswer)(unloadingPermissionValue._1.description)(unloadingSummaryRow.items)
+            val userAnswer = None //TODO: Call get on UserAnswers when this is available
+            SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(userAnswer)(unloadingPermissionValue._1.description)(unloadingSummaryRow.items)
           }
       }
 
