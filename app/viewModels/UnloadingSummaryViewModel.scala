@@ -51,7 +51,6 @@ object SealsSection {
   }
 }
 
-//TODO: Add TransportSectionSpec and show user answers if entered
 object TransportSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission): Seq[Section] = {
