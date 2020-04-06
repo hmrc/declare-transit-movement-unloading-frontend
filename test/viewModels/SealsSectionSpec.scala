@@ -84,6 +84,14 @@ class SealsSectionSpec extends SpecBase {
       data.head.rows(1).value.content mustBe Literal("new seal value 2")
     }
 
+    "not return section if no seals exist" in {
+
+      val noSeals = unloadingPermission.copy(seals = None)
+
+      val data: Seq[Section] = SealsSection(emptyUserAnswers)(noSeals)
+      data mustBe Nil
+    }
+
   }
 
 }

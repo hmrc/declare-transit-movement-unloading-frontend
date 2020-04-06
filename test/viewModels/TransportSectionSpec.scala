@@ -71,7 +71,14 @@ class TransportSectionSpec extends SpecBase {
         val regNumber          = unloadingPermission.copy(transportCountry = Some("France"))
         val data: Seq[Section] = TransportSection(emptyUserAnswers)(regNumber)
         data.head.rows.head.value.content mustBe Literal("France")
+      }
 
+      "not return section if identity and country don't exist" in {
+
+        val noTransport = unloadingPermission.copy(transportCountry = None, transportIdentity = None)
+
+        val data: Seq[Section] = TransportSection(emptyUserAnswers)(noTransport)
+        data mustBe Nil
       }
 
     }

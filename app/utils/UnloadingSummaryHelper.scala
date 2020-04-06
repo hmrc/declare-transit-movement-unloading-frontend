@@ -15,11 +15,35 @@
  */
 
 package utils
+import models.reference.Country
 import models.{CheckMode, Index, MovementReferenceNumber, UserAnswers}
+import pages.QuestionPage
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
 class UnloadingSummaryHelper(userAnswers: UserAnswers) {
+
+  val rowString: UserAnswers => QuestionPage[String] => Option[String] => Seq[Row] = {
+    userAnswers => questionPage => unloadingPermissionValue =>
+      unloadingPermissionValue.map {
+        value =>
+          userAnswers.get(questionPage) match {
+            case Some(userAnswer) => this.vehicleUsed(userAnswer)
+            case None             => this.vehicleUsed(value)
+          }
+      }.toSeq
+  }
+
+  val rowCountry: UserAnswers => QuestionPage[Country] => Option[String] => Seq[Row] = {
+    userAnswers => questionPage => unloadingPermissionValue =>
+      unloadingPermissionValue.map {
+        value =>
+          userAnswers.get(questionPage) match {
+            case Some(userAnswer) => this.vehicleUsed(userAnswer.description)
+            case None             => this.vehicleUsed(value)
+          }
+      }.toSeq
+  }
 
   def seals(index: Index, value: String) =
     Row(
@@ -42,46 +66,53 @@ class UnloadingSummaryHelper(userAnswers: UserAnswers) {
       actions = Nil
     )
 
-  def vehicleUsed(value: String) =
-    Row(
-      key   = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
-      value = Value(lit"$value"),
-      actions = List(
-        Action(
-          content            = msg"site.edit",
-          href               = controllers.routes.VehicleNameRegistrationReferenceController.onPageLoad(mrn, CheckMode).url,
-          visuallyHiddenText = Some(msg"changeVehicle.reference.change.hidden"),
-          attributes         = Map("id" -> s"""change-vehicle-reference""")
+  val vehicleUsed: String => Row = {
+    value =>
+      Row(
+        key   = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$value"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = controllers.routes.VehicleNameRegistrationReferenceController.onPageLoad(mrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"changeVehicle.reference.change.hidden"),
+            attributes         = Map("id" -> s"""change-vehicle-reference""")
+          )
         )
       )
-    )
+  }
 
-  def registeredCountry(value: String) =
-    Row(
-      key   = Key(msg"changeVehicle.registeredCountry.label", classes = Seq("govuk-!-width-one-half")),
-      value = Value(lit"$value"),
-      actions = List(
-        Action(
-          content            = msg"site.edit",
-          href               = controllers.routes.VehicleRegistrationCountryController.onPageLoad(mrn, CheckMode).url,
-          visuallyHiddenText = Some(msg"changeVehicle.registeredCountry.change.hidden"),
-          attributes         = Map("id" -> s"""change-vehicle-reference""")
+  val registeredCountry: String => Row = {
+    value =>
+      Row(
+        key   = Key(msg"changeVehicle.registeredCountry.label", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$value"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = controllers.routes.VehicleRegistrationCountryController.onPageLoad(mrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"changeVehicle.registeredCountry.change.hidden"),
+            attributes         = Map("id" -> s"""change-vehicle-reference""")
+          )
         )
       )
-    )
+  }
 
-  def grossMass(value: String) =
-    Row(
-      key   = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
-      value = Value(lit"$value"),
-      actions = List(
-        Action(
-          content            = msg"site.edit",
-          href               = controllers.routes.GrossMassAmountController.onPageLoad(mrn, CheckMode).url,
-          visuallyHiddenText = Some(msg"changeItems.grossMass.change.hidden"),
-          attributes         = Map("id" -> s"""change-gross-mass""")
+  val grossMass: String => Row = {
+    value =>
+      Row(
+        key   = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$value"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = controllers.routes.GrossMassAmountController.onPageLoad(mrn, CheckMode).url,
+            visuallyHiddenText = Some(msg"changeItems.grossMass.change.hidden"),
+            attributes         = Map("id" -> s"""change-gross-mass""")
+          )
         )
       )
-    )
+  }
+
   def mrn: MovementReferenceNumber = userAnswers.id
 }
