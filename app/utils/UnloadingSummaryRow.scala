@@ -15,56 +15,36 @@
  */
 
 package utils
-import models.reference.Country
 import models.{CheckMode, Index, MovementReferenceNumber, UserAnswers}
-import pages.QuestionPage
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
-class UnloadingSummaryHelper(userAnswers: UserAnswers) {
+class UnloadingSummaryRow(userAnswers: UserAnswers) {
 
-  val rowString: UserAnswers => QuestionPage[String] => Option[String] => Seq[Row] = {
-    userAnswers => questionPage => unloadingPermissionValue =>
-      unloadingPermissionValue.map {
-        value =>
-          userAnswers.get(questionPage) match {
-            case Some(userAnswer) => this.vehicleUsed(userAnswer)
-            case None             => this.vehicleUsed(value)
-          }
-      }.toSeq
-  }
-
-  val rowCountry: UserAnswers => QuestionPage[Country] => Option[String] => Seq[Row] = {
-    userAnswers => questionPage => unloadingPermissionValue =>
-      unloadingPermissionValue.map {
-        value =>
-          userAnswers.get(questionPage) match {
-            case Some(userAnswer) => this.vehicleUsed(userAnswer.description)
-            case None             => this.vehicleUsed(value)
-          }
-      }.toSeq
-  }
-
-  def seals(index: Index, value: String) =
-    Row(
-      key   = Key(msg"changeSeal.sealList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
-      value = Value(lit"$value"),
-      actions = List(
-        Action(
-          content            = msg"site.edit",
-          href               = controllers.routes.NewSealNumberController.onPageLoad(mrn, index, CheckMode).url,
-          visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display)),
-          attributes         = Map("id" -> s"""change-seal-${index.position}""")
+  val seals: (Index, String) => Row = {
+    (index, value) =>
+      Row(
+        key   = Key(msg"changeSeal.sealList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$value"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = controllers.routes.NewSealNumberController.onPageLoad(mrn, index, CheckMode).url,
+            visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display)),
+            attributes         = Map("id" -> s"""change-seal-${index.position}""")
+          )
         )
       )
-    )
+  }
 
-  def items(index: Index, value: String) =
-    Row(
-      key     = Key(msg"changeItem.itemList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
-      value   = Value(lit"$value"),
-      actions = Nil
-    )
+  val items: (Index, String) => Row = {
+    (index, value) =>
+      Row(
+        key     = Key(msg"changeItem.itemList.label".withArgs(index.display), classes = Seq("govuk-!-width-one-half")),
+        value   = Value(lit"$value"),
+        actions = Nil
+      )
+  }
 
   val vehicleUsed: String => Row = {
     value =>

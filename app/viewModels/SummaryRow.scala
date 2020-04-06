@@ -22,19 +22,19 @@ import uk.gov.hmrc.viewmodels.SummaryList.Row
 
 object SummaryRow {
 
-  type SummaryRow = Option[String] => Option[String] => (String => Row) => Seq[Row]
+  type SummaryRow          = Option[String] => Option[String] => (String => Row) => Seq[Row]
+  type SummaryRowWithIndex = Index => Option[String] => String => ((Index, String) => Row) => Row
 
-  type GetUserAnswerString  = UserAnswers => QuestionPage[String] => Option[String]
-  type GetUserAnswerCountry = UserAnswers => QuestionPage[Country] => Option[String]
+  type UserAnswerString  = UserAnswers => QuestionPage[String] => Option[String]
+  type UserAnswerCountry = UserAnswers => QuestionPage[Country] => Option[String]
+  type UserAnswerSeals   = UserAnswers => NewSealNumberPage.type => Option[String]
 
-  type GetUserAnswerSeals = UserAnswers => NewSealNumberPage.type => Option[String]
-
-  val userAnswerString: GetUserAnswerString = {
+  val userAnswerString: UserAnswerString = {
     ua => page =>
       ua.get(page)
   }
 
-  val userAnswerCountry: GetUserAnswerCountry = {
+  val userAnswerCountry: UserAnswerCountry = {
     ua => page =>
       ua.get(page) match {
         case Some(x) => Some(x.description)
@@ -42,7 +42,7 @@ object SummaryRow {
       }
   }
 
-  val userAnswerWithIndex: Index => GetUserAnswerSeals = {
+  val userAnswerWithIndex: Index => UserAnswerSeals = {
     index => ua => page =>
       ua.get(page(index))
   }
@@ -58,14 +58,14 @@ object SummaryRow {
           }
     }
 
-  val rowWithIndex: Index => SummaryRow =
-    index => userAnswer =>
-      summaryValue =>
-        buildRow => {
-          (userAnswer, summaryValue) match {
-            case (Some(x), _)    => Seq(buildRow(index)(x))
-            case (None, Some(x)) => Seq(buildRow(index)(x))
-            case (_, _)          => Nil
-          }
+  val rowWithIndex: SummaryRowWithIndex =
+    index =>
+      userAnswer =>
+        summaryValue =>
+          buildRow => {
+            (userAnswer, summaryValue) match {
+              case (Some(x), _) => buildRow(index, x)
+              case (None, x)    => buildRow(index, x)
+            }
     }
 }

@@ -21,6 +21,7 @@ import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission}
 import pages.GrossMassAmountPage
 import uk.gov.hmrc.viewmodels.Text.Literal
+import utils.UnloadingSummaryRow
 import viewModels.sections.Section
 
 class ItemsSectionSpec extends SpecBase {
@@ -62,8 +63,9 @@ class ItemsSectionSpec extends SpecBase {
       "Correct Gross mass when no changes have been made" in {
 
         val grossMassAmount    = unloadingPermission.copy(grossMass = "1000")
-        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(grossMassAmount)
+        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(grossMassAmount, new UnloadingSummaryRow(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("1000")
+        data.head.rows(1).value.content mustBe Literal("Flowers")
       }
 
       "Correct Gross mass when change has been made" in {
@@ -74,9 +76,11 @@ class ItemsSectionSpec extends SpecBase {
           .success
           .value
 
-        val data: Seq[Section] = ItemsSection(updatedAnswers)(grossMassAmount)
+        val data: Seq[Section] = ItemsSection(updatedAnswers)(grossMassAmount, new UnloadingSummaryRow(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("2000")
+        data.head.rows(1).value.content mustBe Literal("Flowers")
       }
+
     }
   }
 
