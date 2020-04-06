@@ -41,16 +41,6 @@ POST       /:mrn/seal/:index/new-seal-number                        controllers.
 GET        /:mrn/seal/:index/change-new-seal-number                 controllers.NewSealNumberController.onPageLoad(mrn: MovementReferenceNumber, index: Index, mode: Mode = CheckMode)
 POST       /:mrn/seal/:index/change-new-seal-number                 controllers.NewSealNumberController.onSubmit(mrn: MovementReferenceNumber, index: Index, mode: Mode = CheckMode)
 
-GET        /:mrn/seals-information                      controllers.SealsInformationController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-POST       /:mrn/seals-information                      controllers.SealsInformationController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-GET        /:mrn/change-seals-information               controllers.SealsInformationController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
-POST       /:mrn/change-seals-information               controllers.SealsInformationController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
-
-GET        /:mrn/additional-changes-information                        controllers.AdditionalChangesInformationController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-POST       /:mrn/additional-changes-information                        controllers.AdditionalChangesInformationController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-GET        /:mrn/change-additional-changes-information                  controllers.AdditionalChangesInformationController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
-POST       /:mrn/change-additional-changes-information                  controllers.AdditionalChangesInformationController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
-
 GET        /:mrn/unloading-summary                       controllers.UnloadingSummaryController.onPageLoad(mrn: MovementReferenceNumber)
 
 GET        /:mrn/can-seals-be-read                        controllers.CanSealsBeReadController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = NormalMode)

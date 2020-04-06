@@ -36,10 +36,10 @@
         <h1 class="govuk-heading-xl">What do you need to report?</h1>
 
               {{ govukCharacterCount({
-                name: "changesToReport",
+                name: "value",
                 id: "value",
                 maxlength: 350,
-                value: data['changesToReport'],
+                value: form.value.value,
                 label: {
                   text: "",
                   classes: "govuk-heading-xl"

@@ -50,8 +50,9 @@ class UnloadingSummaryController @Inject()(
         case Some(unloadingPermission) => UnloadingSummaryViewModel(request.userAnswers)(unloadingPermission).sections
       }
 
-      val redirectUrl = controllers.routes.AnythingElseToReportController.onPageLoad(mrn, NormalMode)
-      val json        = Json.obj("mrn" -> mrn, "redirectUrl" -> redirectUrl.url, "sections" -> Json.toJson(sections))
+      val redirectUrl   = controllers.routes.CheckYourAnswersController.onPageLoad(mrn)
+      val addCommentUrl = controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode)
+      val json          = Json.obj("mrn" -> mrn, "redirectUrl" -> redirectUrl.url, "addCommentUrl" -> addCommentUrl.url, "sections" -> Json.toJson(sections))
 
       renderer.render("unloadingSummary.njk", json).map(Ok(_))
   }

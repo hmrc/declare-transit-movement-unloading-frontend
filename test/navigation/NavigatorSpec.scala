@@ -117,32 +117,6 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "must go from anything else to report page" - {
-        "to check your answers page when no is selected " in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.set(AnythingElseToReportPage, false).success.value
-
-              navigator
-                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.CheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
-          }
-        }
-        "to changes to report page when yes is selected" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.set(AnythingElseToReportPage, true).success.value
-
-              navigator
-                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.ChangesToReportController.onPageLoad(updatedUserAnswers.id, NormalMode))
-
-          }
-        }
-      }
-
       "from changes to report page to check your answers page" - {
 
         forAll(arbitrary[UserAnswers]) {
@@ -152,20 +126,6 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
 
         }
-
-        "to session expired when there is no answer" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.remove(AnythingElseToReportPage).success.value
-
-              navigator
-                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.SessionExpiredController.onPageLoad())
-
-          }
-        }
-
       }
 
       "in Check mode" - {

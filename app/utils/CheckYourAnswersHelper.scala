@@ -89,36 +89,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       )
   }
 
-  def additionalChangesInformation: Option[Row] = userAnswers.get(AdditionalChangesInformationPage) map {
-    answer =>
-      Row(
-        key   = Key(msg"additionalChangesInformation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content            = msg"site.edit",
-            href               = routes.AdditionalChangesInformationController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"additionalChangesInformation.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
-  def sealsInformation: Option[Row] = userAnswers.get(SealsInformationPage) map {
-    answer =>
-      Row(
-        key   = Key(msg"sealsInformation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content            = msg"site.edit",
-            href               = routes.SealsInformationController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealsInformation.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
   def newSealNumber(index: Index): Option[Row] = userAnswers.get(NewSealNumberPage(index)) map {
     answer =>
       Row(
