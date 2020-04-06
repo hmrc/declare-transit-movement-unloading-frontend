@@ -31,17 +31,20 @@
 
           {{ csrf() | safe }}
 
-          {{ govukInput({
-            label: {
-              text: messages('additionalChangesInformation.title'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
-            id: "value",
-            name: "value",
-            value: form.value.value,
-            errorMessage: form.value.error
-          }) }}
+       <h1 class="govuk-heading-xl">What do you need to report?</h1>
+
+             {{ govukCharacterCount({
+               name: "changesToReport",
+               id: "changesToReport",
+               maxlength: 350,
+               value: data['changesToReport'],
+               label: {
+                 text: "",
+                 classes: "govuk-heading-xl"
+               }
+
+             }) }}
+
 
           {{ govukButton({
             text: messages("site.continue"),

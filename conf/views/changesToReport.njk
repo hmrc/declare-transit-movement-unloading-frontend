@@ -5,6 +5,8 @@
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+
 
 {% block pageTitle %}
   {{ title(messages("changesToReport.title"), form.errors) }}
@@ -31,17 +33,20 @@
 
           {{ csrf() | safe }}
 
-          {{ govukInput({
-            label: {
-              text: messages('changesToReport.title'),
-              isPageHeading: true,
-              classes: "govuk-label--xl"
-            },
-            id: "value",
-            name: "value",
-            value: form.value.value,
-            errorMessage: form.value.error
-          }) }}
+        <h1 class="govuk-heading-xl">What do you need to report?</h1>
+
+              {{ govukCharacterCount({
+                name: "changesToReport",
+                id: "changesToReport",
+                maxlength: 350,
+                value: data['changesToReport'],
+                label: {
+                  text: "",
+                  classes: "govuk-heading-xl"
+                }
+
+              }) }}
+
 
           {{ govukButton({
             text: messages("site.continue"),
