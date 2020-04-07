@@ -30,6 +30,20 @@ class NavigatorUnloadingPermissionSpec extends SpecBase with ScalaCheckPropertyC
 
   "NavigatorUnloadingPermission" - {
 
+    "in Check mode" - {
+
+      "must go from Date Goods Unloaded page to check your answers page" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(DateGoodsUnloadedPage, CheckMode, answers, None)
+              .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
+        }
+      }
+
+    }
+
     "in Normal mode" - {
 
       "must go from a page that doesn't exist in the route map to Index" in {

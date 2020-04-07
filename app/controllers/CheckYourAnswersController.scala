@@ -17,15 +17,16 @@
 package controllers
 
 import com.google.inject.Inject
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, DataRetrievalActionProvider, IdentifierAction}
-import models.{MovementReferenceNumber, NormalMode}
+import controllers.actions.{DataRequiredAction, DataRetrievalActionProvider, IdentifierAction}
+import models.MovementReferenceNumber
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import renderer.Renderer
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.{NunjucksSupport, SummaryList}
-import utils.CheckYourAnswersHelper
+import uk.gov.hmrc.viewmodels.NunjucksSupport
+import viewModels.CheckYourAnswersViewModel
+import viewModels.sections.Section
 
 import scala.concurrent.ExecutionContext
 
@@ -41,17 +42,19 @@ class CheckYourAnswersController @Inject()(
     with I18nSupport
     with NunjucksSupport {
 
+  private val redirectUrl: MovementReferenceNumber => Call =
+    mrn => controllers.routes.ConfirmationController.onPageLoad(mrn)
+
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val helper      = new CheckYourAnswersHelper(request.userAnswers)
-      val redirectUrl = controllers.routes.ConfirmationController.onPageLoad(mrn)
+      val viewModel: CheckYourAnswersViewModel = CheckYourAnswersViewModel(request.userAnswers)
 
-      val answers: Seq[SummaryList.Row] = Seq()
+      val answers: Seq[Section] = viewModel.sections
 
       renderer
         .render(
           "check-your-answers.njk",
-          Json.obj("list" -> answers, "redirectUrl" -> redirectUrl.url)
+          Json.obj("sections" -> Json.toJson(answers), "redirectUrl" -> redirectUrl(mrn).url)
         )
         .map(Ok(_))
   }

@@ -37,6 +37,9 @@ phaseBanner.3 = will help us to improve it.
 checkYourAnswers.title = Check your answers before sending these unloading remarks
 checkYourAnswers.heading = Check your answers before sending these unloading remarks
 
+checkYourAnswers.confirmation.heading = Now send your unloading remarks
+checkYourAnswers.confirmation.paragraph = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
+
 index.title = declare-transit-movement-unloading-frontend
 index.heading = declare-transit-movement-unloading-frontend
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
@@ -139,7 +142,7 @@ unloadingGuidance.bullet2 = check that the unloaded goods match the information 
 dateGoodsUnloaded.title = When were the goods unloaded?
 dateGoodsUnloaded.heading = When were the goods unloaded?
 dateGoodsUnloaded.hint = For example, 14 1 2020
-dateGoodsUnloaded.checkYourAnswersLabel = DateGoodsUnloaded
+dateGoodsUnloaded.checkYourAnswersLabel = What date were the goods unloaded?
 dateGoodsUnloaded.error.required.all = Enter when the goods were unloaded
 dateGoodsUnloaded.error.required.two = The date goods were unloaded must include {0} and {1}
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
