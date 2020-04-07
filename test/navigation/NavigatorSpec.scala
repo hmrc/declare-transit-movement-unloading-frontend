@@ -44,16 +44,6 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "must go from date goods unloaded page to can seals be read page" in {
-
-        forAll(arbitrary[UserAnswers]) {
-          answers =>
-            navigator
-              .nextPage(DateGoodsUnloadedPage, NormalMode, answers)
-              .mustBe(routes.CanSealsBeReadController.onPageLoad(answers.id, NormalMode))
-        }
-      }
-
       "must go from can seals be read page" - {
         "to Are any seals broken page when answer is Yes" in {
 
@@ -127,32 +117,6 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "must go from anything else to report page" - {
-        "to check your answers page when no is selected " in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.set(AnythingElseToReportPage, false).success.value
-
-              navigator
-                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.CheckYourAnswersController.onPageLoad(updatedUserAnswers.id))
-          }
-        }
-        "to changes to report page when yes is selected" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.set(AnythingElseToReportPage, true).success.value
-
-              navigator
-                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.ChangesToReportController.onPageLoad(updatedUserAnswers.id, NormalMode))
-
-          }
-        }
-      }
-
       "from changes to report page to check your answers page" - {
 
         forAll(arbitrary[UserAnswers]) {
@@ -162,20 +126,6 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
 
         }
-
-        "to session expired when there is no answer" in {
-
-          forAll(arbitrary[UserAnswers]) {
-            answers =>
-              val updatedUserAnswers = answers.remove(AnythingElseToReportPage).success.value
-
-              navigator
-                .nextPage(AnythingElseToReportPage, NormalMode, updatedUserAnswers)
-                .mustBe(routes.SessionExpiredController.onPageLoad())
-
-          }
-        }
-
       }
 
       "in Check mode" - {
@@ -189,6 +139,46 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               navigator
                 .nextPage(UnknownPage, CheckMode, answers)
                 .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
+          }
+        }
+
+        "must go from Vehicle Name Registration Reference page to unloading summary page" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(VehicleNameRegistrationReferencePage, CheckMode, answers)
+                .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+          }
+        }
+
+        "must go from Vehicle Registration Country page to unloading summary page" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(VehicleNameRegistrationReferencePage, CheckMode, answers)
+                .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+          }
+        }
+
+        "must go from Gross mass amount page to unloading summary page" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(GrossMassAmountPage, CheckMode, answers)
+                .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+          }
+        }
+
+        "must go from New Seal Number page to unloading summary page" in {
+
+          forAll(arbitrary[UserAnswers]) {
+            answers =>
+              navigator
+                .nextPage(NewSealNumberPage(Index(0)), CheckMode, answers)
+                .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
           }
         }
       }

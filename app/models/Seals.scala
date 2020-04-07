@@ -16,11 +16,9 @@
 
 package models
 
-import cats.data.NonEmptyList
-import com.lucidchart.open.xtract.{__, XmlReader}
-import com.lucidchart.open.xtract.XmlReader._
-
 import cats.syntax.all._
+import com.lucidchart.open.xtract.XmlReader._
+import com.lucidchart.open.xtract.{__, XmlReader}
 
 case class Seals(numberOfSeals: Int, SealId: Seq[String])
 

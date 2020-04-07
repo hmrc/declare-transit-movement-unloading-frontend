@@ -1,4 +1,5 @@
 {% extends "includes/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
 
 {% from "macros/title.njk"                         import title %}
 {% from "macros/section.njk"                       import section as sectionMacro %}
@@ -9,6 +10,10 @@
 {% endblock %}
 
 {% block mainContent %}
+
+  {{ govukBackLink({
+    text: messages("site.back")
+  }) }}
 
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
@@ -21,6 +26,10 @@
         {% for section in sections %}
           {{ sectionMacro(section.sectionTitle, section.rows) }}
         {% endfor %}
+
+        <p class ="govuk-body">
+                    <a id="value" href="{{ addCommentUrl }}" class="govuk-link"> {{ messages("unloadingSummary.link.text") }} </a>
+                  </p>
 
         {{ govukButton({
           text: messages("site.continue"),

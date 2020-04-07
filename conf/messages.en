@@ -144,7 +144,7 @@ dateGoodsUnloaded.error.required.all = Enter when the goods were unloaded
 dateGoodsUnloaded.error.required.two = The date goods were unloaded must include {0} and {1}
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
 dateGoodsUnloaded.error.invalid = Enter a real date
-dateGoodsUnloaded.error.max.date = The date goods were unloaded must be no later than today
+dateGoodsUnloaded.error.max.date = When the goods were unloaded must be today or in the past
 
 vehicleNameRegistrationReference.title = What is the name, registration or reference of the new vehicle?
 vehicleNameRegistrationReference.heading = What is the name, registration or reference of the new vehicle?
@@ -170,20 +170,9 @@ newSealNumber.checkYourAnswersLabel = What is the new seal number or mark?
 newSealNumber.error.required = Enter the new seal number or mark
 newSealNumber.error.length = Seal number or mark must be 100 characters or less
 
-sealsInformation.title = sealsInformation
-sealsInformation.heading = sealsInformation
-sealsInformation.checkYourAnswersLabel = sealsInformation
-sealsInformation.error.required = Enter sealsInformation
-sealsInformation.error.length = SealsInformation must be 100 characters or less
-
-additionalChangesInformation.title = additionalChangesInformation
-additionalChangesInformation.heading = additionalChangesInformation
-additionalChangesInformation.checkYourAnswersLabel = additionalChangesInformation
-additionalChangesInformation.error.required = Enter additionalChangesInformation
-additionalChangesInformation.error.length = AdditionalChangesInformation must be 100 characters or less
-
 unloadingSummary.title = Check what you found against the transit declaration
 unloadingSummary.heading = Check what you found against the transit declaration
+unloadingSummary.link.text = Add comment
 
 vehicleUsed.title = Vehicle used
 changeVehicle.reference.label = Name, registration or reference

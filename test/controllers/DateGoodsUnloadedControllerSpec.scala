@@ -22,7 +22,7 @@ import base.SpecBase
 import forms.DateGoodsUnloadedFormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
+import navigation.{FakeUnloadingPermissionNavigator, NavigatorUnloadingPermission}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -141,7 +141,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with MockitoSugar with Nu
       val application =
         applicationBuilder(userAnswers = Some(emptyUserAnswers))
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[NavigatorUnloadingPermission].toInstance(new FakeUnloadingPermissionNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()
@@ -227,7 +227,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with MockitoSugar with Nu
       val application =
         applicationBuilder(userAnswers = None)
           .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[NavigatorUnloadingPermission].toInstance(new FakeUnloadingPermissionNavigator(onwardRoute)),
             bind[SessionRepository].toInstance(mockSessionRepository)
           )
           .build()

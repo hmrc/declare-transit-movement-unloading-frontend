@@ -19,14 +19,15 @@ package controllers
 import controllers.actions._
 import forms.DateGoodsUnloadedFormProvider
 import javax.inject.Inject
-import models.{Mode, MovementReferenceNumber, UserAnswers}
-import navigation.Navigator
+import models.{Mode, MovementReferenceNumber, UnloadingPermission, UserAnswers}
+import navigation.NavigatorUnloadingPermission
 import pages.DateGoodsUnloadedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
+import services.UnloadingPermissionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
@@ -35,13 +36,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateGoodsUnloadedController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: Navigator,
+  navigator: NavigatorUnloadingPermission,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: DateGoodsUnloadedFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  unloadingPermissionService: UnloadingPermissionService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -94,7 +96,12 @@ class DateGoodsUnloadedController @Inject()(
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(mrn)).set(DateGoodsUnloadedPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers))
+            } yield {
+
+              val unloadingPermission: Option[UnloadingPermission] = unloadingPermissionService.getUnloadingPermission(mrn)
+
+              Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers, unloadingPermission))
+          }
         )
   }
 }

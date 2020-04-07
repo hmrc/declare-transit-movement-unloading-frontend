@@ -15,11 +15,12 @@
  */
 
 package viewModels
+import base.SpecBase
 import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, Seals, TraderAtDestinationWithEori, UnloadingPermission}
 import org.scalatest.{FreeSpec, MustMatchers}
 
-class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
+class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers with SpecBase {
 
   private val trader =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
@@ -53,12 +54,14 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
   )
 
+  private val transportCountry = None
+
   "UnloadingSummaryViewModel" - {
 
     "seals section should" - {
       "display no seals" in {
 
-        val data = UnloadingSummaryViewModel()(unloadingPermission)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(unloadingPermission)
 
         data.sections.length mustBe 1
       }
@@ -67,7 +70,7 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
 
         val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))))
 
-        val data = UnloadingSummaryViewModel()(withSeals)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(withSeals)
 
         data.sections.length mustBe 2
         data.sections.head.sectionTitle mustBe defined
@@ -80,7 +83,7 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
                                                  transportCountry  = Some("registration"),
                                                  transportIdentity = Some("registration"))
 
-        val data = UnloadingSummaryViewModel()(withSeals)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(withSeals)
 
         data.sections.length mustBe 3
         data.sections(0).sectionTitle mustBe defined
@@ -98,7 +101,7 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
 
         val transportIdentity = unloadingPermission.copy(transportIdentity = Some("registration"))
 
-        val data = UnloadingSummaryViewModel()(transportIdentity)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(transportIdentity)
 
         data.sections.length mustBe 2
         data.sections.head.sectionTitle mustBe defined
@@ -107,9 +110,9 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
 
       "display transportCountry" in {
 
-        val transportCountry = unloadingPermission.copy(transportCountry = Some("registration"))
+        val unloadingPermissionTransportCountry = unloadingPermission.copy(transportCountry = Some("registration"))
 
-        val data = UnloadingSummaryViewModel()(transportCountry)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(unloadingPermissionTransportCountry)
 
         data.sections.length mustBe 2
         data.sections.head.sectionTitle mustBe defined
@@ -118,9 +121,9 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
 
       "display transportCountry and transportIdentity" in {
 
-        val transportCountry = unloadingPermission.copy(transportCountry = Some("registration"), transportIdentity = Some("registration"))
+        val unloadingPermissionTransportCountry = unloadingPermission.copy(transportCountry = Some("registration"), transportIdentity = Some("registration"))
 
-        val data = UnloadingSummaryViewModel()(transportCountry)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(unloadingPermissionTransportCountry)
 
         data.sections.length mustBe 2
         data.sections.head.sectionTitle mustBe defined
@@ -133,11 +136,12 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers {
 
       "display total mass with single item" in {
 
-        val data = UnloadingSummaryViewModel()(unloadingPermission)
+        val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(unloadingPermission)
 
         data.sections.length mustBe 1
         data.sections.head.sectionTitle mustBe defined
         data.sections.head.rows.length mustBe 2
+        data.sections.head.rows(1).actions.isEmpty mustBe true
       }
 
     }

@@ -19,7 +19,7 @@ package utils
 import java.time.format.DateTimeFormatter
 
 import controllers.routes
-import models.{CheckMode, NormalMode, UserAnswers}
+import models.{CheckMode, Index, NormalMode, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList._
@@ -89,37 +89,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
       )
   }
 
-  def additionalChangesInformation: Option[Row] = userAnswers.get(AdditionalChangesInformationPage) map {
-    answer =>
-      Row(
-        key   = Key(msg"additionalChangesInformation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content            = msg"site.edit",
-            href               = routes.AdditionalChangesInformationController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"additionalChangesInformation.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
-  def sealsInformation: Option[Row] = userAnswers.get(SealsInformationPage) map {
-    answer =>
-      Row(
-        key   = Key(msg"sealsInformation.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content            = msg"site.edit",
-            href               = routes.SealsInformationController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"sealsInformation.checkYourAnswersLabel"))
-          )
-        )
-      )
-  }
-
-  def newSealNumber: Option[Row] = userAnswers.get(NewSealNumberPage) map {
+  def newSealNumber(index: Index): Option[Row] = userAnswers.get(NewSealNumberPage(index)) map {
     answer =>
       Row(
         key   = Key(msg"newSealNumber.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
@@ -127,7 +97,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
         actions = List(
           Action(
             content            = msg"site.edit",
-            href               = routes.NewSealNumberController.onPageLoad(userAnswers.id, CheckMode).url,
+            href               = routes.NewSealNumberController.onPageLoad(userAnswers.id, index, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"newSealNumber.checkYourAnswersLabel"))
           )
         )

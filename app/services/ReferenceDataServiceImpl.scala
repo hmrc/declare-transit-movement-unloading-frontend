@@ -24,20 +24,18 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ReferenceDataServiceImpl @Inject()(connector: ReferenceDataConnector) extends ReferenceDataService {
 
-  def getCountryByCode(code: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]] = {
-//    connector.getCountryList() map {
-//      countries =>
-//        countries.find(x => x.code.equals(code))
-//    }
-
-    connector.getCountryList().flatMap {
-      countries =>
-        Future.successful(countries.find(x => x.code.equals(code)))
+  def getCountryByCode(code: Option[String])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]] =
+    code match {
+      case Some(countryCode) => {
+        connector.getCountryList().flatMap {
+          countries =>
+            Future.successful(countries.find(x => x.code.equals(countryCode)))
+        }
+      }
+      case None => Future.successful(None)
     }
-  }
-
 }
 
 trait ReferenceDataService {
-  def getCountryByCode(code: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]]
+  def getCountryByCode(code: Option[String])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]]
 }

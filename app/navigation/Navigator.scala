@@ -50,13 +50,6 @@ class Navigator @Inject()() {
           case _           => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
         }
 
-    case AnythingElseToReportPage =>
-      ua =>
-        ua.get(AnythingElseToReportPage) match {
-          case Some(true)  => routes.ChangesToReportController.onPageLoad(ua.id, NormalMode)
-          case Some(false) => routes.CheckYourAnswersController.onPageLoad(ua.id)
-          case _           => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
-        }
     case ChangesToReportPage =>
       ua =>
         routes.CheckYourAnswersController.onPageLoad(ua.id)
@@ -68,6 +61,18 @@ class Navigator @Inject()() {
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
+    case VehicleNameRegistrationReferencePage =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
+    case VehicleRegistrationCountryPage =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
+    case GrossMassAmountPage =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
+    case NewSealNumberPage(_) =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
     case _ =>
       ua =>
         routes.CheckYourAnswersController.onPageLoad(ua.id)

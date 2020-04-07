@@ -16,16 +16,17 @@
 
 package pages
 
+import models.reference.Country
 import pages.behaviours.PageBehaviours
 
 class VehicleRegistrationCountryPageSpec extends PageBehaviours {
 
   "VehicleRegistrationCountryPage" - {
 
-    beRetrievable[String](VehicleRegistrationCountryPage)
+    beRetrievable[Country](VehicleRegistrationCountryPage)
 
-    beSettable[String](VehicleRegistrationCountryPage)
+    beSettable[Country](VehicleRegistrationCountryPage)
 
-    beRemovable[String](VehicleRegistrationCountryPage)
+    beRemovable[Country](VehicleRegistrationCountryPage)
   }
 }
