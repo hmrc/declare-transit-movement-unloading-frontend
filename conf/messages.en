@@ -172,7 +172,8 @@ newSealNumber.error.length = Seal number or mark must be 100 characters or less
 
 unloadingSummary.title = Check what you found against the transit declaration
 unloadingSummary.heading = Check what you found against the transit declaration
-unloadingSummary.link.text = Add comment
+unloadingSummary.addSeal.link.text = Add a new seal number
+unloadingSummary.addComment.link.text = Add comment
 
 vehicleUsed.title = Vehicle used
 changeVehicle.reference.label = Name, registration or reference

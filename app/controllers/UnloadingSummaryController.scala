@@ -25,7 +25,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import services.{ReferenceDataService, UnloadingPermissionService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import viewModels.UnloadingSummaryViewModel
+import utils.UnloadingSummaryRow
+import viewModels.{SealsSection, UnloadingSummaryViewModel}
 import viewModels.sections.Section
 
 import scala.concurrent.ExecutionContext
@@ -46,14 +47,24 @@ class UnloadingSummaryController @Inject()(
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
       //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
-      val sections: Seq[Section] = unloadingPermissionService.getUnloadingPermission(mrn) match {
-        case Some(unloadingPermission) => UnloadingSummaryViewModel(request.userAnswers)(unloadingPermission).sections
+      unloadingPermissionService.getUnloadingPermission(mrn) match {
+        case Some(unloadingPermission) =>
+          val sections                                          = UnloadingSummaryViewModel(request.userAnswers)(unloadingPermission).sections
+          implicit val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(request.userAnswers)
+
+          val sealsSection = SealsSection(request.userAnswers)(unloadingPermission, unloadingSummaryRow)
+
+          val redirectUrl   = controllers.routes.CheckYourAnswersController.onPageLoad(mrn)
+          val addCommentUrl = controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode)
+          val json = Json.obj(
+            "mrn"           -> mrn,
+            "redirectUrl"   -> redirectUrl.url,
+            "addCommentUrl" -> addCommentUrl.url,
+            "sealsSection"  -> Json.toJson(sealsSection),
+            "sections"      -> Json.toJson(sections)
+          )
+          renderer.render("unloadingSummary.njk", json).map(Ok(_))
       }
-
-      val redirectUrl   = controllers.routes.CheckYourAnswersController.onPageLoad(mrn)
-      val addCommentUrl = controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode)
-      val json          = Json.obj("mrn" -> mrn, "redirectUrl" -> redirectUrl.url, "addCommentUrl" -> addCommentUrl.url, "sections" -> Json.toJson(sections))
-
-      renderer.render("unloadingSummary.njk", json).map(Ok(_))
   }
+
 }

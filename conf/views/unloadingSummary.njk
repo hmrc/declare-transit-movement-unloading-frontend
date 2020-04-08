@@ -23,13 +23,21 @@
           {{ messages("unloadingSummary.heading") }}
         </h1>
 
+        {% if sealsSection %}
+          {% for section in sealsSection %}
+            {{ sectionMacro(section.sectionTitle, section.rows) }}
+          {% endfor %}
+        {% else %}
+            <h2 class="govuk-heading-m">Seals</h2>
+            <p class="govuk-body">There are no seals.</p>
+        {% endif %}
+        <p class ="govuk-body"><a id="value" href="{{ addSealUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addSeal.link.text") }}</a></p>
+
         {% for section in sections %}
           {{ sectionMacro(section.sectionTitle, section.rows) }}
         {% endfor %}
 
-        <p class ="govuk-body">
-                    <a id="value" href="{{ addCommentUrl }}" class="govuk-link"> {{ messages("unloadingSummary.link.text") }} </a>
-                  </p>
+        <p class ="govuk-body"><a id="value" href="{{ addCommentUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addComment.link.text") }}</a></p>
 
         {{ govukButton({
           text: messages("site.continue"),

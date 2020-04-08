@@ -31,14 +31,14 @@ object UnloadingSummaryViewModel {
 
     implicit val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
 
-    UnloadingSummaryViewModel(SealsSection(userAnswers) ++ TransportSection(userAnswers) ++ ItemsSection(userAnswers))
+    UnloadingSummaryViewModel(TransportSection(userAnswers) ++ ItemsSection(userAnswers))
   }
 
 }
 
 object SealsSection {
 
-  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Seq[Section] =
+  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Option[Seq[Section]] =
     unloadingPermission.seals match {
       case Some(seals) =>
         val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
@@ -47,9 +47,10 @@ object SealsSection {
             SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(unloadingSummaryRow.seals)
           }
         )
-        Seq(Section(msg"changeSeal.title", rows))
 
-      case None => Seq.empty
+        Some(Seq(Section(msg"changeSeal.title", rows)))
+
+      case None => None
     }
 }
 
