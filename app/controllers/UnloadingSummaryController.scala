@@ -60,6 +60,7 @@ class UnloadingSummaryController @Inject()(
             "mrn"           -> mrn,
             "redirectUrl"   -> redirectUrl.url,
             "addCommentUrl" -> addCommentUrl.url,
+            "addSealsUrl"   -> "",
             "sealsSection"  -> Json.toJson(sealsSection),
             "sections"      -> Json.toJson(sections)
           )
