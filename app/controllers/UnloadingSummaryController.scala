@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import javax.inject.Inject
-import models.{MovementReferenceNumber, NormalMode}
+import models.{Index, MovementReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -56,10 +56,13 @@ class UnloadingSummaryController @Inject()(
 
           val redirectUrl   = controllers.routes.CheckYourAnswersController.onPageLoad(mrn)
           val addCommentUrl = controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode)
+          val addSealUrl    = controllers.routes.NewSealNumberController.onPageLoad(mrn, Index(0), NormalMode) //todo add mode and also point to correct seal
+
           val json = Json.obj(
             "mrn"           -> mrn,
             "redirectUrl"   -> redirectUrl.url,
             "addCommentUrl" -> addCommentUrl.url,
+            "addSealUrl"    -> addSealUrl.url,
             "sealsSection"  -> Json.toJson(sealsSection),
             "sections"      -> Json.toJson(sections)
           )

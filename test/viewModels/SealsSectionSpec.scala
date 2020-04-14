@@ -63,7 +63,7 @@ class SealsSectionSpec extends SpecBase {
 
       val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))))
 
-      val data: Seq[Section] = SealsSection(emptyUserAnswers)(withSeals, new UnloadingSummaryRow(emptyUserAnswers))
+      val data: Seq[Section] = SealsSection(emptyUserAnswers)(withSeals, new UnloadingSummaryRow(emptyUserAnswers)).head
       data.head.rows(0).value.content mustBe Literal("seal 1")
       data.head.rows(1).value.content mustBe Literal("seal 2")
     }
@@ -80,7 +80,7 @@ class SealsSectionSpec extends SpecBase {
         .success
         .value
 
-      val data: Seq[Section] = SealsSection(updatedUserAnswers)(withSeals, new UnloadingSummaryRow(updatedUserAnswers))
+      val data: Seq[Section] = SealsSection(updatedUserAnswers)(withSeals, new UnloadingSummaryRow(updatedUserAnswers)).head
       data.head.rows(0).value.content mustBe Literal("new seal value 1")
       data.head.rows(1).value.content mustBe Literal("new seal value 2")
     }
@@ -89,8 +89,8 @@ class SealsSectionSpec extends SpecBase {
 
       val noSeals = unloadingPermission.copy(seals = None)
 
-      val data: Seq[Section] = SealsSection(emptyUserAnswers)(noSeals, new UnloadingSummaryRow(emptyUserAnswers))
-      data mustBe Nil
+      val data: Option[Seq[Section]] = SealsSection(emptyUserAnswers)(noSeals, new UnloadingSummaryRow(emptyUserAnswers))
+      data mustBe None
     }
 
   }

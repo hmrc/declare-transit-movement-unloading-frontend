@@ -56,43 +56,6 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers with Spec
 
   "UnloadingSummaryViewModel" - {
 
-    "seals section should" - {
-      "display no seals" in {
-
-        val data = UnloadingSummaryViewModel(emptyUserAnswers)(unloadingPermission)
-
-        data.sections.length mustBe 1
-      }
-
-      "display seals" in {
-
-        val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))))
-
-        val data = UnloadingSummaryViewModel(emptyUserAnswers)(withSeals)
-
-        data.sections.length mustBe 2
-        data.sections.head.sectionTitle mustBe defined
-        data.sections.head.rows.length mustBe 2
-      }
-
-      "display seals with transport details" in {
-
-        val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))),
-                                                 transportCountry  = Some("registration"),
-                                                 transportIdentity = Some("registration"))
-
-        val data = UnloadingSummaryViewModel(emptyUserAnswers)(withSeals)
-
-        data.sections.length mustBe 3
-        data.sections(0).sectionTitle mustBe defined
-        data.sections(0).rows.length mustBe 2
-        data.sections(1).sectionTitle mustBe defined
-        data.sections(1).rows.length mustBe 2
-        data.sections(2).sectionTitle mustBe defined
-        data.sections(2).rows.length mustBe 2
-      }
-    }
-
     "vehicle section should" - {
 
       "display transportIdentity" in {
