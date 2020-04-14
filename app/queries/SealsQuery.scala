@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-package pages
+package queries
 
-import models.Index
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-final case class NewSealNumberPage(index: Index) extends QuestionPage[String] {
-
-  override def path: JsPath = JsPath \ "seals" \ index.position
-
-  override def toString: String = "newSealNumber"
+final case object SealsQuery extends QuestionPage[Seq[String]] {
+  override def path: JsPath = JsPath \ "seals"
 }
