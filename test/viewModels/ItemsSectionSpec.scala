@@ -19,7 +19,7 @@ package viewModels
 import base.SpecBase
 import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission}
-import pages.GrossMassAmountPage
+import pages.{ChangesToReportPage, GrossMassAmountPage}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import utils.UnloadingSummaryRow
 import viewModels.sections.Section
@@ -79,6 +79,16 @@ class ItemsSectionSpec extends SpecBase {
         val data: Seq[Section] = ItemsSection(updatedAnswers)(grossMassAmount, new UnloadingSummaryRow(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("2000")
         data.head.rows(1).value.content mustBe Literal("Flowers")
+      }
+
+      "Correct Comments when change has been made" in {
+        val updatedAnswers = emptyUserAnswers
+          .set(ChangesToReportPage, "Test")
+          .success
+          .value
+
+        val data: Seq[Section] = ItemsSection(updatedAnswers)(unloadingPermission, new UnloadingSummaryRow(emptyUserAnswers))
+        data.head.rows(2).value.content mustBe Literal("Test")
       }
 
     }

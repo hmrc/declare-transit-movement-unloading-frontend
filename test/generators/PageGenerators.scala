@@ -22,6 +22,9 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryConfirmRemoveCommentsPage: Arbitrary[ConfirmRemoveCommentsPage.type] =
+    Arbitrary(ConfirmRemoveCommentsPage)
+
   implicit lazy val arbitraryChangesToReportPage: Arbitrary[ChangesToReportPage.type] =
     Arbitrary(ChangesToReportPage)
 

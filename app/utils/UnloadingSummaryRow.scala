@@ -15,7 +15,7 @@
  */
 
 package utils
-import models.{CheckMode, Index, MovementReferenceNumber, UserAnswers}
+import models.{CheckMode, Index, MovementReferenceNumber, NormalMode, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
@@ -89,6 +89,28 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             href               = controllers.routes.GrossMassAmountController.onPageLoad(mrn, CheckMode).url,
             visuallyHiddenText = Some(msg"changeItems.grossMass.change.hidden"),
             attributes         = Map("id" -> s"""change-gross-mass""")
+          )
+        )
+      )
+  }
+
+  val comments: String => Row = {
+    value =>
+      Row(
+        key   = Key(msg"changeItems.comments.label", classes = Seq("govuk-!-width-one-half")),
+        value = Value(lit"$value"),
+        actions = List(
+          Action(
+            content            = msg"site.edit",
+            href               = controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode).url,
+            visuallyHiddenText = Some(msg"changeItems.comments.change.hidden"),
+            attributes         = Map("id" -> s"""change-comments""")
+          ),
+          Action(
+            content            = msg"site.delete",
+            href               = controllers.routes.ConfirmRemoveCommentsController.onPageLoad(mrn, NormalMode).url,
+            visuallyHiddenText = Some(msg"changeItems.comments.remove.hidden"),
+            attributes         = Map("id" -> s"""remove-comment""")
           )
         )
       )

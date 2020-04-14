@@ -17,30 +17,29 @@
 package controllers
 
 import controllers.actions._
-import forms.ChangesToReportFormProvider
+import forms.ConfirmRemoveCommentsFormProvider
 import javax.inject.Inject
-import models.{Mode, MovementReferenceNumber, UserAnswers}
+import models.{Mode, MovementReferenceNumber}
 import navigation.Navigator
-import pages.ChangesToReportPage
+import pages.{ChangesToReportPage, ConfirmRemoveCommentsPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
-class ChangesToReportController @Inject()(
+class ConfirmRemoveCommentsController @Inject()(
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
-  formProvider: ChangesToReportFormProvider,
+  formProvider: ConfirmRemoveCommentsFormProvider,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -52,18 +51,14 @@ class ChangesToReportController @Inject()(
 
   def onPageLoad(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ChangesToReportPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
-
       val json = Json.obj(
-        "form" -> preparedForm,
-        "mrn"  -> mrn,
-        "mode" -> mode
+        "form"   -> form,
+        "mode"   -> mode,
+        "mrn"    -> mrn,
+        "radios" -> Radios.yesNo(form("value"))
       )
 
-      renderer.render("changesToReport.njk", json).map(Ok(_))
+      renderer.render("confirmRemoveComments.njk", json).map(Ok(_))
   }
 
   def onSubmit(mrn: MovementReferenceNumber, mode: Mode): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
@@ -74,18 +69,23 @@ class ChangesToReportController @Inject()(
           formWithErrors => {
 
             val json = Json.obj(
-              "form" -> formWithErrors,
-              "mrn"  -> mrn,
-              "mode" -> mode
+              "form"   -> formWithErrors,
+              "mode"   -> mode,
+              "mrn"    -> mrn,
+              "radios" -> Radios.yesNo(formWithErrors("value"))
             )
 
-            renderer.render("changesToReport.njk", json).map(BadRequest(_))
+            renderer.render("confirmRemoveComments.njk", json).map(BadRequest(_))
           },
           value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangesToReportPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ChangesToReportPage, mode, updatedAnswers))
+            if (value) {
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.remove(ChangesToReportPage))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, updatedAnswers))
+            } else {
+              Future.successful(Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, request.userAnswers)))
+          }
         )
   }
 }

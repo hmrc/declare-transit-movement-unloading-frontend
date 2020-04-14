@@ -117,13 +117,13 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
-      "from changes to report page to check your answers page" - {
+      "from changes to report page to unloading summary page" - {
 
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
               .nextPage(ChangesToReportPage, NormalMode, answers)
-              .mustBe(routes.CheckYourAnswersController.onPageLoad(answers.id))
+              .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
 
         }
       }
@@ -179,6 +179,18 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
               navigator
                 .nextPage(NewSealNumberPage(Index(0)), CheckMode, answers)
                 .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+          }
+        }
+
+        "must go from Remove comments page " - {
+          "to unloading summary page when the form is submitted" in {
+
+            forAll(arbitrary[UserAnswers]) {
+              answers =>
+                navigator
+                  .nextPage(ConfirmRemoveCommentsPage, NormalMode, answers)
+                  .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+            }
           }
         }
       }

@@ -102,6 +102,7 @@ class UnloadingSummaryViewModelSpec extends FreeSpec with MustMatchers with Spec
         data.sections.length mustBe 1
         data.sections.head.sectionTitle mustBe defined
         data.sections.head.rows.length mustBe 2
+        data.sections.head.rows.head.actions.isEmpty mustBe false
         data.sections.head.rows(1).actions.isEmpty mustBe true
       }
 
