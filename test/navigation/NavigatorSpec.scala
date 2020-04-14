@@ -117,6 +117,16 @@ class NavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generato
         }
       }
 
+      "must go from New Seal Number page to unloading summary page" in {
+
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(NewSealNumberPage(Index(0)), NormalMode, answers)
+              .mustBe(routes.UnloadingSummaryController.onPageLoad(answers.id))
+        }
+      }
+
       "from changes to report page to unloading summary page" - {
 
         forAll(arbitrary[UserAnswers]) {

@@ -40,23 +40,24 @@ object UnloadingSummaryViewModel {
 object SealsSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Option[Seq[Section]] =
-    unloadingPermission.seals match {
+    userAnswers.get(SealsQuery) match {
       case Some(seals) => {
-        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
-          unloadingPermissionValue => {
-            val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
-            SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(unloadingSummaryRow.seals)
+        val rows: Seq[Row] = seals.zipWithIndex.map(
+          sealNumber => {
+            SummaryRow.rowWithIndex(Index(sealNumber._2))(None)(sealNumber._1)(unloadingSummaryRow.seals)
           }
         )
 
         Some(Seq(Section(msg"changeSeal.title", rows)))
       }
+
       case None =>
-        userAnswers.get(SealsQuery) match {
+        unloadingPermission.seals match {
           case Some(seals) => {
-            val rows: Seq[Row] = seals.zipWithIndex.map(
-              sealNumber => {
-                SummaryRow.rowWithIndex(Index(sealNumber._2))(None)(sealNumber._1)(unloadingSummaryRow.seals)
+            val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
+              unloadingPermissionValue => {
+                val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
+                SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(unloadingSummaryRow.seals)
               }
             )
 

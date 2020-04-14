@@ -18,7 +18,12 @@ package services
 import cats.data.NonEmptyList
 import com.google.inject.{Inject, Singleton}
 import connectors.UnloadingConnector
-import models.{GoodsItem, MovementReferenceNumber, Packages, ProducedDocument, Seals, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
+import models.{GoodsItem, Index, MovementReferenceNumber, Packages, ProducedDocument, Seals, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
+import pages.NewSealNumberPage
+import queries.SealsQuery
+
+import scala.concurrent.Future
+import scala.util.Try
 
 @Singleton
 class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) extends UnloadingPermissionService {
@@ -42,7 +47,7 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
     sensitiveGoodsInformation = Seq.empty
   )
 
-  private val unloadingPermission = UnloadingPermission(
+  private val unloadingPermissionNoSeals = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
     transportIdentity       = None,
     transportCountry        = None,
@@ -85,7 +90,17 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
   //TODO: to test the view
   def getUnloadingPermission(mrn: MovementReferenceNumber): Option[UnloadingPermission] = mrn.toString match {
     case "19IT02110010007827" => Some(unloadingPermissionSeals)
-    case _                    => Some(unloadingPermission)
+    case _                    => Some(unloadingPermissionNoSeals)
+  }
+
+  def convertSeals(userAnswers: UserAnswers): Option[UserAnswers] = getUnloadingPermission(userAnswers.id) match {
+    case Some(unloadingPermission) =>
+      unloadingPermission.seals match {
+        case Some(seals) =>
+          userAnswers.set(SealsQuery, seals.SealId).map(ua => ua).toOption
+        case _ => Some(userAnswers)
+      }
+    case _ => Some(userAnswers)
   }
 }
 

@@ -18,8 +18,10 @@ package models
 
 import java.time.LocalDateTime
 
+import derivable.Derivable
 import pages._
 import play.api.libs.json._
+import queries.Gettable
 
 import scala.util.{Failure, Success, Try}
 
@@ -29,8 +31,11 @@ final case class UserAnswers(
   lastUpdated: LocalDateTime = LocalDateTime.now
 ) {
 
-  def get[A](page: QuestionPage[A])(implicit rds: Reads[A]): Option[A] =
+  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)
+
+  def get[A, B](derivable: Derivable[A, B])(implicit rds: Reads[A]): Option[B] =
+    get(derivable: Gettable[A]).map(derivable.derive)
 
   def set[A](page: QuestionPage[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 

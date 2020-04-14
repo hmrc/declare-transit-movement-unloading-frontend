@@ -56,6 +56,10 @@ class Navigator @Inject()() {
       ua =>
         routes.UnloadingSummaryController.onPageLoad(ua.id)
 
+    case NewSealNumberPage(_) =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
+
     case ConfirmRemoveCommentsPage =>
       ua =>
         routes.UnloadingSummaryController.onPageLoad(ua.id)
