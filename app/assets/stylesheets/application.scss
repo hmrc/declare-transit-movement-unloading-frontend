@@ -5,3 +5,7 @@ $govuk-assets-path: "/common-transit-convention-unloading-arrival/assets/lib/gov
 @import "partials/page-heading";
 @import "partials/header";
 @import "partials/shame";
+
+.govuk-summary-list__actions-list-item {
+    display: inline-block;
+}

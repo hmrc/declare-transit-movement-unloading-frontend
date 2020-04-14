@@ -39,20 +39,26 @@ class Navigator @Inject()() {
     case CanSealsBeReadPage =>
       ua =>
         ua.get(CanSealsBeReadPage) match {
-          case Some(true) => routes.AreAnySealsBrokenController.onPageLoad(ua.id, NormalMode)
-          case _          => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
+          case Some(true)  => routes.AreAnySealsBrokenController.onPageLoad(ua.id, NormalMode)
+          case Some(false) => routes.AreAnySealsBrokenController.onPageLoad(ua.id, NormalMode)
+          case _           => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
         }
 
     case AreAnySealsBrokenPage =>
       ua =>
         ua.get(AreAnySealsBrokenPage) match {
           case Some(false) => routes.UnloadingSummaryController.onPageLoad(ua.id)
+          case Some(true)  => routes.UnloadingSummaryController.onPageLoad(ua.id)
           case _           => routes.SessionExpiredController.onPageLoad() //TODO temporary redirect will be error page
         }
 
     case ChangesToReportPage =>
       ua =>
-        routes.CheckYourAnswersController.onPageLoad(ua.id)
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
+
+    case ConfirmRemoveCommentsPage =>
+      ua =>
+        routes.UnloadingSummaryController.onPageLoad(ua.id)
 
     case _ =>
       _ =>
