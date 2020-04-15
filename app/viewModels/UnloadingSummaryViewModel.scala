@@ -16,8 +16,8 @@
 
 package viewModels
 import cats.data.NonEmptyList
-import models.{Index, UnloadingPermission, UserAnswers}
-import pages.{GrossMassAmountPage, NewSealNumberPage, VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
+import models.{UnloadingPermission, UserAnswers}
+import pages._
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.UnloadingSummaryRow
@@ -41,12 +41,7 @@ object SealsSection {
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Seq[Section] =
     unloadingPermission.seals match {
       case Some(seals) =>
-        val rows: Seq[Row] = seals.SealId.zipWithIndex.map(
-          unloadingPermissionValue => {
-            val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
-            SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(unloadingSummaryRow.seals)
-          }
-        )
+        val rows: Seq[Row] = SummaryRow.rowSeals(seals.SealId)(userAnswers)(unloadingSummaryRow.seals)
         Seq(Section(msg"changeSeal.title", rows))
 
       case None => Seq.empty
@@ -77,15 +72,11 @@ object ItemsSection {
     val grossMassAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(GrossMassAmountPage)
     val grossMassRow: Seq[Row]          = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(unloadingSummaryRow.grossMass)
 
-    val itemsRow: NonEmptyList[Row] = unloadingPermission.goodsItems.zipWithIndex
-      .map {
-        unloadingPermissionValue =>
-          {
-            val userAnswer = None //TODO: Call get on UserAnswers when this is available
-            SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(userAnswer)(unloadingPermissionValue._1.description)(unloadingSummaryRow.items)
-          }
-      }
+    val itemsRow: NonEmptyList[Row] = SummaryRow.rowGoodsItems(unloadingPermission.goodsItems)(userAnswers)(unloadingSummaryRow.items)
 
-    Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow.toList))
+    val commentsAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(ChangesToReportPage)
+    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(unloadingSummaryRow.comments)
+
+    Seq(Section(msg"changeItems.title", grossMassRow ++ itemsRow.toList ++ commentsRow))
   }
 }

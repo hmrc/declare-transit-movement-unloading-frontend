@@ -15,15 +15,19 @@
  */
 
 package viewModels
-import models.{Index, UserAnswers}
+import cats.data.NonEmptyList
 import models.reference.Country
+import models.{GoodsItem, Index, UserAnswers}
 import pages.{NewSealNumberPage, QuestionPage}
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 
 object SummaryRow {
 
-  type SummaryRow          = Option[String] => Option[String] => (String => Row) => Seq[Row]
-  type SummaryRowWithIndex = Index => Option[String] => String => ((Index, String) => Row) => Row
+  type StandardRow   = Option[String] => Option[String] => (String => Row) => Seq[Row]
+  type RowWithIndex  = Index => Option[String] => String => ((Index, String) => Row) => Row
+  type SealRows      = Seq[String] => UserAnswers => ((Index, String) => Row) => Seq[Row]
+  type GoodsItemRows = NonEmptyList[GoodsItem] => UserAnswers => ((Index, String) => Row) => NonEmptyList[Row]
+  type GoodsItemRow  = Index => Option[String] => GoodsItem => ((Index, String) => Row) => Row
 
   type UserAnswerString  = UserAnswers => QuestionPage[String] => Option[String]
   type UserAnswerCountry = UserAnswers => QuestionPage[Country] => Option[String]
@@ -47,7 +51,7 @@ object SummaryRow {
       ua.get(page(index))
   }
 
-  val row: SummaryRow =
+  val row: StandardRow =
     userAnswer =>
       summaryValue =>
         buildRow => {
@@ -58,7 +62,7 @@ object SummaryRow {
           }
     }
 
-  val rowWithIndex: SummaryRowWithIndex =
+  val rowWithIndex: RowWithIndex =
     index =>
       userAnswer =>
         summaryValue =>
@@ -68,4 +72,37 @@ object SummaryRow {
               case (None, x)    => buildRow(index, x)
             }
     }
+
+  val rowSeals: SealRows =
+    sequence =>
+      userAnswers =>
+        buildRow =>
+          sequence.zipWithIndex.map(
+            unloadingPermissionValue => {
+              val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
+              SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(buildRow)
+            }
+    )
+
+  val rowGoodsItemWithIndex: GoodsItemRow =
+    index =>
+      userAnswer =>
+        summaryValue =>
+          buildRow => {
+            (userAnswer, summaryValue) match {
+              case (Some(x), _) => buildRow(index, x)
+              case (None, x)    => buildRow(index, x.description)
+            }
+    }
+
+  val rowGoodsItems: GoodsItemRows =
+    sequence =>
+      _ =>
+        buildRow =>
+          sequence.zipWithIndex.map(
+            unloadingPermissionValue => {
+              val answer = None //TODO: Call get on UserAnswers when this is available
+              SummaryRow.rowGoodsItemWithIndex(Index(unloadingPermissionValue._2))(answer)(unloadingPermissionValue._1)(buildRow)
+            }
+    )
 }
