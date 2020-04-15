@@ -23,9 +23,10 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import renderer.Renderer
+import services.UnloadingPermissionService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
-import viewModels.CheckYourAnswersViewModel
+import viewModels.{CheckYourAnswersViewModel, UnloadingSummaryViewModel}
 import viewModels.sections.Section
 
 import scala.concurrent.ExecutionContext
@@ -35,6 +36,7 @@ class CheckYourAnswersController @Inject()(
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
+  unloadingPermissionService: UnloadingPermissionService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer
 )(implicit ec: ExecutionContext)
@@ -47,15 +49,20 @@ class CheckYourAnswersController @Inject()(
 
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      val viewModel: CheckYourAnswersViewModel = CheckYourAnswersViewModel(request.userAnswers)
+      unloadingPermissionService.getUnloadingPermission(mrn) match {
+        case Some(unloadingPermission) => {
 
-      val answers: Seq[Section] = viewModel.sections
+          val viewModel = CheckYourAnswersViewModel(request.userAnswers, unloadingPermission)
 
-      renderer
-        .render(
-          "check-your-answers.njk",
-          Json.obj("sections" -> Json.toJson(answers), "redirectUrl" -> redirectUrl(mrn).url)
-        )
-        .map(Ok(_))
+          val answers: Seq[Section] = viewModel.sections
+
+          renderer
+            .render(
+              "check-your-answers.njk",
+              Json.obj("sections" -> Json.toJson(answers), "redirectUrl" -> redirectUrl(mrn).url)
+            )
+            .map(Ok(_))
+        }
+      }
   }
 }

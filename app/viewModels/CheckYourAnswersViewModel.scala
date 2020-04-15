@@ -15,7 +15,8 @@
  */
 
 package viewModels
-import models.UserAnswers
+import models.{UnloadingPermission, UserAnswers}
+import pages.VehicleNameRegistrationReferencePage
 import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import utils.CheckYourAnswersHelper
@@ -25,8 +26,13 @@ case class CheckYourAnswersViewModel(sections: Seq[Section])
 
 object CheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): CheckYourAnswersViewModel = {
+  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit messages: Messages): CheckYourAnswersViewModel = {
 
+    val vehicleNameRegistration: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
+    if (vehicleNameRegistration.isEmpty && unloadingPermission.transportIdentity.nonEmpty) {
+      userAnswers.set(VehicleNameRegistrationReferencePage, unloadingPermission.transportIdentity.getOrElse(""))
+
+    }
     val checkYourAnswersRow = new CheckYourAnswersHelper(userAnswers)
 
     val row: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
@@ -34,9 +40,14 @@ object CheckYourAnswersViewModel {
     if (row.nonEmpty) {
       CheckYourAnswersViewModel(Seq(Section(row.toSeq)))
     } else {
-      CheckYourAnswersViewModel(Nil)
+
+      val vehicleNameRegistrationReferenceRow: Option[Row] = checkYourAnswersRow.vehicleNameRegistrationReference
+      if (vehicleNameRegistrationReferenceRow.nonEmpty) {
+        CheckYourAnswersViewModel(Seq(Section(vehicleNameRegistrationReferenceRow.toSeq)))
+      } else {
+        CheckYourAnswersViewModel(Nil)
+      }
     }
 
   }
-
 }
