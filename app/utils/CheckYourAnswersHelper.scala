@@ -157,7 +157,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.DateGoodsUnloadedController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"dateGoodsUnloaded.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"dateGoodsUnloaded.checkYourAnswersLabel")),
+            attributes         = Map("id" -> s"""change-date-goods-unloaded""")
           )
         )
       )
