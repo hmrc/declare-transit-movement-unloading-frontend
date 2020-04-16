@@ -20,9 +20,8 @@ import java.time.LocalDate
 import base.SpecBase
 import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
-import pages.DateGoodsUnloadedPage
+import pages.{DateGoodsUnloadedPage, VehicleNameRegistrationReferencePage}
 import uk.gov.hmrc.viewmodels.Text.Literal
-import viewModels.sections.Section
 
 class CheckYourAnswersViewModelSpec extends SpecBase {
 
@@ -80,10 +79,8 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
     }
 
     "contain vehicle registration details" in {
-      val vehicleIdDetails = unloadingPermission.copy(transportIdentity = Some("testId"))
-      val data             = CheckYourAnswersViewModel(emptyUserAnswers, vehicleIdDetails)
-
-      val x: Seq[Section] = data.sections
+      val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "test1").success.value
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 1
 
