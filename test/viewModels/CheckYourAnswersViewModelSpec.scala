@@ -59,13 +59,6 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
   "CheckYourAnswersViewModel" - {
 
-//    "contain no sections if data doesn't exist" in {
-//
-//      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission)
-//
-//      data.sections mustBe Nil
-//    }
-
     "contain date goods unloaded" in {
 
       val date = LocalDate.of(2020: Int, 3: Int, 12: Int)
@@ -79,10 +72,11 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
     }
 
     "contain vehicle registration details" in {
-      val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "test1").success.value
+      val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "vehicle reference").success.value
       val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 2
+      data.sections(1).rows(0).value.content mustBe Literal("vehicle reference")
       data.sections(1).rows.head.actions mustBe Nil
     }
 
@@ -92,6 +86,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 2
       data.sections(1).rows(0).value.content mustBe Literal("500")
+      data.sections(1).rows(0).actions mustBe Nil
     }
 
     "contain item details" in {
@@ -100,6 +95,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 2
       data.sections(1).rows(1).value.content mustBe Literal("Flowers")
+      data.sections(1).rows(1).actions mustBe Nil
     }
 
     "contain comments details" in {
@@ -108,6 +104,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 2
       data.sections(1).rows(2).value.content mustBe Literal("Test comment")
+      data.sections(1).rows(2).actions mustBe Nil
     }
   }
 }

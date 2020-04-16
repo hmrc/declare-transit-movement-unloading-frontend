@@ -32,27 +32,20 @@ object CheckYourAnswersViewModel {
 
     val checkYourAnswersRow           = new CheckYourAnswersHelper(userAnswers)
     val rowGoodsUnloaded: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
-    val newUnloadingSummaryRow        = new UnloadingSummaryRow(userAnswers)
+    val unloadingSummaryRow           = new UnloadingSummaryRow(userAnswers)
 
-    val vehicleAnswer: Option[String]   = userAnswers.get(VehicleNameRegistrationReferencePage)
-    val transportIdentity: Seq[Row]     = SummaryRow.row(vehicleAnswer)(unloadingPermission.transportIdentity)(newUnloadingSummaryRow.vehicleUsedCYA)
+    val transportIdentityAnswer: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
+    val transportIdentity: Seq[Row]             = SummaryRow.row(transportIdentityAnswer)(unloadingPermission.transportIdentity)(unloadingSummaryRow.vehicleUsedCYA)
+
     val grossMassAnswer: Option[String] = userAnswers.get(GrossMassAmountPage)
-    val grossMass: Seq[Row]             = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(newUnloadingSummaryRow.grossMassCYA)
+    val grossMass: Seq[Row]             = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(unloadingSummaryRow.grossMassCYA)
 
-    val itemsRow: NonEmptyList[Row] = SummaryRow.rowGoodsItems(unloadingPermission.goodsItems)(userAnswers)(newUnloadingSummaryRow.items)
+    val itemsRow: NonEmptyList[Row] = SummaryRow.rowGoodsItems(unloadingPermission.goodsItems)(userAnswers)(unloadingSummaryRow.items)
 
     val commentsAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(ChangesToReportPage)
-    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(newUnloadingSummaryRow.commentsCYA)
+    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(unloadingSummaryRow.commentsCYA)
 
-    if (transportIdentity.nonEmpty || grossMass.nonEmpty || commentsRow.nonEmpty) {
-      CheckYourAnswersViewModel(
-        Seq(Section(rowGoodsUnloaded.toSeq), Section(msg"checkYourAnswers.subTitle", transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
-    } else {
-      if (rowGoodsUnloaded.nonEmpty) {
-        CheckYourAnswersViewModel(Seq(Section(transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
-      } else {
-        CheckYourAnswersViewModel(Nil)
-      }
-    }
+    CheckYourAnswersViewModel(
+      Seq(Section(rowGoodsUnloaded.toSeq), Section(msg"checkYourAnswers.subTitle", transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
   }
 }
