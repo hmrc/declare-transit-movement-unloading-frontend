@@ -62,6 +62,15 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
       )
   }
 
+  val vehicleUsedCYA: String => Row = {
+    value =>
+      Row(
+        key     = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
+        value   = Value(lit"$value"),
+        actions = Nil
+      )
+  }
+
   val registeredCountry: String => Row = {
     value =>
       Row(

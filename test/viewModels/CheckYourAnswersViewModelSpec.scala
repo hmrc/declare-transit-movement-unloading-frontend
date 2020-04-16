@@ -83,6 +83,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
       val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 1
+      data.sections.head.rows.head.actions mustBe Nil
 
     }
   }

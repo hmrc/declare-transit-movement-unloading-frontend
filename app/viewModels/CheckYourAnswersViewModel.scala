@@ -21,6 +21,7 @@ import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import utils.{CheckYourAnswersHelper, UnloadingSummaryRow}
 import viewModels.sections.Section
+import uk.gov.hmrc.viewmodels._
 
 case class CheckYourAnswersViewModel(sections: Seq[Section])
 
@@ -28,31 +29,25 @@ object CheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit messages: Messages): CheckYourAnswersViewModel = {
 
-    val vehicleNameRegistration: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
-    if (vehicleNameRegistration.isEmpty && unloadingPermission.transportIdentity.nonEmpty) {
-      userAnswers.set(VehicleNameRegistrationReferencePage, unloadingPermission.transportIdentity.getOrElse(""))
-
-    }
     val checkYourAnswersRow    = new CheckYourAnswersHelper(userAnswers)
+    val rowGoodsUnloaded: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
+
+
     val newUnloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
 
-    val row: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
-
-    // val vehicleAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(VehicleNameRegistrationReferencePage)
     val vehicleAnswer: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
-    val transportIdentity: Seq[Row]   = SummaryRow.row(vehicleAnswer)(unloadingPermission.transportIdentity)(newUnloadingSummaryRow.vehicleUsed)
+    val transportIdentity: Seq[Row]   = SummaryRow.row(vehicleAnswer)(unloadingPermission.transportIdentity)(newUnloadingSummaryRow.vehicleUsedCYA)
 
-    if (row.nonEmpty) {
-      CheckYourAnswersViewModel(Seq(Section(row.toSeq)))
+    if (transportIdentity.nonEmpty) {
+      CheckYourAnswersViewModel(Seq(Section(rowGoodsUnloaded.toSeq), Section(msg"checkYourAnswers.subTitle", transportIdentity)))
     } else {
-
-      val vehicleNameRegistrationReferenceRow: Option[Row] = checkYourAnswersRow.vehicleNameRegistrationReference
-      if (vehicleNameRegistrationReferenceRow.nonEmpty) {
-        CheckYourAnswersViewModel(Seq(Section(row.toSeq ++ transportIdentity)))
-      } else {
+      if (rowGoodsUnloaded.nonEmpty) {
         CheckYourAnswersViewModel(Seq(Section(transportIdentity)))
+      } else {
+        CheckYourAnswersViewModel(Nil)
       }
     }
 
   }
+
 }
