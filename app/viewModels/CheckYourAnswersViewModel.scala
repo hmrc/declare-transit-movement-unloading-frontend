@@ -15,8 +15,9 @@
  */
 
 package viewModels
+import cats.data.NonEmptyList
 import models.{UnloadingPermission, UserAnswers}
-import pages.VehicleNameRegistrationReferencePage
+import pages.{ChangesToReportPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import utils.{CheckYourAnswersHelper, UnloadingSummaryRow}
@@ -29,25 +30,22 @@ object CheckYourAnswersViewModel {
 
   def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit messages: Messages): CheckYourAnswersViewModel = {
 
-    val checkYourAnswersRow    = new CheckYourAnswersHelper(userAnswers)
+    val checkYourAnswersRow           = new CheckYourAnswersHelper(userAnswers)
     val rowGoodsUnloaded: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
+    val newUnloadingSummaryRow        = new UnloadingSummaryRow(userAnswers)
 
+    val vehicleAnswer: Option[String]   = userAnswers.get(VehicleNameRegistrationReferencePage)
+    val transportIdentity: Seq[Row]     = SummaryRow.row(vehicleAnswer)(unloadingPermission.transportIdentity)(newUnloadingSummaryRow.vehicleUsedCYA)
+    val grossMassAnswer: Option[String] = userAnswers.get(GrossMassAmountPage)
+    val grossMass: Seq[Row]             = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(newUnloadingSummaryRow.grossMassCYA)
 
-    val newUnloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
+    val itemsRow: NonEmptyList[Row] = SummaryRow.rowGoodsItems(unloadingPermission.goodsItems)(userAnswers)(newUnloadingSummaryRow.items)
 
-    val vehicleAnswer: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
-    val transportIdentity: Seq[Row]   = SummaryRow.row(vehicleAnswer)(unloadingPermission.transportIdentity)(newUnloadingSummaryRow.vehicleUsedCYA)
+    val commentsAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(ChangesToReportPage)
+    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(newUnloadingSummaryRow.comments)
 
-    if (transportIdentity.nonEmpty) {
-      CheckYourAnswersViewModel(Seq(Section(rowGoodsUnloaded.toSeq), Section(msg"checkYourAnswers.subTitle", transportIdentity)))
-    } else {
-      if (rowGoodsUnloaded.nonEmpty) {
-        CheckYourAnswersViewModel(Seq(Section(transportIdentity)))
-      } else {
-        CheckYourAnswersViewModel(Nil)
-      }
-    }
-
+    CheckYourAnswersViewModel(
+      Seq(Section(rowGoodsUnloaded.toSeq), (Section(msg"changeItems.title", transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
+    )
   }
-
 }

@@ -103,6 +103,15 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
       )
   }
 
+  val grossMassCYA: String => Row = {
+    value =>
+      Row(
+        key     = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
+        value   = Value(lit"$value"),
+        actions = Nil
+      )
+  }
+
   val comments: String => Row = {
     value =>
       Row(
