@@ -42,10 +42,17 @@ object CheckYourAnswersViewModel {
     val itemsRow: NonEmptyList[Row] = SummaryRow.rowGoodsItems(unloadingPermission.goodsItems)(userAnswers)(newUnloadingSummaryRow.items)
 
     val commentsAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(ChangesToReportPage)
-    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(newUnloadingSummaryRow.comments)
+    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(newUnloadingSummaryRow.commentsCYA)
 
-    CheckYourAnswersViewModel(
-      Seq(Section(rowGoodsUnloaded.toSeq), (Section(msg"changeItems.title", transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
-    )
+    if (transportIdentity.nonEmpty || grossMass.nonEmpty || commentsRow.nonEmpty) {
+      CheckYourAnswersViewModel(
+        Seq(Section(rowGoodsUnloaded.toSeq), Section(msg"checkYourAnswers.subTitle", transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
+    } else {
+      if (rowGoodsUnloaded.nonEmpty) {
+        CheckYourAnswersViewModel(Seq(Section(transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
+      } else {
+        CheckYourAnswersViewModel(Nil)
+      }
+    }
   }
 }

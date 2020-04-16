@@ -134,5 +134,14 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
       )
   }
 
+  val commentsCYA: String => Row = {
+    value =>
+      Row(
+        key     = Key(msg"changeItems.comments.label", classes = Seq("govuk-!-width-one-half")),
+        value   = Value(lit"$value"),
+        actions = Nil
+      )
+  }
+
   def mrn: MovementReferenceNumber = userAnswers.id
 }

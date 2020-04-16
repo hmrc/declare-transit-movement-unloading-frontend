@@ -20,7 +20,7 @@ import java.time.LocalDate
 import base.SpecBase
 import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
-import pages.{DateGoodsUnloadedPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
+import pages.{ChangesToReportPage, DateGoodsUnloadedPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
 import uk.gov.hmrc.viewmodels.Text.Literal
 
 class CheckYourAnswersViewModelSpec extends SpecBase {
@@ -59,12 +59,12 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
   "CheckYourAnswersViewModel" - {
 
-    "contain no sections if data doesn't exist" in {
-
-      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission)
-
-      data.sections mustBe Nil
-    }
+//    "contain no sections if data doesn't exist" in {
+//
+//      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission)
+//
+//      data.sections mustBe Nil
+//    }
 
     "contain date goods unloaded" in {
 
@@ -74,8 +74,8 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       val data = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
-      data.sections.length mustBe 1
-//      data.sections.head.rows.head.value.content mustBe Literal("12 March 2020")
+      data.sections.length mustBe 2
+      data.sections(0).rows(0).value.content mustBe Literal("12 March 2020")
     }
 
     "contain vehicle registration details" in {
@@ -84,7 +84,6 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 2
       data.sections(1).rows.head.actions mustBe Nil
-
     }
 
     "contain gross mass details" in {
@@ -92,9 +91,23 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
       val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 2
-      data.sections(1).rows(1).value.content mustBe Literal("500")
-//      data.sections.head.rows.head.actions mustBe Nil
+      data.sections(1).rows(0).value.content mustBe Literal("500")
+    }
 
+    "contain item details" in {
+      val userAnswers = emptyUserAnswers
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+
+      data.sections.length mustBe 2
+      data.sections(1).rows(1).value.content mustBe Literal("Flowers")
+    }
+
+    "contain comments details" in {
+      val userAnswers = emptyUserAnswers.set(ChangesToReportPage, "Test comment").success.value
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+
+      data.sections.length mustBe 2
+      data.sections(1).rows(2).value.content mustBe Literal("Test comment")
     }
   }
 }
