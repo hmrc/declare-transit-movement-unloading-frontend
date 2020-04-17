@@ -30,7 +30,8 @@ case class CheckYourAnswersViewModel(sections: Seq[Section])
 
 object CheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit messages: Messages): CheckYourAnswersViewModel = {
+  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(
+    implicit messages: Messages): CheckYourAnswersViewModel = {
 
     val checkYourAnswersRow           = new CheckYourAnswersHelper(userAnswers)
     val rowGoodsUnloaded: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
@@ -38,6 +39,14 @@ object CheckYourAnswersViewModel {
 
     val transportIdentityAnswer: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
     val transportIdentity: Seq[Row]             = SummaryRow.row(transportIdentityAnswer)(unloadingPermission.transportIdentity)(unloadingSummaryRow.vehicleUsedCYA)
+
+    val transportCountryDescription: Option[String] = summaryTransportCountry match {
+      case Some(country) => Some(country.description)
+      case None          => unloadingPermission.transportCountry
+    }
+
+    val countryAnswer: Option[String] = SummaryRow.userAnswerCountry(userAnswers)(VehicleRegistrationCountryPage)
+    val transportCountry: Seq[Row]    = SummaryRow.row(countryAnswer)(transportCountryDescription)(unloadingSummaryRow.registeredCountryCYA)
 
     val grossMassAnswer: Option[String] = userAnswers.get(GrossMassAmountPage)
     val grossMass: Seq[Row]             = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(unloadingSummaryRow.grossMassCYA)
@@ -50,22 +59,22 @@ object CheckYourAnswersViewModel {
     CheckYourAnswersViewModel(
       Seq(
         Section(rowGoodsUnloaded.toSeq),
-        Section(msg"checkYourAnswers.subTitle", buildRows(transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow, userAnswers.id))
+        Section(msg"checkYourAnswers.subTitle", buildRows(transportIdentity ++ transportCountry ++ grossMass ++ itemsRow.toList ++ commentsRow, userAnswers.id))
       ))
   }
 
   private def buildRows(rows: Seq[Row], mrn: MovementReferenceNumber): Seq[Row] = rows match {
     case head :: tail => {
-      val frank = head.copy(
+      val changeAction = head.copy(
         actions = List(
           Action(
             content            = msg"site.edit",
             href               = routes.UnloadingSummaryController.onPageLoad(mrn).url,
-            visuallyHiddenText = Some(msg"changeItems.comments.remove.hidden"),
-            attributes         = Map("id" -> s"""remove-comment""")
+            visuallyHiddenText = Some(msg"checkYourAnswers.changeItems.hidden"),
+            attributes         = Map("id" -> s"""change-answers""")
           )))
 
-      Seq(frank) ++ tail
+      Seq(changeAction) ++ tail
     }
     case _ => rows
 

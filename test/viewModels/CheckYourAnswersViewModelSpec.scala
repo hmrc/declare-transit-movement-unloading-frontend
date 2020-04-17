@@ -21,7 +21,7 @@ import base.SpecBase
 import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
 import org.scalatest.{FreeSpec, MustMatchers}
-import pages.{ChangesToReportPage, DateGoodsUnloadedPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
+import pages._
 import uk.gov.hmrc.viewmodels.Text.Literal
 
 class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with SpecBase {
@@ -58,6 +58,21 @@ class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with Spec
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
   )
 
+  private val unloadingPermissionWithTransport = UnloadingPermission(
+    movementReferenceNumber = "19IT02110010007827",
+    transportIdentity       = Some("YK67 XPF"),
+    transportCountry        = Some("United Kingdom"),
+    numberOfItems           = 1,
+    numberOfPackages        = 1,
+    grossMass               = "1000",
+    traderAtDestination     = trader,
+    presentationOffice      = "GB000060",
+    seals                   = None,
+    goodsItems              = NonEmptyList(goodsItemMandatory, Nil)
+  )
+
+  private val transportCountry = None
+
   "CheckYourAnswersViewModel" - {
 
     "contain date goods unloaded" in {
@@ -66,7 +81,7 @@ class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with Spec
 
       val userAnswers: UserAnswers = emptyUserAnswers.set(DateGoodsUnloadedPage, date).success.value
 
-      val data = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+      val data = CheckYourAnswersViewModel(userAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 2
       data.sections.head.rows.head.value.content mustBe Literal("12 March 2020")
@@ -74,15 +89,22 @@ class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with Spec
 
     "contain vehicle registration details with new user answers" in {
       val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "vehicle reference").success.value
-      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 2
       data.sections(1).rows.head.value.content mustBe Literal("vehicle reference")
       data.sections(1).rows.head.actions.isEmpty mustBe false
     }
 
+    "contain transport country details from unloading permission" in {
+      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermissionWithTransport, transportCountry)
+
+      data.sections.length mustBe 2
+      data.sections(1).rows(1).value.content mustBe Literal("United Kingdom")
+    }
+
     "contain gross mass amount details from unloading permission" in {
-      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission)
+      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 2
       data.sections(1).rows.head.value.content mustBe Literal("1000")
@@ -91,7 +113,7 @@ class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with Spec
 
     "contain gross mass details" in {
       val userAnswers = emptyUserAnswers.set(GrossMassAmountPage, "500").success.value
-      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 2
       data.sections(1).rows.head.value.content mustBe Literal("500")
@@ -101,7 +123,7 @@ class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with Spec
 
     "contain item details" in {
       val userAnswers = emptyUserAnswers
-      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 2
       data.sections(1).rows(1).value.content mustBe Literal("Flowers")
@@ -110,7 +132,7 @@ class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with Spec
 
     "contain comments details" in {
       val userAnswers = emptyUserAnswers.set(ChangesToReportPage, "Test comment").success.value
-      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
+      val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 2
       data.sections(1).rows(2).value.content mustBe Literal("Test comment")
