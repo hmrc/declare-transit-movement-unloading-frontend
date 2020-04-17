@@ -18,7 +18,7 @@ GET        /:mrn/unloading-guidance                      controllers.UnloadingGu
 
 GET        /:mrn/date-goods-unloaded                      controllers.DateGoodsUnloadedController.onPageLoad(mrn: MovementReferenceNumber, mode:Mode = NormalMode)
 POST       /:mrn/date-goods-unloaded                    controllers.DateGoodsUnloadedController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
-GET        /:mrn/change-date-goods-unloaded              controllers.DateGoodsUnloadedController.onPageLoad(mrn: MovementReferenceNumber, mode:Mode = CheckMode)
+GET        /:mrn/change-date-goods-unloaded              controllers.DateGoodsUnloadedController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
 POST       /:mrn/change-date-goods-unloaded               controllers.DateGoodsUnloadedController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
 
 GET        /:mrn/vehicle-name-registration-reference                        controllers.VehicleNameRegistrationReferenceController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
@@ -69,3 +69,5 @@ GET        /:mrn/confirm-remove-comments                        controllers.Conf
 POST       /:mrn/confirm-remove-comments                        controllers.ConfirmRemoveCommentsController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
 GET        /:mrn/change-confirm-remove-comments                  controllers.ConfirmRemoveCommentsController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
 POST       /:mrn/change-confirm-remove-comments                  controllers.ConfirmRemoveCommentsController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
+
+GET        /technical-difficulties                       controllers.TechnicalDifficultiesController.onPageLoad()

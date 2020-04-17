@@ -18,7 +18,7 @@ package navigation
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
-import models.{Mode, NormalMode, Seals, UnloadingPermission, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, Seals, UnloadingPermission, UserAnswers}
 import pages._
 import play.api.mvc.Call
 
@@ -39,7 +39,10 @@ class NavigatorUnloadingPermission @Inject()() {
         routes.IndexController.onPageLoad()
   }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, unloadingPermission: Option[UnloadingPermission]): Call =
-    normalRoutes(page)(userAnswers)(unloadingPermission)
-
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, unloadingPermission: Option[UnloadingPermission]): Call = mode match {
+    case NormalMode =>
+      normalRoutes(page)(userAnswers)(unloadingPermission)
+    case CheckMode =>
+      routes.CheckYourAnswersController.onPageLoad(userAnswers.id)
+  }
 }

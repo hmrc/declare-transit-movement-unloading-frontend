@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.{Index, MovementReferenceNumber, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import renderer.Renderer
 import services.{ReferenceDataService, UnloadingPermissionService, UnloadingPermissionServiceImpl}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -46,18 +46,19 @@ class UnloadingSummaryController @Inject()(
     extends FrontendBaseController
     with I18nSupport {
 
+  private val redirectUrl: MovementReferenceNumber => Call =
+    mrn => controllers.routes.CheckYourAnswersController.onPageLoad(mrn)
+  private val addCommentUrl: MovementReferenceNumber => Call =
+    mrn => controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode)
+
   def onPageLoad(mrn: MovementReferenceNumber): Action[AnyContent] = (identify andThen getData(mrn) andThen requireData).async {
     implicit request =>
-      //TODO: Do we need to return UnloadingSummaryViewModel, could just return Seq[Sections]
       unloadingPermissionService.getUnloadingPermission(mrn) match {
-        case Some(unloadingPermission) =>
-          val sections                                          = UnloadingSummaryViewModel(request.userAnswers)(unloadingPermission).sections
-          implicit val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(request.userAnswers)
+        case Some(unloadingPermission) => {
 
-          val sealsSection = SealsSection(request.userAnswers)(unloadingPermission, unloadingSummaryRow)
+          val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(request.userAnswers)
+          val sealsSection                             = SealsSection(request.userAnswers)(unloadingPermission, unloadingSummaryRow)
 
-          val redirectUrl   = controllers.routes.CheckYourAnswersController.onPageLoad(mrn)
-          val addCommentUrl = controllers.routes.ChangesToReportController.onPageLoad(mrn, NormalMode)
           val numberOfSeals = request.userAnswers.get(DeriveNumberOfSeals) match {
             case Some(sealsNum) => sealsNum
             case None =>
@@ -66,18 +67,26 @@ class UnloadingSummaryController @Inject()(
                 case _        => 0
               }
           }
-          val addSealUrl = controllers.routes.NewSealNumberController.onPageLoad(mrn, Index(numberOfSeals), NormalMode) //todo add mode and also point to correct seal
+          val addSealUrl = controllers.routes.NewSealNumberController.onPageLoad(mrn, Index(numberOfSeals), NormalMode) //todo add mode
 
-          val json = Json.obj(
-            "mrn"           -> mrn,
-            "redirectUrl"   -> redirectUrl.url,
-            "addCommentUrl" -> addCommentUrl.url,
-            "addSealUrl"    -> addSealUrl.url,
-            "sealsSection"  -> Json.toJson(sealsSection),
-            "sections"      -> Json.toJson(sections)
-          )
-          renderer.render("unloadingSummary.njk", json).map(Ok(_))
+          referenceDataService.getCountryByCode(unloadingPermission.transportCountry).flatMap {
+            transportCountry =>
+              val sections = UnloadingSummaryViewModel(request.userAnswers, transportCountry)(unloadingPermission).sections
+
+              val json =
+                Json.obj(
+                  "mrn"           -> mrn,
+                  "redirectUrl"   -> redirectUrl(mrn).url,
+                  "addCommentUrl" -> addCommentUrl(mrn).url,
+                  "addSealUrl"    -> addSealUrl.url,
+                  "sealsSection"  -> Json.toJson(sealsSection),
+                  "sections"      -> Json.toJson(sections)
+                )
+
+              renderer.render("unloadingSummary.njk", json).map(Ok(_))
+          }
+
+        }
       }
   }
-
 }

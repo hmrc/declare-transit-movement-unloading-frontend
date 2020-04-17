@@ -63,7 +63,7 @@ class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) ex
   private val unloadingPermissionSeals = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
     transportIdentity       = Some("NX56RTA"),
-    transportCountry        = Some("UK"), //TODO: Do we need to call reference data for this
+    transportCountry        = Some("GB"),
     numberOfItems           = 2,
     numberOfPackages        = 1,
     grossMass               = "1000",

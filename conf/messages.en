@@ -10,6 +10,7 @@ site.edit.hidden = Change {0}
 site.no = No
 site.yes = Yes
 site.continue = Continue
+site.confirmAndSend = Confirm and send
 site.service_name = declare-transit-movement-unloading-frontend
 site.textarea.char_limit = (Limit is {0} characters)
 site.title.suffix = - declare-transit-movement-unloading-frontend - GOV.UK
@@ -37,6 +38,9 @@ phaseBanner.3 = will help us to improve it.
 checkYourAnswers.title = Check your answers before sending these unloading remarks
 checkYourAnswers.heading = Check your answers before sending these unloading remarks
 
+checkYourAnswers.confirmation.heading = Now send your unloading remarks
+checkYourAnswers.confirmation.paragraph = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
+
 index.title = declare-transit-movement-unloading-frontend
 index.heading = declare-transit-movement-unloading-frontend
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
@@ -47,6 +51,12 @@ session_expired.guidance = The details you have given have been deleted because 
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+technicalDifficulties.title = Sorry, there is a problem with the service
+technicalDifficulties.heading = Sorry, there is a problem with the service
+technicalDifficulties.tryAgain = Try again later.
+technicalDifficulties.contact = You can
+technicalDifficulties.contact.link = contact the New Computerised Transit System helpdesk if you need to speak to someone about transit movements (opens in a new window or tab)
 
 #### Compliance statement
 
@@ -139,7 +149,7 @@ unloadingGuidance.bullet2 = check that the unloaded goods match the information 
 dateGoodsUnloaded.title = When were the goods unloaded?
 dateGoodsUnloaded.heading = When were the goods unloaded?
 dateGoodsUnloaded.hint = For example, 14 1 2020
-dateGoodsUnloaded.checkYourAnswersLabel = DateGoodsUnloaded
+dateGoodsUnloaded.checkYourAnswersLabel = What date were the goods unloaded?
 dateGoodsUnloaded.error.required.all = Enter when the goods were unloaded
 dateGoodsUnloaded.error.required.two = The date goods were unloaded must include {0} and {1}
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
@@ -229,3 +239,6 @@ confirmRemoveComments.title = Are you sure you want to remove your comments?
 confirmRemoveComments.heading = Are you sure you want to remove your comments?
 confirmRemoveComments.checkYourAnswersLabel = Are you sure you want to remove your comments?
 confirmRemoveComments.error.required = Select yes if you are sure you want to remove your comments
+
+techicalDifficulties.title = techicalDifficulties
+techicalDifficulties.heading = techicalDifficulties

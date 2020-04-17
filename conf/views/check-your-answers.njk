@@ -2,9 +2,9 @@
 
 {% from "govuk/components/back-link/macro.njk"     import govukBackLink %}
 {% from "govuk/components/summary-list/macro.njk"  import govukSummaryList %}
-{% from "macros/title.njk"                         import title %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
-
+{% from "macros/title.njk"                         import title %}
+{% from "macros/section.njk"                       import section as sectionMacro %}
 
 {% block pageTitle %}
   {{ title(messages("checkYourAnswers.title")) }}
@@ -12,28 +12,33 @@
 
 {% block mainContent %}
 
-  {{ govukBackLink({
-    text: messages("site.back")
-  }) }}
-
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("checkYourAnswers.heading") }}
-        </h1>
+        <h1 class="govuk-heading-xl">{{ messages("checkYourAnswers.heading") }}</h1>
 
-        {{ govukSummaryList({
-          rows: list
-        }) }}
+        {{ csrf() | safe }}
 
-        {{ govukButton({
-          text: messages("site.continue"),
-          href: redirectUrl,
-          attributes: {id:"submit"}
-        }) }}
+        {% for section in sections %}
+          {{ sectionMacro(section.sectionTitle, section.rows) }}
+        {% endfor %}
 
+        <h2 class="govuk-heading-m">{{ messages("checkYourAnswers.confirmation.heading") }}</h2>
+
+        <p class="govuk-body">{{ messages("checkYourAnswers.confirmation.paragraph") }}</p>
+
+        <form action="{{ routes.controllers.CheckYourAnswersController.onSubmit.url }}" method="post">
+            {{ csrf() | safe }}
+
+            {{ govukButton({
+              text: messages("site.confirmAndSend"),
+              preventDoubleClick: true,
+              href: redirectUrl,
+              attributes: {id:"submit"}
+            }) }}
+
+         </form>
       </div>
     </div>
   </div>

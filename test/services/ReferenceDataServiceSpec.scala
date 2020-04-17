@@ -43,7 +43,17 @@ class ReferenceDataServiceSpec extends FreeSpec with ScalaFutures with MustMatch
         )
 
         val service = new ReferenceDataServiceImpl(mockConnector)
-        service.getCountryByCode("GB").futureValue mustBe None
+        service.getCountryByCode(Some("GB")).futureValue mustBe None
+      }
+
+      "return None if country code is not passed in" in {
+
+        when(mockConnector.getCountryList()).thenReturn(
+          Future.successful(Nil)
+        )
+
+        val service = new ReferenceDataServiceImpl(mockConnector)
+        service.getCountryByCode(None).futureValue mustBe None
       }
 
       "return Country if country code exists" in {
@@ -58,7 +68,7 @@ class ReferenceDataServiceSpec extends FreeSpec with ScalaFutures with MustMatch
         )
 
         val service = new ReferenceDataServiceImpl(mockConnector)
-        service.getCountryByCode("GB").futureValue mustBe Some(
+        service.getCountryByCode(Some("GB")).futureValue mustBe Some(
           Country("valid", "GB", "United Kingdom")
         )
       }
