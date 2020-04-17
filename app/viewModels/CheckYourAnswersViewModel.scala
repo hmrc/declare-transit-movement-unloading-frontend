@@ -16,10 +16,10 @@
 
 package viewModels
 import cats.data.NonEmptyList
-import models.{UnloadingPermission, UserAnswers}
+import models.{NormalMode, UnloadingPermission, UserAnswers}
 import pages.{ChangesToReportPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
 import play.api.i18n.Messages
-import uk.gov.hmrc.viewmodels.SummaryList.Row
+import uk.gov.hmrc.viewmodels.SummaryList.{Action, Row}
 import utils.{CheckYourAnswersHelper, UnloadingSummaryRow}
 import viewModels.sections.Section
 import uk.gov.hmrc.viewmodels._
@@ -46,6 +46,24 @@ object CheckYourAnswersViewModel {
     val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(unloadingSummaryRow.commentsCYA)
 
     CheckYourAnswersViewModel(
-      Seq(Section(rowGoodsUnloaded.toSeq), Section(msg"checkYourAnswers.subTitle", transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow)))
+      Seq(Section(rowGoodsUnloaded.toSeq),
+          Section(msg"checkYourAnswers.subTitle", buildRows(transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow))))
+  }
+
+  private def buildRows(rows: Seq[Row]): Seq[Row] = rows match {
+    case head :: tail => {
+      val frank = head.copy(
+        actions = List(
+          Action(
+            content            = msg"site.change",
+            href               = "",
+            visuallyHiddenText = Some(msg"changeItems.comments.remove.hidden"),
+            attributes         = Map("id" -> s"""remove-comment""")
+          )))
+
+      Seq(frank) ++ tail
+    }
+    case _ => rows
+
   }
 }
