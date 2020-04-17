@@ -16,7 +16,7 @@
 
 package viewModels
 import cats.data.NonEmptyList
-import models.{NormalMode, UnloadingPermission, UserAnswers}
+import models.{Mode, MovementReferenceNumber, UnloadingPermission, UserAnswers}
 import pages.{ChangesToReportPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Row}
@@ -55,7 +55,7 @@ object CheckYourAnswersViewModel {
       val frank = head.copy(
         actions = List(
           Action(
-            content            = msg"site.change",
+            content            = msg"site.edit",
             href               = "",
             visuallyHiddenText = Some(msg"changeItems.comments.remove.hidden"),
             attributes         = Map("id" -> s"""remove-comment""")

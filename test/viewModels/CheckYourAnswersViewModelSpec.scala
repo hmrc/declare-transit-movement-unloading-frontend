@@ -20,10 +20,11 @@ import java.time.LocalDate
 import base.SpecBase
 import cats.data.NonEmptyList
 import models.{GoodsItem, Packages, ProducedDocument, TraderAtDestinationWithEori, UnloadingPermission, UserAnswers}
+import org.scalatest.{FreeSpec, MustMatchers}
 import pages.{ChangesToReportPage, DateGoodsUnloadedPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
 import uk.gov.hmrc.viewmodels.Text.Literal
 
-class CheckYourAnswersViewModelSpec extends SpecBase {
+class CheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with SpecBase {
 
   private val trader =
     TraderAtDestinationWithEori("GB163910077000", Some("The Luggage Carriers"), Some("225 Suedopolish Yard,"), Some("SS8 2BB"), Some(","), Some("GB"))
@@ -68,16 +69,24 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
       val data = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 2
-      data.sections(0).rows(0).value.content mustBe Literal("12 March 2020")
+      data.sections.head.rows.head.value.content mustBe Literal("12 March 2020")
     }
 
-    "contain vehicle registration details" in {
+    "contain vehicle registration details with new user answers" in {
       val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "vehicle reference").success.value
       val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 2
-      data.sections(1).rows(0).value.content mustBe Literal("vehicle reference")
-      data.sections(1).rows.head.actions mustBe Nil
+      data.sections(1).rows.head.value.content mustBe Literal("vehicle reference")
+      data.sections(1).rows.head.actions.isEmpty mustBe false
+    }
+
+    "contain gross mass amount details from unloading permission" in {
+      val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission)
+
+      data.sections.length mustBe 2
+      data.sections(1).rows.head.value.content mustBe Literal("1000")
+      data.sections(1).rows.head.actions.isEmpty mustBe false
     }
 
     "contain gross mass details" in {
@@ -85,8 +94,9 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
       val data        = CheckYourAnswersViewModel(userAnswers, unloadingPermission)
 
       data.sections.length mustBe 2
-      data.sections(1).rows(0).value.content mustBe Literal("500")
-      data.sections(1).rows(0).actions mustBe Nil
+      data.sections(1).rows.head.value.content mustBe Literal("500")
+      data.sections(1).rows.head.actions.isEmpty mustBe false
+      data.sections(1).rows(1).actions mustBe Nil
     }
 
     "contain item details" in {
