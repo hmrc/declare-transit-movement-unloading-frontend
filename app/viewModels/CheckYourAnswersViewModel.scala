@@ -16,8 +16,10 @@
 
 package viewModels
 import cats.data.NonEmptyList
+import controllers.routes
+import models.reference.Country
 import models.{Mode, MovementReferenceNumber, UnloadingPermission, UserAnswers}
-import pages.{ChangesToReportPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage}
+import pages.{ChangesToReportPage, GrossMassAmountPage, VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
 import play.api.i18n.Messages
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Row}
 import utils.{CheckYourAnswersHelper, UnloadingSummaryRow}
@@ -46,17 +48,19 @@ object CheckYourAnswersViewModel {
     val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(unloadingSummaryRow.commentsCYA)
 
     CheckYourAnswersViewModel(
-      Seq(Section(rowGoodsUnloaded.toSeq),
-          Section(msg"checkYourAnswers.subTitle", buildRows(transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow))))
+      Seq(
+        Section(rowGoodsUnloaded.toSeq),
+        Section(msg"checkYourAnswers.subTitle", buildRows(transportIdentity ++ grossMass ++ itemsRow.toList ++ commentsRow, userAnswers.id))
+      ))
   }
 
-  private def buildRows(rows: Seq[Row]): Seq[Row] = rows match {
+  private def buildRows(rows: Seq[Row], mrn: MovementReferenceNumber): Seq[Row] = rows match {
     case head :: tail => {
       val frank = head.copy(
         actions = List(
           Action(
             content            = msg"site.edit",
-            href               = "",
+            href               = routes.UnloadingSummaryController.onPageLoad(mrn).url,
             visuallyHiddenText = Some(msg"changeItems.comments.remove.hidden"),
             attributes         = Map("id" -> s"""remove-comment""")
           )))
