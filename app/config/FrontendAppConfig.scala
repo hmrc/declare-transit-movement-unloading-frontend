@@ -40,6 +40,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val enrolmentKey: String           = configuration.get[String]("microservice.services.auth.enrolmentKey")
   lazy val enrolmentIdentifierKey: String = configuration.get[String]("microservice.services.auth.enrolmentIdentifierKey")
 
+  lazy val nctsEnquiriesUrl: String      = configuration.get[String]("urls.nctsEnquiries")
   private val manageTransitMovementsHost = configuration.get[String]("manage-transit-movements-frontend.host")
   val manageTransitMovementsUrl          = s"$manageTransitMovementsHost/manage-transit-movements/"
 

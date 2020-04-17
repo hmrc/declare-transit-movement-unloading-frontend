@@ -55,6 +55,12 @@ session_expired.guidance = The details you have given have been deleted because 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
+technicalDifficulties.title = Sorry, there is a problem with the service
+technicalDifficulties.heading = Sorry, there is a problem with the service
+technicalDifficulties.tryAgain = Try again later.
+technicalDifficulties.contact = You can
+technicalDifficulties.contact.link = contact the New Computerised Transit System helpdesk if you need to speak to someone about transit movements (opens in a new window or tab)
+
 #### Compliance statement
 
 ## section one
@@ -235,3 +241,6 @@ confirmRemoveComments.title = Are you sure you want to remove your comments?
 confirmRemoveComments.heading = Are you sure you want to remove your comments?
 confirmRemoveComments.checkYourAnswersLabel = Are you sure you want to remove your comments?
 confirmRemoveComments.error.required = Select yes if you are sure you want to remove your comments
+
+techicalDifficulties.title = techicalDifficulties
+techicalDifficulties.heading = techicalDifficulties

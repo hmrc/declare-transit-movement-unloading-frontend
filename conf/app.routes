@@ -69,3 +69,5 @@ GET        /:mrn/confirm-remove-comments                        controllers.Conf
 POST       /:mrn/confirm-remove-comments                        controllers.ConfirmRemoveCommentsController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = NormalMode)
 GET        /:mrn/change-confirm-remove-comments                  controllers.ConfirmRemoveCommentsController.onPageLoad(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
 POST       /:mrn/change-confirm-remove-comments                  controllers.ConfirmRemoveCommentsController.onSubmit(mrn: MovementReferenceNumber, mode: Mode = CheckMode)
+
+GET        /technical-difficulties                       controllers.TechnicalDifficultiesController.onPageLoad()
