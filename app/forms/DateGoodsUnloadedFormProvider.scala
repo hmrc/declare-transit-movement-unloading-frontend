@@ -25,6 +25,7 @@ import play.api.data.Form
 
 class DateGoodsUnloadedFormProvider @Inject() extends Mappings {
 
+
   def apply(): Form[LocalDate] = {
     Logger.info(s"CTC local date: " + LocalDate.now())
 
