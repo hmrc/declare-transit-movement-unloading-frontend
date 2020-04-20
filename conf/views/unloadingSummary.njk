@@ -29,7 +29,7 @@
           {% endfor %}
         {% else %}
             <h2 class="govuk-heading-m">Seals</h2>
-            <p class="govuk-body">There are no seals.</p>
+            <p class="govuk-body">{{ messages("unloadingSummary.noSeals") }}</p>
         {% endif %}
         <p class ="govuk-body"><a id="value" href="{{ addSealUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addSeal.link.text") }}</a></p>
 

@@ -184,6 +184,7 @@ unloadingSummary.title = Check what you found against the transit declaration
 unloadingSummary.heading = Check what you found against the transit declaration
 unloadingSummary.addSeal.link.text = Add a new seal number
 unloadingSummary.addComment.link.text = Add comment
+unloadingSummary.noSeals = There are no seals.
 
 vehicleUsed.title = Vehicle used
 changeVehicle.reference.label = Name, registration or reference
