@@ -28,7 +28,7 @@
             {{ sectionMacro(section.sectionTitle, section.rows) }}
           {% endfor %}
         {% else %}
-            <h2 class="govuk-heading-m">Seals</h2>
+            <h2 class="govuk-heading-m">{{ messages("unloadingSummary.seals.subheading") }}</h2>
             <p class="govuk-body">{{ messages("unloadingSummary.noSeals") }}</p>
         {% endif %}
         <p class ="govuk-body"><a id="value" href="{{ addSealUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addSeal.link.text") }}</a></p>
