@@ -41,7 +41,8 @@ class AnythingElseToReportController @Inject()(
   requireData: DataRequiredAction,
   formProvider: AnythingElseToReportFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkDepartureStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport

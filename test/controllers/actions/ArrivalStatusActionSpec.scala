@@ -18,10 +18,10 @@ package controllers.actions
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
-import connectors.DepartureMovementConnector
+import connectors.UnloadingConnector
 import models.requests.IdentifierRequest
-import models.response.ResponseDeparture
-import models.{DepartureId, EoriNumber, LocalReferenceNumber}
+import models.response.ResponseArrival
+import models.{ArrivalId, ArrivalStatus, EoriNumber}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.mockito.{ArgumentCaptor, Mockito}
@@ -38,9 +38,9 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DepartureStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppWithDefaultMockFixtures with NunjucksSupport {
+class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppWithDefaultMockFixtures with NunjucksSupport {
 
-  val mockConnector: DepartureMovementConnector = mock[DepartureMovementConnector]
+  val mockConnector: UnloadingConnector = mock[UnloadingConnector]
 
   private val frontendAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
@@ -56,23 +56,23 @@ class DepartureStatusActionSpec extends SpecBase with BeforeAndAfterEach with Ap
 
   "a check cancellation status action" - {
     "will get a 200 and will load the correct page when the departure status is UnloadingPermission" in {
-      val mockDepartureResponse: ResponseDeparture = {
-        ResponseDeparture(
-          LocalReferenceNumber("lrn"),
-          "UnloadingPermission"
+      val mockArrivalResponse: ResponseArrival = {
+        ResponseArrival(
+          ArrivalId(1),
+          ArrivalStatus.UnloadingRemarksRejected
         )
       }
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockConnector.getDeparture(any())(any())).thenReturn(Future.successful(Some(mockDepartureResponse)))
+      when(mockConnector.getArrival(any())(any())).thenReturn(Future.successful(Some(mockArrivalResponse)))
 
-      val checkCancellationStatusProvider = (new CheckDepartureStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(DepartureId(1))
+      val checkArrivalStatusProvider = (new CheckArrivalStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(ArrivalId(1))
 
       val testRequest = IdentifierRequest(FakeRequest(GET, "/"), EoriNumber("eori"))
 
-      val result: Future[Result] = checkCancellationStatusProvider.invokeBlock(testRequest, fakeOkResult)
+      val result: Future[Result] = checkArrivalStatusProvider.invokeBlock(testRequest, fakeOkResult)
 
       status(result) mustEqual OK
       contentAsString(result) mustEqual "fake ok result value"
@@ -80,26 +80,26 @@ class DepartureStatusActionSpec extends SpecBase with BeforeAndAfterEach with Ap
   }
 
   "will get a 400 and will load the cannot cancel page when the departure status is invalid" in {
-    val mockDepartureResponse: ResponseDeparture = {
-      ResponseDeparture(
-        LocalReferenceNumber("lrn"),
-        "InvalidStatus"
+    val mockArrivalResponse: ResponseArrival = {
+      ResponseArrival(
+        ArrivalId(1),
+        ArrivalStatus.ArrivalSubmitted
       )
     }
 
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
 
-    when(mockConnector.getDeparture(any())(any())).thenReturn(Future.successful(Some(mockDepartureResponse)))
+    when(mockConnector.getArrival(any())(any())).thenReturn(Future.successful(Some(mockArrivalResponse)))
 
-    val checkCancellationStatusProvider = (new CheckDepartureStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(DepartureId(1))
+    val checkArrivalStatusProvider = (new CheckArrivalStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(ArrivalId(1))
 
     val testRequest = IdentifierRequest(FakeRequest(GET, "/"), EoriNumber("eori"))
 
     val templateCaptor = ArgumentCaptor.forClass(classOf[String])
     val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
-    val result: Future[Result] = checkCancellationStatusProvider.invokeBlock(testRequest, fakeOkResult)
+    val result: Future[Result] = checkArrivalStatusProvider.invokeBlock(testRequest, fakeOkResult)
 
     status(result) mustEqual BAD_REQUEST
     verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
@@ -112,16 +112,16 @@ class DepartureStatusActionSpec extends SpecBase with BeforeAndAfterEach with Ap
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
 
-    when(mockConnector.getDeparture(any())(any())).thenReturn(Future.successful(None))
+    when(mockConnector.getArrival(any())(any())).thenReturn(Future.successful(None))
 
-    val checkCancellationStatusProvider = (new CheckDepartureStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(DepartureId(1))
+    val checkArrivalStatusProvider = (new CheckArrivalStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(ArrivalId(1))
 
     val testRequest = IdentifierRequest(FakeRequest(GET, "/"), EoriNumber("eori"))
 
     val templateCaptor = ArgumentCaptor.forClass(classOf[String])
     val jsonCaptor     = ArgumentCaptor.forClass(classOf[JsObject])
 
-    val result: Future[Result] = checkCancellationStatusProvider.invokeBlock(testRequest, fakeOkResult)
+    val result: Future[Result] = checkArrivalStatusProvider.invokeBlock(testRequest, fakeOkResult)
 
     status(result) mustEqual NOT_FOUND
     verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())

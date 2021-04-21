@@ -17,10 +17,10 @@
 package controllers.actions
 
 import config.FrontendAppConfig
-import connectors.DepartureMovementConnector
-import models.DepartureId
+import connectors.UnloadingConnector
 import models.requests.{AuthorisedRequest, IdentifierRequest}
-import models.response.ResponseDeparture
+import models.response.ResponseArrival
+import models.{ArrivalId, ArrivalStatus}
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc.{ActionRefiner, Result}
@@ -31,29 +31,29 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckDepartureStatusProvider @Inject()(departureMovementConnector: DepartureMovementConnector, renderer: Renderer, appConfig: FrontendAppConfig)(
+class CheckArrivalStatusProvider @Inject()(unloadingConnector: UnloadingConnector, renderer: Renderer, appConfig: FrontendAppConfig)(
   implicit ec: ExecutionContext) {
 
-  def apply(departureId: DepartureId): ActionRefiner[IdentifierRequest, AuthorisedRequest] =
-    new DepartureStatusAction(departureId, departureMovementConnector, renderer, appConfig)
+  def apply(arrivalId: ArrivalId): ActionRefiner[IdentifierRequest, AuthorisedRequest] =
+    new ArrivalStatusAction(arrivalId, unloadingConnector, renderer, appConfig)
 
 }
 
-class DepartureStatusAction(
-  departureId: DepartureId,
-  departureMovementConnector: DepartureMovementConnector,
+class ArrivalStatusAction(
+  arrivalId: ArrivalId,
+  unloadingConnector: UnloadingConnector,
   renderer: Renderer,
   appConfig: FrontendAppConfig
 )(implicit protected val executionContext: ExecutionContext)
     extends ActionRefiner[IdentifierRequest, AuthorisedRequest] {
 
-  final val validStatus: Seq[String] = Seq("UnloadingPermission", "UnloadingRemarksRejection")
+  final val validStatus: Seq[ArrivalStatus] = Seq(ArrivalStatus.UnloadingPermission, ArrivalStatus.UnloadingRemarksRejected)
 
   override protected def refine[A](request: IdentifierRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-    departureMovementConnector.getDeparture(departureId).flatMap {
-      case Some(responseDeparture: ResponseDeparture) if !validStatus.contains(responseDeparture.status) =>
+    unloadingConnector.getArrival(arrivalId).flatMap {
+      case Some(responseArrival: ResponseArrival) if !validStatus.contains(responseArrival.status) =>
         renderer
           .render("canNotSendUnloadingRemarks.njk",
                   Json.obj(
@@ -61,8 +61,8 @@ class DepartureStatusAction(
                   ))(request)
           .map(html => Left(BadRequest(html)))
 
-      case Some(responseDeparture: ResponseDeparture) if validStatus.contains(responseDeparture.status) =>
-        Future.successful(Right(AuthorisedRequest(request.request, request.eoriNumber, responseDeparture.localReferenceNumber)))
+      case Some(responseArrival: ResponseArrival) if validStatus.contains(responseArrival.status) =>
+        Future.successful(Right(AuthorisedRequest(request.request, request.eoriNumber)))
 
       case None =>
         renderer
