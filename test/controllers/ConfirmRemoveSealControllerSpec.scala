@@ -43,7 +43,7 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
   "ConfirmRemoveSeal Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -74,7 +74,7 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       val userAnswers = emptyUserAnswers.set(NewSealNumberPage(index), "seal 1").success.value
@@ -93,7 +93,7 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -125,7 +125,7 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, confirmRemoveSealRoute)
@@ -138,7 +138,7 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request =

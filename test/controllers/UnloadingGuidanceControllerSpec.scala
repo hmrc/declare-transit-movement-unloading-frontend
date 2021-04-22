@@ -32,6 +32,7 @@ class UnloadingGuidanceControllerSpec extends SpecBase with AppWithDefaultMockFi
 
   "UnloadingGuidance Controller" - {
     "return OK and the correct view for a GET" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 

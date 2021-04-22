@@ -65,7 +65,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
 
   "Index Controller" - {
     "must redirect to onward route for a GET when there are no UserAnswers and prepopulate data" in {
-
+      checkArrivalStatus()
       val seals                        = Seals(1, Seq("Seal1", "Seal2"))
       val unloadingPermissionWithSeals = unloadingPermission.copy(seals = Some(seals))
 
@@ -93,6 +93,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "must redirect to onward route for a when there are UserAnswers" in {
+      checkArrivalStatus()
       setExistingUserAnswers(emptyUserAnswers)
 
       val request = FakeRequest(GET, routes.IndexController.onPageLoad(arrivalId).url)
@@ -103,7 +104,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "must redirect to session expired when no response for arrivalId" in {
-
+      checkArrivalStatus()
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any()))
         .thenReturn(Future.successful(None))
 
@@ -117,6 +118,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     }
 
     "must redirect to session expired when bad mrn received" in {
+      checkArrivalStatus()
       val badUnloadingPermission = UnloadingPermission(
         movementReferenceNumber = "",
         transportIdentity       = None,

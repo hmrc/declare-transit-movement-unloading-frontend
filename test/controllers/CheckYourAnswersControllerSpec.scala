@@ -78,7 +78,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "onPageLoad must" - {
 
       "return OK and the correct view for a GET" in {
-
+        checkArrivalStatus()
         when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
         when(mockRenderer.render(any(), any())(any()))
@@ -101,7 +101,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
 
       "redirect to Session Expired for a GET if no existing data is found" in {
-
+        checkArrivalStatus()
         setNoExistingUserAnswers()
 
         val request = FakeRequest(GET, routes.CheckYourAnswersController.onPageLoad(arrivalId).url)
@@ -114,7 +114,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
 
       "return BAD REQUEST when unloading permission does not exist" in {
-
+        checkArrivalStatus()
         when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(None))
 
         when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
@@ -139,7 +139,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     "onSubmit must" - {
 
       "redirect to Confirmation on valid submission" in {
-
+        checkArrivalStatus()
         setExistingUserAnswers(emptyUserAnswers)
 
         when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
@@ -156,7 +156,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
 
       "render the Technical Difficulties page on failed submission (invalid response code)" in {
-
+        checkArrivalStatus()
         when(mockRenderer.render(any(), any())(any()))
           .thenReturn(Future.successful(Html("")))
         val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
@@ -184,7 +184,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
 
       "return UNAUTHORIZED when backend returns 401" in {
-
+        checkArrivalStatus()
         setExistingUserAnswers(emptyUserAnswers)
 
         when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
@@ -201,7 +201,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
 
       "return INTERNAL_SERVER_ERROR on internal failure" in {
-
+        checkArrivalStatus()
         setExistingUserAnswers(emptyUserAnswers)
 
         when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
@@ -218,7 +218,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
       }
 
       "return INTERNAL_SERVER_ERROR when UnloadingPermission can't be retrieved" in {
-
+        checkArrivalStatus()
         setExistingUserAnswers(emptyUserAnswers)
 
         when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))

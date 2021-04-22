@@ -65,7 +65,7 @@ class UnloadingSummaryControllerSpec extends SpecBase with AppWithDefaultMockFix
   "UnloadingSummary Controller" - {
 
     "return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
       when(mockRenderer.render(any(), any())(any()))

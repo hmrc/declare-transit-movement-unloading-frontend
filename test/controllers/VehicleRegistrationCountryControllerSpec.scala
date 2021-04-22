@@ -64,7 +64,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
   "VehicleRegistrationCountry Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -95,7 +95,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -128,7 +128,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
@@ -145,7 +145,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
 
@@ -174,7 +174,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, vehicleRegistrationCountryRoute)
@@ -187,7 +187,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request =
