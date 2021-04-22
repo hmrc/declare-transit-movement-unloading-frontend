@@ -41,7 +41,8 @@ class TotalNumberOfPackagesController @Inject()(
   requireData: DataRequiredAction,
   formProvider: TotalNumberOfPackagesFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -49,44 +50,46 @@ class TotalNumberOfPackagesController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(TotalNumberOfPackagesPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(TotalNumberOfPackagesPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      val json = Json.obj(
-        "form"      -> preparedForm,
-        "mrn"       -> request.userAnswers.mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> mode
-      )
-
-      renderer.render("totalNumberOfPackages.njk", json).map(Ok(_))
-  }
-
-  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"      -> formWithErrors,
-              "mrn"       -> request.userAnswers.mrn,
-              "arrivalId" -> arrivalId,
-              "mode"      -> mode
-            )
-
-            renderer.render("totalNumberOfPackages.njk", json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(TotalNumberOfPackagesPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(TotalNumberOfPackagesPage, mode, updatedAnswers))
+        val json = Json.obj(
+          "form"      -> preparedForm,
+          "mrn"       -> request.userAnswers.mrn,
+          "arrivalId" -> arrivalId,
+          "mode"      -> mode
         )
-  }
+
+        renderer.render("totalNumberOfPackages.njk", json).map(Ok(_))
+    }
+
+  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => {
+
+              val json = Json.obj(
+                "form"      -> formWithErrors,
+                "mrn"       -> request.userAnswers.mrn,
+                "arrivalId" -> arrivalId,
+                "mode"      -> mode
+              )
+
+              renderer.render("totalNumberOfPackages.njk", json).map(BadRequest(_))
+            },
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(TotalNumberOfPackagesPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(TotalNumberOfPackagesPage, mode, updatedAnswers))
+          )
+    }
 }

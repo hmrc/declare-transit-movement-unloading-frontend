@@ -16,7 +16,8 @@
 
 package controllers
 
-import controllers.actions.{DataRetrievalActionProvider, IdentifierAction}
+import controllers.actions.{CheckArrivalStatusProvider, DataRetrievalActionProvider, IdentifierAction}
+
 import javax.inject.Inject
 import logging.Logging
 import models.{ArrivalId, MovementReferenceNumber, UserAnswers}
@@ -34,7 +35,8 @@ class IndexController @Inject()(
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   unloadingPermissionService: UnloadingPermissionService,
-  sessionRepository: SessionRepository
+  sessionRepository: SessionRepository,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -42,7 +44,7 @@ class IndexController @Inject()(
 
   private val nextPage: ArrivalId => String = arrivalId => routes.UnloadingGuidanceController.onPageLoad(arrivalId).url
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId)).async {
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId)).async {
     implicit request =>
       request.userAnswers match {
         case Some(_) =>

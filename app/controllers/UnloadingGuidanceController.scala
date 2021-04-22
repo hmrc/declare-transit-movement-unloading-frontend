@@ -36,23 +36,25 @@ class UnloadingGuidanceController @Inject()(
   requireData: DataRequiredAction,
   navigator: Navigator,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val pdfUrl = routes.UnloadingPermissionPDFController.getPDF(arrivalId).url
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val pdfUrl = routes.UnloadingPermissionPDFController.getPDF(arrivalId).url
 
-      val json = Json.obj(
-        "mrn"         -> request.userAnswers.mrn,
-        "nextPageUrl" -> navigator.nextPage(UnloadingGuidancePage, mode, request.userAnswers).url,
-        "arrivalId"   -> arrivalId,
-        "mode"        -> mode,
-        "pdfUrl"      -> pdfUrl
-      )
+        val json = Json.obj(
+          "mrn"         -> request.userAnswers.mrn,
+          "nextPageUrl" -> navigator.nextPage(UnloadingGuidancePage, mode, request.userAnswers).url,
+          "arrivalId"   -> arrivalId,
+          "mode"        -> mode,
+          "pdfUrl"      -> pdfUrl
+        )
 
-      renderer.render("unloadingGuidance.njk", json).map(Ok(_))
-  }
+        renderer.render("unloadingGuidance.njk", json).map(Ok(_))
+    }
 }

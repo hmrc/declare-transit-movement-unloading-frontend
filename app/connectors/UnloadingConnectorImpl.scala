@@ -117,11 +117,13 @@ class UnloadingConnectorImpl @Inject()(
   }
 
   override def getArrival(arrivalId: ArrivalId)(implicit hc: HeaderCarrier): Future[Option[ResponseArrival]] = {
+
     val serviceUrl: String = s"${config.arrivalsBackend}/movements/arrivals/${arrivalId.value}"
     val header             = hc.withExtraHeaders(ChannelHeader(channel))
 
     http.GET[HttpResponse](serviceUrl)(httpReads, header, ec) map {
       case responseMessage if is2xx(responseMessage.status) =>
+        println(s"\n\n\n${responseMessage.json}\n\n\n")
         Some(responseMessage.json.as[ResponseArrival])
       case _ =>
         logger.error(s"Get Arrival failed to return data")

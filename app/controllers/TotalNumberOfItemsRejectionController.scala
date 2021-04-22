@@ -42,7 +42,8 @@ class TotalNumberOfItemsRejectionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   rejectionService: UnloadingRemarksRejectionService,
   val renderer: Renderer,
-  val appConfig: FrontendAppConfig
+  val appConfig: FrontendAppConfig,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -51,7 +52,7 @@ class TotalNumberOfItemsRejectionController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId)).async {
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId)).async {
     implicit request =>
       rejectionService.getRejectedValueAsInt(arrivalId, request.userAnswers)(TotalNumberOfItemsPage) flatMap {
         case Some(originalAttrValue) =>
@@ -64,7 +65,7 @@ class TotalNumberOfItemsRejectionController @Inject()(
       }
   }
 
-  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId)).async {
+  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId)).async {
     implicit request =>
       form
         .bindFromRequest()

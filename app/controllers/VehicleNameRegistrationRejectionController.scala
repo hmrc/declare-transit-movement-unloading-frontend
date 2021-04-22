@@ -43,7 +43,8 @@ class VehicleNameRegistrationRejectionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   rejectionService: UnloadingRemarksRejectionService,
   val renderer: Renderer,
-  val appConfig: FrontendAppConfig
+  val appConfig: FrontendAppConfig,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -52,7 +53,7 @@ class VehicleNameRegistrationRejectionController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId)).async {
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId)).async {
     implicit request =>
       rejectionService.getRejectedValueAsString(arrivalId, request.userAnswers)(VehicleNameRegistrationReferencePage) flatMap {
         case Some(originalAttrValue) =>

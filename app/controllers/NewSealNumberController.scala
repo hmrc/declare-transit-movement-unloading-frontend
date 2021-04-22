@@ -46,7 +46,8 @@ class NewSealNumberController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   unloadingPermissionService: UnloadingPermissionService,
-  errorHandler: ErrorHandler
+  errorHandler: ErrorHandler,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -54,49 +55,51 @@ class NewSealNumberController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(NewSealNumberPage(index)) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(arrivalId: ArrivalId, index: Index, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(NewSealNumberPage(index)) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      val json = Json.obj(
-        "form"      -> preparedForm,
-        "mrn"       -> request.userAnswers.mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> mode
-      )
+        val json = Json.obj(
+          "form"      -> preparedForm,
+          "mrn"       -> request.userAnswers.mrn,
+          "arrivalId" -> arrivalId,
+          "mode"      -> mode
+        )
 
-      renderer.render("newSealNumber.njk", json).map(Ok(_))
-  }
+        renderer.render("newSealNumber.njk", json).map(Ok(_))
+    }
 
-  def onSubmit(arrivalId: ArrivalId, index: Index, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val userAnswers: Future[Option[UserAnswers]] = request.userAnswers.get(DeriveNumberOfSeals) match {
-        case Some(_) => Future.successful(Some(request.userAnswers))
-        case None    => unloadingPermissionService.convertSeals(request.userAnswers)
-      }
+  def onSubmit(arrivalId: ArrivalId, index: Index, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val userAnswers: Future[Option[UserAnswers]] = request.userAnswers.get(DeriveNumberOfSeals) match {
+          case Some(_) => Future.successful(Some(request.userAnswers))
+          case None    => unloadingPermissionService.convertSeals(request.userAnswers)
+        }
 
-      userAnswers.flatMap {
-        case Some(ua) =>
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => {
-                val json = Json.obj("form" -> formWithErrors, "mrn" -> request.userAnswers.mrn, "arrivalId" -> arrivalId, "mode" -> mode)
-                renderer.render("newSealNumber.njk", json).map(BadRequest(_))
-              },
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(ua.set(NewSealNumberPage(index), value))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(NewSealNumberPage(index), mode, updatedAnswers))
-            )
-        case _ =>
-          errorHandler.onClientError(request, BAD_REQUEST, "errors.malformedSeals") //todo: get design and content to look at this
-      }
+        userAnswers.flatMap {
+          case Some(ua) =>
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => {
+                  val json = Json.obj("form" -> formWithErrors, "mrn" -> request.userAnswers.mrn, "arrivalId" -> arrivalId, "mode" -> mode)
+                  renderer.render("newSealNumber.njk", json).map(BadRequest(_))
+                },
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(ua.set(NewSealNumberPage(index), value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(NewSealNumberPage(index), mode, updatedAnswers))
+              )
+          case _ =>
+            errorHandler.onClientError(request, BAD_REQUEST, "errors.malformedSeals") //todo: get design and content to look at this
+        }
 
-  }
+    }
 
 }

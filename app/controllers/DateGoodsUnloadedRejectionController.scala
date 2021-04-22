@@ -46,13 +46,14 @@ class DateGoodsUnloadedRejectionController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   unloadingPermissionService: UnloadingPermissionService,
-  frontendAppConfig: FrontendAppConfig
+  frontendAppConfig: FrontendAppConfig,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId)).async {
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId)).async {
     implicit request =>
       (for {
         up            <- OptionT(unloadingPermissionService.getUnloadingPermission(arrivalId))
@@ -78,7 +79,7 @@ class DateGoodsUnloadedRejectionController @Inject()(
 
   }
 
-  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId)).async {
+  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId)).async {
     implicit request =>
       (for {
         up <- OptionT(unloadingPermissionService.getUnloadingPermission(arrivalId))

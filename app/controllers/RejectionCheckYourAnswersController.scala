@@ -19,7 +19,7 @@ package controllers
 import audit.services.AuditEventSubmissionService
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.actions.{DataRequiredAction, DataRetrievalActionProvider, IdentifierAction}
+import controllers.actions.{CheckArrivalStatusProvider, DataRequiredAction, DataRetrievalActionProvider, IdentifierAction}
 import handlers.ErrorHandler
 import models.ArrivalId
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -44,7 +44,8 @@ class RejectionCheckYourAnswersController @Inject()(
   errorHandler: ErrorHandler,
   val renderer: Renderer,
   val appConfig: FrontendAppConfig,
-  auditEventSubmissionService: AuditEventSubmissionService
+  auditEventSubmissionService: AuditEventSubmissionService,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -54,33 +55,38 @@ class RejectionCheckYourAnswersController @Inject()(
   private val redirectUrl: ArrivalId => Call =
     arrivalId => controllers.routes.ConfirmationController.onPageLoad(arrivalId)
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val viewModel             = RejectionCheckYourAnswersViewModel(request.userAnswers)
-      val answers: Seq[Section] = viewModel.sections
-      renderer
-        .render(
-          "rejection-check-your-answers.njk",
-          Json.obj("mrn" -> request.userAnswers.mrn, "sections" -> Json.toJson(answers), "arrivalId" -> arrivalId, "redirectUrl" -> redirectUrl(arrivalId).url)
-        )
-        .map(Ok(_))
-  }
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val viewModel             = RejectionCheckYourAnswersViewModel(request.userAnswers)
+        val answers: Seq[Section] = viewModel.sections
+        renderer
+          .render(
+            "rejection-check-your-answers.njk",
+            Json.obj("mrn"         -> request.userAnswers.mrn,
+                     "sections"    -> Json.toJson(answers),
+                     "arrivalId"   -> arrivalId,
+                     "redirectUrl" -> redirectUrl(arrivalId).url)
+          )
+          .map(Ok(_))
+    }
 
-  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      unloadingRemarksService.resubmit(arrivalId, request.userAnswers) flatMap {
-        case Some(status) =>
-          status match {
-            case ACCEPTED => {
-              auditEventSubmissionService.auditUnloadingRemarks(request.userAnswers, "resubmitUnloadingRemarks")
-              Future.successful(Redirect(routes.ConfirmationController.onPageLoad(arrivalId)))
+  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        unloadingRemarksService.resubmit(arrivalId, request.userAnswers) flatMap {
+          case Some(status) =>
+            status match {
+              case ACCEPTED => {
+                auditEventSubmissionService.auditUnloadingRemarks(request.userAnswers, "resubmitUnloadingRemarks")
+                Future.successful(Redirect(routes.ConfirmationController.onPageLoad(arrivalId)))
+              }
+              case UNAUTHORIZED => errorHandler.onClientError(request, UNAUTHORIZED)
+              case _            => renderTechnicalDifficultiesPage
             }
-            case UNAUTHORIZED => errorHandler.onClientError(request, UNAUTHORIZED)
-            case _            => renderTechnicalDifficultiesPage
-          }
-        case None => errorHandler.onClientError(request, INTERNAL_SERVER_ERROR)
-      }
+          case None => errorHandler.onClientError(request, INTERNAL_SERVER_ERROR)
+        }
 
-  }
+    }
 
 }

@@ -47,7 +47,7 @@ object ResponseArrival {
   implicit def reads: Reads[ResponseArrival] =
     json =>
       for {
-        arrivalId <- (json \ "_id").validate[ArrivalId]
+        arrivalId <- (json \ "arrivalId").validate[ArrivalId]
         status    <- (json \ "status").validate[ArrivalStatus]
       } yield
         ResponseArrival(
