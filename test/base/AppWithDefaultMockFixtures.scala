@@ -16,16 +16,8 @@
 
 package base
 
-import controllers.actions.{
-  CheckArrivalStatusProvider,
-  DataRequiredAction,
-  DataRequiredActionImpl,
-  DataRetrievalActionProvider,
-  FakeDataRetrievalAction,
-  FakeIdentifierAction,
-  IdentifierAction
-}
-import models.{LocalReferenceNumber, UserAnswers}
+import controllers.actions._
+import models.UserAnswers
 import models.requests.{AuthorisedRequest, IdentifierRequest}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
