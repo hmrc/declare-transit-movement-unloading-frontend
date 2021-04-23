@@ -18,7 +18,7 @@ package base
 
 import controllers.actions._
 import models.UserAnswers
-import models.requests.{AuthorisedRequest, IdentifierRequest}
+import models.requests.IdentifierRequest
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito
@@ -30,7 +30,7 @@ import play.api.Application
 import play.api.i18n.MessagesApi
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.{ActionRefiner, Call, Result}
+import play.api.mvc.{ActionFilter, ActionRefiner, Call, Result}
 import play.api.test.Helpers
 import repositories.SessionRepository
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
@@ -64,9 +64,9 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(None)
 
   protected def checkArrivalStatus(): Unit = {
-    val fakeCheckArrivalStatusAction = new ActionRefiner[IdentifierRequest, AuthorisedRequest] {
-      override protected def refine[A](request: IdentifierRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] =
-        Future.successful(Right(AuthorisedRequest(request.request, request.eoriNumber)))
+    val fakeCheckArrivalStatusAction = new ActionFilter[IdentifierRequest] {
+      override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] =
+        Future.successful(None)
 
       override protected def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
     }

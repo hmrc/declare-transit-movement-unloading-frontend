@@ -16,32 +16,32 @@
 
 package controllers.actions
 
-import javax.inject.Inject
 import models.ArrivalId
-import models.requests.{AuthorisedRequest, IdentifierRequest, OptionalDataRequest}
+import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.SessionRepository
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DataRetrievalActionProviderImpl @Inject()(sessionRepository: SessionRepository, ec: ExecutionContext) extends DataRetrievalActionProvider {
 
-  def apply(arrivalId: ArrivalId): ActionTransformer[AuthorisedRequest, OptionalDataRequest] =
+  def apply(arrivalId: ArrivalId): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
     new DataRetrievalAction(arrivalId, ec, sessionRepository)
 }
 
 trait DataRetrievalActionProvider {
 
-  def apply(arrivalId: ArrivalId): ActionTransformer[AuthorisedRequest, OptionalDataRequest]
+  def apply(arrivalId: ArrivalId): ActionTransformer[IdentifierRequest, OptionalDataRequest]
 }
 
 class DataRetrievalAction(
   arrivalId: ArrivalId,
   implicit protected val executionContext: ExecutionContext,
   sessionRepository: SessionRepository
-) extends ActionTransformer[AuthorisedRequest, OptionalDataRequest] {
+) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
 
-  override protected def transform[A](request: AuthorisedRequest[A]): Future[OptionalDataRequest[A]] =
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
     sessionRepository.get(arrivalId, request.eoriNumber).map {
       userAnswers =>
         OptionalDataRequest(request.request, request.eoriNumber, userAnswers)

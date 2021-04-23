@@ -18,12 +18,12 @@ package controllers.actions
 
 import config.FrontendAppConfig
 import connectors.UnloadingConnector
-import models.requests.{AuthorisedRequest, IdentifierRequest}
+import models.requests.IdentifierRequest
 import models.response.ResponseArrival
 import models.{ArrivalId, ArrivalStatus}
 import play.api.libs.json.Json
 import play.api.mvc.Results._
-import play.api.mvc.{ActionRefiner, Result}
+import play.api.mvc.{ActionFilter, Result}
 import renderer.Renderer
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckArrivalStatusProvider @Inject()(unloadingConnector: UnloadingConnector, renderer: Renderer, appConfig: FrontendAppConfig)(
   implicit ec: ExecutionContext) {
 
-  def apply(arrivalId: ArrivalId): ActionRefiner[IdentifierRequest, AuthorisedRequest] =
+  def apply(arrivalId: ArrivalId): ActionFilter[IdentifierRequest] =
     new ArrivalStatusAction(arrivalId, unloadingConnector, renderer, appConfig)
 
 }
@@ -45,11 +45,11 @@ class ArrivalStatusAction(
   renderer: Renderer,
   appConfig: FrontendAppConfig
 )(implicit protected val executionContext: ExecutionContext)
-    extends ActionRefiner[IdentifierRequest, AuthorisedRequest] {
+    extends ActionFilter[IdentifierRequest] {
 
-  final val validStatus: Seq[ArrivalStatus] = Seq(ArrivalStatus.UnloadingPermission, ArrivalStatus.UnloadingRemarksRejected)
+  final private val validStatus: Seq[ArrivalStatus] = Seq(ArrivalStatus.UnloadingPermission, ArrivalStatus.UnloadingRemarksRejected)
 
-  override protected def refine[A](request: IdentifierRequest[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
+  override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
     unloadingConnector.getArrival(arrivalId).flatMap {
@@ -59,10 +59,10 @@ class ArrivalStatusAction(
                   Json.obj(
                     "arrivalNotifications" -> s"${appConfig.arrivalNotificationsUrl}"
                   ))(request)
-          .map(html => Left(BadRequest(html)))
+          .map(html => Option(BadRequest(html)))
 
       case Some(responseArrival: ResponseArrival) if validStatus.contains(responseArrival.status) =>
-        Future.successful(Right(AuthorisedRequest(request.request, request.eoriNumber)))
+        Future.successful(None)
 
       case None =>
         renderer
@@ -70,7 +70,7 @@ class ArrivalStatusAction(
                   Json.obj(
                     "arrivalNotifications" -> s"${appConfig.arrivalNotificationsUrl}"
                   ))(request)
-          .map(html => Left(NotFound(html)))
+          .map(html => Option(NotFound(html)))
 
     }
   }
