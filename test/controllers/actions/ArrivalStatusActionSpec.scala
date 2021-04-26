@@ -126,7 +126,7 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
     status(result) mustEqual NOT_FOUND
     verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
     contentAsString(result) must not be ("fake ok result value")
-    templateCaptor.getValue mustEqual "declarationNotFound.njk"
+    templateCaptor.getValue mustEqual "canNotSendUnloadingRemarks.njk"
   }
 
 }
