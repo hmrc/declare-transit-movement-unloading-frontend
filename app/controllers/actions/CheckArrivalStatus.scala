@@ -66,7 +66,7 @@ class ArrivalStatusAction(
 
       case None =>
         renderer
-          .render("declarationNotFound.njk",
+          .render("canNotSendUnloadingRemarks.njk",
                   Json.obj(
                     "arrivalNotifications" -> s"${appConfig.arrivalNotificationsUrl}"
                   ))(request)
