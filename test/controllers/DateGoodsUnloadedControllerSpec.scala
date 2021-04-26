@@ -81,7 +81,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
   "DateGoodsUnloaded Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -111,7 +111,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -150,6 +150,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return an Internal Server Error on a GET when date of preparation is not available" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(None))
 
@@ -173,6 +174,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect on to the next page when valid data is submitted" in {
+      checkArrivalStatus()
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -192,6 +194,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -232,6 +235,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return a Bad Request and errors when the date is before date of preparation" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -274,6 +278,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return an Internal Server Error when valid data is submitted but date of preparation is not available" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(None))
 

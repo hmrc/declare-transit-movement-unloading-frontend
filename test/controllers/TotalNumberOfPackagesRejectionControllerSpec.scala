@@ -64,6 +64,7 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
   "TotalNumberOfPackages Controller" - {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
       when(mockRejectionService.getRejectedValueAsInt(any(), any())(any())(any())).thenReturn(Future.successful(Some(validAnswer)))
@@ -91,6 +92,7 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
     }
 
     "must render the Technical Difficulties page when get rejected value is None" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockRejectionService.getRejectedValueAsInt(any(), any())(any())(any())).thenReturn(Future.successful(None))
 
@@ -112,7 +114,7 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
+      checkArrivalStatus()
       val originalValue    = "some reference"
       val errors           = Seq(FunctionalError(IncorrectValue, DefaultPointer(""), None, Some(originalValue)))
       val rejectionMessage = UnloadingRemarksRejectionMessage(mrn, LocalDate.now, None, errors)
@@ -134,7 +136,7 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -161,6 +163,7 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
     }
 
     "must render the Technical Difficulties page when there is no rejection message on submission" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockRejectionService.unloadingRemarksRejectionMessage(any())(any())).thenReturn(Future.successful(None))
 

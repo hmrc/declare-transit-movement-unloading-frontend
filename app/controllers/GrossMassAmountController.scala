@@ -42,7 +42,8 @@ class GrossMassAmountController @Inject()(
   requireData: DataRequiredAction,
   formProvider: GrossMassAmountFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -50,44 +51,46 @@ class GrossMassAmountController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(GrossMassAmountPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(GrossMassAmountPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      val json = Json.obj(
-        "form"      -> preparedForm,
-        "mrn"       -> request.userAnswers.mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> mode
-      )
-
-      renderer.render("grossMassAmount.njk", json).map(Ok(_))
-  }
-
-  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"      -> formWithErrors,
-              "mrn"       -> request.userAnswers.mrn,
-              "arrivalId" -> arrivalId,
-              "mode"      -> mode
-            )
-
-            renderer.render("grossMassAmount.njk", json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(GrossMassAmountPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(GrossMassAmountPage, mode, updatedAnswers))
+        val json = Json.obj(
+          "form"      -> preparedForm,
+          "mrn"       -> request.userAnswers.mrn,
+          "arrivalId" -> arrivalId,
+          "mode"      -> mode
         )
-  }
+
+        renderer.render("grossMassAmount.njk", json).map(Ok(_))
+    }
+
+  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => {
+
+              val json = Json.obj(
+                "form"      -> formWithErrors,
+                "mrn"       -> request.userAnswers.mrn,
+                "arrivalId" -> arrivalId,
+                "mode"      -> mode
+              )
+
+              renderer.render("grossMassAmount.njk", json).map(BadRequest(_))
+            },
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(GrossMassAmountPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(GrossMassAmountPage, mode, updatedAnswers))
+          )
+    }
 }

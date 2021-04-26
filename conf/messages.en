@@ -320,3 +320,10 @@ unauthorisedWithoutGroupAccess.title = You cannot use this service group authori
 unauthorisedWithoutGroupAccess.heading = You cannot use this service
 unauthorisedWithoutGroupAccess.requestAccess = request access to NCTS
 unauthorisedWithoutGroupAccess.beforeUseThisService =  before you can use this service.
+
+canNotSendUnloadingRemarks.title = You cannot send these unloading remarks
+canNotSendUnloadingRemarks.heading = You cannot send these unloading remarks
+canNotSendUnloadingRemarks.declarationNotFound = There is no departure declaration with these details.
+canNotSendUnloadingRemarks.message =  If you still need to send these unloading remarks, you must
+canNotSendUnloadingRemarks.contactLink = contact the New Computerised Transit System (NCTS) Helpdesk (opens in a new tab)
+canNotSendUnloadingRemarks.linkText = Back to arrival notification

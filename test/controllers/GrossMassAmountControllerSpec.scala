@@ -42,7 +42,7 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
   "GrossMassAmount Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -70,7 +70,7 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -101,7 +101,7 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -117,7 +117,7 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -146,7 +146,7 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, grossMassAmountRoute)
@@ -159,7 +159,7 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request =

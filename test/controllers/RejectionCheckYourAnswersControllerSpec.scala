@@ -46,7 +46,7 @@ class RejectionCheckYourAnswersControllerSpec extends SpecBase with AppWithDefau
       .overrides(bind[UnloadingRemarksService].toInstance(mockUnloadingRemarksService))
 
   "return OK and the Rejection view for a GET when unloading rejection message returns a Some" in {
-
+    checkArrivalStatus()
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
 
@@ -65,6 +65,7 @@ class RejectionCheckYourAnswersControllerSpec extends SpecBase with AppWithDefau
 
   "onSubmit" - {
     "must redirect to Confirmation on valid submission" in {
+      checkArrivalStatus()
       val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "updatedValue").success.value
 
       when(mockUnloadingRemarksService.resubmit(any(), any())(any()))
@@ -82,7 +83,7 @@ class RejectionCheckYourAnswersControllerSpec extends SpecBase with AppWithDefau
     }
 
     "return UNAUTHORIZED when backend returns 401" in {
-
+      checkArrivalStatus()
       val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "updatedValue").success.value
 
       setExistingUserAnswers(userAnswers)
@@ -98,7 +99,7 @@ class RejectionCheckYourAnswersControllerSpec extends SpecBase with AppWithDefau
     }
 
     "return INTERNAL_SERVER_ERROR on internal failure" in {
-
+      checkArrivalStatus()
       val userAnswers = emptyUserAnswers.set(VehicleNameRegistrationReferencePage, "updatedValue").success.value
 
       setExistingUserAnswers(userAnswers)

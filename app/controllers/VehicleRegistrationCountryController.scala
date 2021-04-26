@@ -45,25 +45,27 @@ class VehicleRegistrationCountryController @Inject()(
   formProvider: VehicleRegistrationCountryFormProvider,
   referenceDataConnector: ReferenceDataConnector,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
-        countries =>
-          val form = formProvider(countries)
-          val preparedForm = request.userAnswers.get(VehicleRegistrationCountryPage) match {
-            case None        => form
-            case Some(value) => form.fill(value)
-          }
-          renderPage(arrivalId, request.userAnswers.mrn, mode, preparedForm, countries, Results.Ok)
-      }
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        referenceDataConnector.getCountryList() flatMap {
+          countries =>
+            val form = formProvider(countries)
+            val preparedForm = request.userAnswers.get(VehicleRegistrationCountryPage) match {
+              case None        => form
+              case Some(value) => form.fill(value)
+            }
+            renderPage(arrivalId, request.userAnswers.mrn, mode, preparedForm, countries, Results.Ok)
+        }
 
-  }
+    }
 
   private def renderPage(arrivalId: ArrivalId, mrn: MovementReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(
     implicit request: Request[AnyContent]): Future[Result] = {
@@ -86,23 +88,24 @@ class VehicleRegistrationCountryController @Inject()(
     Json.obj("value" -> "", "text" -> "") +: countryJsonList
   }
 
-  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      referenceDataConnector.getCountryList() flatMap {
-        countries =>
-          val form = formProvider(countries)
-          form
-            .bindFromRequest()
-            .fold(
-              formWithErrors => {
-                renderPage(arrivalId, request.userAnswers.mrn, mode, formWithErrors, countries, Results.BadRequest)
-              },
-              value =>
-                for {
-                  updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))
-                  _              <- sessionRepository.set(updatedAnswers)
-                } yield Redirect(navigator.nextPage(VehicleRegistrationCountryPage, mode, updatedAnswers))
-            )
-      }
-  }
+  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        referenceDataConnector.getCountryList() flatMap {
+          countries =>
+            val form = formProvider(countries)
+            form
+              .bindFromRequest()
+              .fold(
+                formWithErrors => {
+                  renderPage(arrivalId, request.userAnswers.mrn, mode, formWithErrors, countries, Results.BadRequest)
+                },
+                value =>
+                  for {
+                    updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))
+                    _              <- sessionRepository.set(updatedAnswers)
+                  } yield Redirect(navigator.nextPage(VehicleRegistrationCountryPage, mode, updatedAnswers))
+              )
+        }
+    }
 }

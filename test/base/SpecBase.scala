@@ -17,6 +17,7 @@
 package base
 
 import cats.data.NonEmptyList
+import config.FrontendAppConfig
 import models.{
   ArrivalId,
   EoriNumber,
@@ -35,6 +36,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
+import play.api.test.Helpers.baseApplicationBuilder.injector
 import play.api.test.{FakeRequest, Helpers}
 
 import java.time.LocalDate

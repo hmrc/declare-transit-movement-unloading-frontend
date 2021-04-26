@@ -17,11 +17,13 @@
 package connectors
 
 import config.FrontendAppConfig
+
 import javax.inject.Inject
 import logging.Logging
 import models.XMLWrites._
 import models.{XMLReads, _}
 import models.messages.UnloadingRemarksRequest
+import models.response.ResponseArrival
 import play.api.Logger
 import play.api.http.HeaderNames
 import play.api.libs.ws.{WSClient, WSResponse}
@@ -114,6 +116,21 @@ class UnloadingConnectorImpl @Inject()(
       .get
   }
 
+  override def getArrival(arrivalId: ArrivalId)(implicit hc: HeaderCarrier): Future[Option[ResponseArrival]] = {
+
+    val serviceUrl: String = s"${config.arrivalsBackend}/movements/arrivals/${arrivalId.value}"
+    val header             = hc.withExtraHeaders(ChannelHeader(channel))
+
+    http.GET[HttpResponse](serviceUrl)(httpReads, header, ec) map {
+      case responseMessage if is2xx(responseMessage.status) =>
+        println(s"\n\n\n${responseMessage.json}\n\n\n")
+        Some(responseMessage.json.as[ResponseArrival])
+      case _ =>
+        logger.error(s"Get Arrival failed to return data")
+        None
+    }
+  }
+
   object ChannelHeader {
     def apply(value: String): (String, String) = ("Channel", value)
   }
@@ -135,4 +152,5 @@ trait UnloadingConnector {
   def getRejectionMessage(rejectionLocation: String)(implicit hc: HeaderCarrier): Future[Option[UnloadingRemarksRejectionMessage]]
   def getUnloadingRemarksMessage(unloadinRemarksLocation: String)(implicit hc: HeaderCarrier): Future[Option[UnloadingRemarksRequest]]
   def getPDF(arrivalId: ArrivalId, bearerToken: String)(implicit hc: HeaderCarrier): Future[WSResponse]
+  def getArrival(arrivalId: ArrivalId)(implicit hc: HeaderCarrier): Future[Option[ResponseArrival]]
 }

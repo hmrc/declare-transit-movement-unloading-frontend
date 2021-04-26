@@ -60,7 +60,7 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
   "GrossMassAmountRejection Controller" - {
 
     "must populate the view correctly on a GET" in {
-
+      checkArrivalStatus()
       val originalValue = "100000.123"
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -88,6 +88,7 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
     }
 
     "must render the technical difficulties when there is no rejection message" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockRejectionService.getRejectedValueAsString(any(), any())(any())(any())).thenReturn(Future.successful(None))
 
@@ -109,7 +110,7 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
   }
 
   "must redirect to the next page when valid data is submitted" in {
-
+    checkArrivalStatus()
     val originalValue    = "some reference"
     val errors           = Seq(FunctionalError(IncorrectValue, DefaultPointer(""), None, Some(originalValue)))
     val rejectionMessage = UnloadingRemarksRejectionMessage(mrn, LocalDate.now, None, errors)
@@ -130,6 +131,7 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
   }
 
   "must render the technical difficulties page when rejection message is None" in {
+    checkArrivalStatus()
     when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
     when(mockRejectionService.unloadingRemarksRejectionMessage(any())(any())).thenReturn(Future.successful(None))
     when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -152,7 +154,7 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
   }
 
   "must return a Bad Request and errors when invalid data is submitted" in {
-
+    checkArrivalStatus()
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
 

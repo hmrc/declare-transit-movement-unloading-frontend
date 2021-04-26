@@ -37,20 +37,22 @@ class ConfirmationController @Inject()(
   requireData: DataRequiredAction,
   sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val json = Json.obj(
-        "mrn"                       -> request.userAnswers.mrn,
-        "arrivalId"                 -> arrivalId,
-        "manageTransitMovementsUrl" -> appConfig.manageTransitMovementsUrl
-      )
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val json = Json.obj(
+          "mrn"                       -> request.userAnswers.mrn,
+          "arrivalId"                 -> arrivalId,
+          "manageTransitMovementsUrl" -> appConfig.manageTransitMovementsUrl
+        )
 
-      sessionRepository.remove(arrivalId)
-      renderer.render("confirmation.njk", json).map(Ok(_))
-  }
+        sessionRepository.remove(arrivalId)
+        renderer.render("confirmation.njk", json).map(Ok(_))
+    }
 }

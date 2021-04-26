@@ -41,7 +41,8 @@ class AreAnySealsBrokenController @Inject()(
   requireData: DataRequiredAction,
   formProvider: AreAnySealsBrokenFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -49,46 +50,48 @@ class AreAnySealsBrokenController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(AreAnySealsBrokenPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val preparedForm = request.userAnswers.get(AreAnySealsBrokenPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      val json = Json.obj(
-        "form"      -> preparedForm,
-        "mode"      -> mode,
-        "mrn"       -> request.userAnswers.mrn,
-        "arrivalId" -> arrivalId,
-        "radios"    -> Radios.yesNo(preparedForm("value"))
-      )
-
-      renderer.render("areAnySealsBroken.njk", json).map(Ok(_))
-  }
-
-  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"      -> formWithErrors,
-              "mode"      -> mode,
-              "mrn"       -> request.userAnswers.mrn,
-              "arrivalId" -> arrivalId,
-              "radios"    -> Radios.yesNo(formWithErrors("value"))
-            )
-
-            renderer.render("areAnySealsBroken.njk", json).map(BadRequest(_))
-          },
-          value =>
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(AreAnySealsBrokenPage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(AreAnySealsBrokenPage, mode, updatedAnswers))
+        val json = Json.obj(
+          "form"      -> preparedForm,
+          "mode"      -> mode,
+          "mrn"       -> request.userAnswers.mrn,
+          "arrivalId" -> arrivalId,
+          "radios"    -> Radios.yesNo(preparedForm("value"))
         )
-  }
+
+        renderer.render("areAnySealsBroken.njk", json).map(Ok(_))
+    }
+
+  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => {
+
+              val json = Json.obj(
+                "form"      -> formWithErrors,
+                "mode"      -> mode,
+                "mrn"       -> request.userAnswers.mrn,
+                "arrivalId" -> arrivalId,
+                "radios"    -> Radios.yesNo(formWithErrors("value"))
+              )
+
+              renderer.render("areAnySealsBroken.njk", json).map(BadRequest(_))
+            },
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AreAnySealsBrokenPage, value))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(AreAnySealsBrokenPage, mode, updatedAnswers))
+          )
+    }
 }

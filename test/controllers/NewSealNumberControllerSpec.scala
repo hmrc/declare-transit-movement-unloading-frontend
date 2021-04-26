@@ -58,7 +58,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
   "NewSealNumber Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -86,7 +86,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -119,7 +119,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
 
     "onSubmit" - {
       "must redirect to the next page when valid data is submitted" in {
-
+        checkArrivalStatus()
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
         when(mockUnloadingPermissionService.convertSeals(any())(any(), any()))
@@ -139,7 +139,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       }
 
       "must return a Bad Request and errors when invalid data is submitted" in {
-
+        checkArrivalStatus()
         when(mockRenderer.render(any(), any())(any()))
           .thenReturn(Future.successful(Html("")))
 
@@ -171,7 +171,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       }
 
       "must redirect to Session Expired for a GET if no existing data is found" in {
-
+        checkArrivalStatus()
         setNoExistingUserAnswers()
 
         val request = FakeRequest(GET, newSealNumberRoute)
@@ -184,7 +184,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       }
 
       "must redirect to Session Expired for a POST if no existing data is found" in {
-
+        checkArrivalStatus()
         setNoExistingUserAnswers()
 
         val request =
@@ -199,6 +199,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       }
 
       "must redirect to the correct page when seals already in the UserAnswers" in {
+        checkArrivalStatus()
         val userAnswers = UserAnswers(arrivalId, mrn, eoriNumber, Json.obj("seals" -> Seq("Seals01")))
 
         when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
@@ -216,6 +217,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
       }
 
       "redirect to error page when no UserAnswers returned from unloading permissions service" ignore {
+        checkArrivalStatus()
         val ua = UserAnswers(arrivalId, MovementReferenceNumber("41", "IT", "0211001000782"), eoriNumber, Json.obj())
         setExistingUserAnswers(ua)
 

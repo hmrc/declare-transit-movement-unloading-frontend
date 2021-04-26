@@ -41,7 +41,7 @@ class ConfirmRemoveCommentsControllerSpec extends SpecBase with AppWithDefaultMo
   "ConfirmRemoveComments Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -70,7 +70,7 @@ class ConfirmRemoveCommentsControllerSpec extends SpecBase with AppWithDefaultMo
     }
 
     "must redirect to the next page when true is submitted" in {
-
+      checkArrivalStatus()
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -87,7 +87,7 @@ class ConfirmRemoveCommentsControllerSpec extends SpecBase with AppWithDefaultMo
     }
 
     "must redirect to the next page when false is submitted" in {
-
+      checkArrivalStatus()
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
       setExistingUserAnswers(emptyUserAnswers)
@@ -104,7 +104,7 @@ class ConfirmRemoveCommentsControllerSpec extends SpecBase with AppWithDefaultMo
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
@@ -134,7 +134,7 @@ class ConfirmRemoveCommentsControllerSpec extends SpecBase with AppWithDefaultMo
     }
 
     "must redirect to Session Expired for a GET if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request = FakeRequest(GET, confirmRemoveCommentsRoute)
@@ -147,7 +147,7 @@ class ConfirmRemoveCommentsControllerSpec extends SpecBase with AppWithDefaultMo
     }
 
     "must redirect to Session Expired for a POST if no existing data is found" in {
-
+      checkArrivalStatus()
       setNoExistingUserAnswers()
 
       val request =
