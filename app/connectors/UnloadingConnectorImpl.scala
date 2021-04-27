@@ -123,7 +123,6 @@ class UnloadingConnectorImpl @Inject()(
 
     http.GET[HttpResponse](serviceUrl)(httpReads, header, ec) map {
       case responseMessage if is2xx(responseMessage.status) =>
-        println(s"\n\n\n${responseMessage.json}\n\n\n")
         Some(responseMessage.json.as[ResponseArrival])
       case _ =>
         logger.error(s"Get Arrival failed to return data")
