@@ -16,14 +16,16 @@
 
 package forms
 
-import java.time.LocalDate
+import java.time.{Clock, LocalDate}
 import forms.mappings.Mappings
 
 import javax.inject.Inject
 import play.api.data.Form
 import utils.Format.cyaDateFormatter
 
-class DateGoodsUnloadedFormProvider @Inject() extends Mappings {
+class DateGoodsUnloadedFormProvider @Inject()(clock: Clock) extends Mappings {
+
+  def today: LocalDate = LocalDate.now(clock)
 
   def apply(dateOfPrep: LocalDate): Form[LocalDate] =
     Form(
@@ -32,6 +34,9 @@ class DateGoodsUnloadedFormProvider @Inject() extends Mappings {
         allRequiredKey = "dateGoodsUnloaded.error.required.all",
         twoRequiredKey = "dateGoodsUnloaded.error.required.two",
         requiredKey    = "dateGoodsUnloaded.error.required"
-      ).verifying(minDate(dateOfPrep, "dateGoodsUnloaded.error.min.date", dateOfPrep.format(cyaDateFormatter)))
+      ).verifying(
+        minDate(dateOfPrep, "dateGoodsUnloaded.error.min.date", dateOfPrep.format(cyaDateFormatter)),
+        maxDate(today, "dateGoodsUnloaded.error.max.date")
+      )
     )
 }
