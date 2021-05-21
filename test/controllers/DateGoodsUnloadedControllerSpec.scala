@@ -43,7 +43,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
 
   private val stubClock         = Clock.fixed(Instant.now, ZoneId.systemDefault)
   private val dateOfPreparation = LocalDate.now(stubClock)
-  private val validAnswer       = dateOfPreparation.plusDays(1)
+  private val validAnswer       = dateOfPreparation
 
   val unloadingPermission = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
@@ -59,7 +59,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     dateOfPreparation       = dateOfPreparation
   )
 
-  private def form = new DateGoodsUnloadedFormProvider()(dateOfPreparation)
+  private def form = new DateGoodsUnloadedFormProvider(stubClock)(dateOfPreparation)
 
   private lazy val dateGoodsUnloadedRoute = routes.DateGoodsUnloadedController.onPageLoad(arrivalId, NormalMode).url
 
@@ -70,7 +70,8 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
       .guiceApplicationBuilder()
       .overrides(
         bind[NavigatorUnloadingPermission].toInstance(new FakeUnloadingPermissionNavigator(onwardRoute)),
-        bind[UnloadingPermissionService].toInstance(mockUnloadingPermissionService)
+        bind[UnloadingPermissionService].toInstance(mockUnloadingPermissionService),
+        bind[Clock].toInstance(stubClock)
       )
 
   override def beforeEach(): Unit = {

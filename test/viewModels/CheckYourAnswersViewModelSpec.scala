@@ -16,14 +16,13 @@
 
 package viewModels
 
-import java.time.LocalDate
-
 import base.SpecBase
 import cats.data.NonEmptyList
 import models.{UnloadingPermission, UserAnswers}
-import org.scalatest.{FreeSpec, MustMatchers}
 import pages._
 import uk.gov.hmrc.viewmodels.Text.Literal
+
+import java.time.LocalDate
 
 class CheckYourAnswersViewModelSpec extends SpecBase {
 

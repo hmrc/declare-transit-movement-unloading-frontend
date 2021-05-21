@@ -41,8 +41,8 @@ import scala.concurrent.Future
 
 class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
-  val formProvider      = new DateGoodsUnloadedFormProvider()
   val stubClock         = Clock.fixed(Instant.now.plusSeconds(200000), ZoneId.systemDefault)
+  val formProvider      = new DateGoodsUnloadedFormProvider(stubClock)
   val dateOfPreparation = LocalDate.now(stubClock)
 
   val unloadingPermission = UnloadingPermission(
@@ -67,7 +67,7 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
   )
 
   private def form: Form[LocalDate]  = formProvider(dateOfPreparation)
-  private val validAnswer: LocalDate = dateOfPreparation.plusDays(1)
+  private val validAnswer: LocalDate = dateOfPreparation
 
   private lazy val dateGoodsUnloadedRoute = routes.DateGoodsUnloadedRejectionController.onPageLoad(arrivalId).url
 
@@ -79,6 +79,7 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
       .guiceApplicationBuilder()
       .overrides(bind[UnloadingRemarksRejectionService].toInstance(mockRejectionService))
       .overrides(bind[UnloadingPermissionService].toInstance(mockUnloadingPermissionService))
+      .overrides(bind[Clock].toInstance(stubClock))
 
   override def beforeEach(): Unit = {
     super.beforeEach()

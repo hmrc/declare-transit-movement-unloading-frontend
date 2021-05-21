@@ -21,8 +21,6 @@ import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{ParseFailure, ParseSuccess, XmlReader}
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.{FreeSpec, MustMatchers}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import java.time.LocalDate
 import scala.xml.Utility.trim
