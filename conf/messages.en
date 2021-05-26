@@ -169,6 +169,7 @@ dateGoodsUnloaded.error.required.two = The date goods were unloaded must include
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
 dateGoodsUnloaded.error.invalid = Enter a real date
 dateGoodsUnloaded.error.min.date = The date when the goods were unloaded must be on or after {0}
+dateGoodsUnloaded.visually.hidden = the date when the goods were unloaded
 
 vehicleNameRegistrationReference.title = What is the name, registration or reference of the new vehicle?
 vehicleNameRegistrationReference.heading = What is the name, registration or reference of the new vehicle?
