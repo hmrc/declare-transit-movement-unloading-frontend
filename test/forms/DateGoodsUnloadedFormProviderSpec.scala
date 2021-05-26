@@ -16,22 +16,22 @@
 
 package forms
 
-import java.time.{LocalDate, ZoneOffset}
-
+import java.time.{Clock, LocalDate, ZoneOffset}
 import forms.behaviours.DateBehaviours
 import play.api.data.FormError
 
 class DateGoodsUnloadedFormProviderSpec extends DateBehaviours {
 
   val minDate         = LocalDate.of(2020, 12, 31)
+  val maxDate         = LocalDate.now(ZoneOffset.UTC)
   val minDateAsString = "31 December 2020"
-  val form            = new DateGoodsUnloadedFormProvider()(minDate)
+  val form            = new DateGoodsUnloadedFormProvider(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))(minDate)
 
   ".value" - {
 
     val validData = datesBetween(
-      min = LocalDate.now(ZoneOffset.UTC),
-      max = LocalDate.now(ZoneOffset.UTC).plusYears(1)
+      min = minDate,
+      max = LocalDate.now(ZoneOffset.UTC)
     )
 
     behave like dateField(form, "value", validData)
@@ -39,6 +39,8 @@ class DateGoodsUnloadedFormProviderSpec extends DateBehaviours {
     behave like mandatoryDateField(form, "value", "dateGoodsUnloaded.error.required.all")
 
     behave like dateFieldWithMin(form, "value", min = minDate, FormError("value", "dateGoodsUnloaded.error.min.date", Seq(minDateAsString)))
+
+    behave like dateFieldWithMax(form, "value", max = maxDate, FormError("value", "dateGoodsUnloaded.error.max.date"))
 
   }
 }

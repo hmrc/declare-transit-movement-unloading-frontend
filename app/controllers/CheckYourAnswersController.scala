@@ -19,7 +19,7 @@ package controllers
 import audit.services.AuditEventSubmissionService
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.actions.{DataRequiredAction, DataRetrievalActionProvider, IdentifierAction}
+import controllers.actions.{CheckArrivalStatusProvider, DataRequiredAction, DataRetrievalActionProvider, IdentifierAction}
 import handlers.ErrorHandler
 import models.ArrivalId
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -49,7 +49,8 @@ class CheckYourAnswersController @Inject()(
   referenceDataService: ReferenceDataService,
   errorHandler: ErrorHandler,
   unloadingRemarksService: UnloadingRemarksService,
-  auditEventSubmissionService: AuditEventSubmissionService
+  auditEventSubmissionService: AuditEventSubmissionService,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -59,51 +60,53 @@ class CheckYourAnswersController @Inject()(
   private val redirectUrl: ArrivalId => Call =
     arrivalId => controllers.routes.ConfirmationController.onPageLoad(arrivalId)
 
-  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
-        case Some(unloadingPermission) => {
-          referenceDataService.getCountryByCode(unloadingPermission.transportCountry).flatMap {
-            transportCountry =>
-              val viewModel = CheckYourAnswersViewModel(request.userAnswers, unloadingPermission, transportCountry)
+  def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
+          case Some(unloadingPermission) => {
+            referenceDataService.getCountryByCode(unloadingPermission.transportCountry).flatMap {
+              transportCountry =>
+                val viewModel = CheckYourAnswersViewModel(request.userAnswers, unloadingPermission, transportCountry)
 
-              val answers: Seq[Section] = viewModel.sections
+                val answers: Seq[Section] = viewModel.sections
 
-              renderer
-                .render(
-                  "check-your-answers.njk",
-                  Json.obj("mrn"         -> request.userAnswers.mrn,
-                           "arrivalId"   -> arrivalId,
-                           "sections"    -> Json.toJson(answers),
-                           "redirectUrl" -> redirectUrl(arrivalId).url)
-                )
-                .map(Ok(_))
+                renderer
+                  .render(
+                    "check-your-answers.njk",
+                    Json.obj("mrn"         -> request.userAnswers.mrn,
+                             "arrivalId"   -> arrivalId,
+                             "sections"    -> Json.toJson(answers),
+                             "redirectUrl" -> redirectUrl(arrivalId).url)
+                  )
+                  .map(Ok(_))
+            }
           }
+          case _ => errorHandler.onClientError(request, BAD_REQUEST)
         }
-        case _ => errorHandler.onClientError(request, BAD_REQUEST)
-      }
-  }
+    }
 
-  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
-        case Some(unloadingPermission) => {
-          unloadingRemarksService.submit(arrivalId, request.userAnswers, unloadingPermission) flatMap {
-            case Some(status) =>
-              status match {
-                case ACCEPTED => {
-                  auditEventSubmissionService.auditUnloadingRemarks(request.userAnswers, "submitUnloadingRemarks")
-                  Future.successful(Redirect(routes.ConfirmationController.onPageLoad(arrivalId)))
+  def onSubmit(arrivalId: ArrivalId): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
+          case Some(unloadingPermission) => {
+            unloadingRemarksService.submit(arrivalId, request.userAnswers, unloadingPermission) flatMap {
+              case Some(status) =>
+                status match {
+                  case ACCEPTED => {
+                    auditEventSubmissionService.auditUnloadingRemarks(request.userAnswers, "submitUnloadingRemarks")
+                    Future.successful(Redirect(routes.ConfirmationController.onPageLoad(arrivalId)))
+                  }
+                  case UNAUTHORIZED => errorHandler.onClientError(request, UNAUTHORIZED)
+                  case _            => renderTechnicalDifficultiesPage
                 }
-                case UNAUTHORIZED => errorHandler.onClientError(request, UNAUTHORIZED)
-                case _            => renderTechnicalDifficultiesPage
-              }
 
-            case None => renderTechnicalDifficultiesPage
+              case None => renderTechnicalDifficultiesPage
+            }
           }
+          case _ => renderTechnicalDifficultiesPage
         }
-        case _ => renderTechnicalDifficultiesPage
-      }
-  }
+    }
 
 }

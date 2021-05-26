@@ -44,14 +44,15 @@ class ConfirmRemoveSealController @Inject()(
   requireData: DataRequiredAction,
   formProvider: ConfirmRemoveSealFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
   def onPageLoad(arrivalId: ArrivalId, index: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(arrivalId) andThen requireData).async {
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
         request.userAnswers.get(NewSealNumberPage(index)) match {
           case Some(seal) =>
@@ -76,7 +77,7 @@ class ConfirmRemoveSealController @Inject()(
   }
 
   def onSubmit(arrivalId: ArrivalId, index: Index, mode: Mode): Action[AnyContent] =
-    (identify andThen getData(arrivalId) andThen requireData).async {
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
         request.userAnswers.get(NewSealNumberPage(index)) match {
           case Some(seal) =>

@@ -16,15 +16,9 @@
 
 package base
 
-import controllers.actions.{
-  DataRequiredAction,
-  DataRequiredActionImpl,
-  DataRetrievalActionProvider,
-  FakeDataRetrievalAction,
-  FakeIdentifierAction,
-  IdentifierAction
-}
+import controllers.actions._
 import models.UserAnswers
+import models.requests.IdentifierRequest
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.Matchers.any
 import org.mockito.Mockito
@@ -36,10 +30,12 @@ import play.api.Application
 import play.api.i18n.MessagesApi
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.Call
+import play.api.mvc.{ActionFilter, ActionRefiner, Call, Result}
 import play.api.test.Helpers
 import repositories.SessionRepository
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
+
+import scala.concurrent.{ExecutionContext, Future}
 
 trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerSuite with GuiceFakeApplicationFactory with MockitoSugar {
   self: TestSuite =>
@@ -48,12 +44,14 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
     Mockito.reset(
       mockRenderer,
       mockSessionRepository,
-      mockDataRetrievalActionProvider
+      mockDataRetrievalActionProvider,
+      mockCheckArrivalStatusProvider
     )
 
-  final val mockRenderer: NunjucksRenderer           = mock[NunjucksRenderer]
-  final val mockSessionRepository: SessionRepository = mock[SessionRepository]
-  final val mockDataRetrievalActionProvider          = mock[DataRetrievalActionProvider]
+  final val mockRenderer: NunjucksRenderer                             = mock[NunjucksRenderer]
+  final val mockSessionRepository: SessionRepository                   = mock[SessionRepository]
+  final val mockDataRetrievalActionProvider                            = mock[DataRetrievalActionProvider]
+  final val mockCheckArrivalStatusProvider: CheckArrivalStatusProvider = mock[CheckArrivalStatusProvider]
 
   final override def fakeApplication(): Application =
     guiceApplicationBuilder()
@@ -65,6 +63,17 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
   protected def setNoExistingUserAnswers(): Unit =
     when(mockDataRetrievalActionProvider.apply(any())) thenReturn new FakeDataRetrievalAction(None)
 
+  protected def checkArrivalStatus(): Unit = {
+    val fakeCheckArrivalStatusAction = new ActionFilter[IdentifierRequest] {
+      override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] =
+        Future.successful(None)
+
+      override protected def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
+    }
+
+    when(mockCheckArrivalStatusProvider.apply(any())).thenReturn(fakeCheckArrivalStatusAction)
+  }
+
   protected val onwardRoute: Call = Call("GET", "/foo")
 
   protected val fakeNavigator: Navigator = new FakeNavigator(onwardRoute)
@@ -75,6 +84,7 @@ trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerS
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to[FakeIdentifierAction],
         bind[NunjucksRenderer].toInstance(mockRenderer),
+        bind[CheckArrivalStatusProvider].toInstance(mockCheckArrivalStatusProvider),
         bind[SessionRepository].toInstance(mockSessionRepository),
         bind[DataRetrievalActionProvider].toInstance(mockDataRetrievalActionProvider),
         bind[MessagesApi].toInstance(Helpers.stubMessagesApi()),

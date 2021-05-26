@@ -55,12 +55,14 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val countdownSeconds: String = configuration.get[String]("session.countdownSeconds")
 
   private val manageTransitMovementsHost = configuration.get[String]("manage-transit-movements-frontend.host")
-  val manageTransitMovementsUrl          = s"$manageTransitMovementsHost/manage-transit-movements/"
+  val manageTransitMovementsUrl          = s"$manageTransitMovementsHost/manage-transit-movements"
+  lazy val serviceUrl: String            = s"$manageTransitMovementsUrl/index"
 
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.reference-data").fullServiceUrl
 
-  lazy val arrivalsBackend: String        = configuration.get[Service]("microservice.services.arrivals-backend").fullServiceUrl
-  lazy val arrivalsBackendBaseUrl: String = configuration.get[Service]("microservice.services.arrivals-backend").baseUrl
+  lazy val arrivalsBackend: String         = configuration.get[Service]("microservice.services.arrivals-backend").fullServiceUrl
+  lazy val arrivalsBackendBaseUrl: String  = configuration.get[Service]("microservice.services.arrivals-backend").baseUrl
+  lazy val arrivalNotificationsUrl: String = configuration.get[String]("urls.arrivalNotifications")
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")

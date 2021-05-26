@@ -43,7 +43,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
 
   private val stubClock         = Clock.fixed(Instant.now, ZoneId.systemDefault)
   private val dateOfPreparation = LocalDate.now(stubClock)
-  private val validAnswer       = dateOfPreparation.plusDays(1)
+  private val validAnswer       = dateOfPreparation
 
   val unloadingPermission = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
@@ -59,7 +59,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     dateOfPreparation       = dateOfPreparation
   )
 
-  private def form = new DateGoodsUnloadedFormProvider()(dateOfPreparation)
+  private def form = new DateGoodsUnloadedFormProvider(stubClock)(dateOfPreparation)
 
   private lazy val dateGoodsUnloadedRoute = routes.DateGoodsUnloadedController.onPageLoad(arrivalId, NormalMode).url
 
@@ -70,7 +70,8 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
       .guiceApplicationBuilder()
       .overrides(
         bind[NavigatorUnloadingPermission].toInstance(new FakeUnloadingPermissionNavigator(onwardRoute)),
-        bind[UnloadingPermissionService].toInstance(mockUnloadingPermissionService)
+        bind[UnloadingPermissionService].toInstance(mockUnloadingPermissionService),
+        bind[Clock].toInstance(stubClock)
       )
 
   override def beforeEach(): Unit = {
@@ -81,7 +82,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
   "DateGoodsUnloaded Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -111,7 +112,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -150,6 +151,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return an Internal Server Error on a GET when date of preparation is not available" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(None))
 
@@ -173,6 +175,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must redirect on to the next page when valid data is submitted" in {
+      checkArrivalStatus()
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
@@ -192,6 +195,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -232,6 +236,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return a Bad Request and errors when the date is before date of preparation" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(Some(unloadingPermission)))
 
@@ -274,6 +279,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     }
 
     "must return an Internal Server Error when valid data is submitted but date of preparation is not available" in {
+      checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
       when(mockUnloadingPermissionService.getUnloadingPermission(any())(any(), any())).thenReturn(Future.successful(None))
 

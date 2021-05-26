@@ -41,7 +41,8 @@ class ConfirmRemoveCommentsController @Inject()(
   requireData: DataRequiredAction,
   formProvider: ConfirmRemoveCommentsFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  renderer: Renderer
+  renderer: Renderer,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -49,45 +50,47 @@ class ConfirmRemoveCommentsController @Inject()(
 
   private val form = formProvider()
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      val json = Json.obj(
-        "form"      -> form,
-        "mode"      -> mode,
-        "mrn"       -> request.userAnswers.mrn,
-        "arrivalId" -> arrivalId,
-        "radios"    -> Radios.yesNo(form("value"))
-      )
-
-      renderer.render("confirmRemoveComments.njk", json).map(Ok(_))
-  }
-
-  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      form
-        .bindFromRequest()
-        .fold(
-          formWithErrors => {
-
-            val json = Json.obj(
-              "form"      -> formWithErrors,
-              "mode"      -> mode,
-              "mrn"       -> request.userAnswers.mrn,
-              "arrivalId" -> arrivalId,
-              "radios"    -> Radios.yesNo(formWithErrors("value"))
-            )
-
-            renderer.render("confirmRemoveComments.njk", json).map(BadRequest(_))
-          },
-          value =>
-            if (value) {
-              for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.remove(ChangesToReportPage))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, updatedAnswers))
-            } else {
-              Future.successful(Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, request.userAnswers)))
-          }
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        val json = Json.obj(
+          "form"      -> form,
+          "mode"      -> mode,
+          "mrn"       -> request.userAnswers.mrn,
+          "arrivalId" -> arrivalId,
+          "radios"    -> Radios.yesNo(form("value"))
         )
-  }
+
+        renderer.render("confirmRemoveComments.njk", json).map(Ok(_))
+    }
+
+  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        form
+          .bindFromRequest()
+          .fold(
+            formWithErrors => {
+
+              val json = Json.obj(
+                "form"      -> formWithErrors,
+                "mode"      -> mode,
+                "mrn"       -> request.userAnswers.mrn,
+                "arrivalId" -> arrivalId,
+                "radios"    -> Radios.yesNo(formWithErrors("value"))
+              )
+
+              renderer.render("confirmRemoveComments.njk", json).map(BadRequest(_))
+            },
+            value =>
+              if (value) {
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(ChangesToReportPage))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, updatedAnswers))
+              } else {
+                Future.successful(Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, request.userAnswers)))
+            }
+          )
+    }
 }

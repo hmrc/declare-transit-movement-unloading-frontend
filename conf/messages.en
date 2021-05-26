@@ -163,12 +163,13 @@ unloadingGuidance.pdf = Download the Unloading Permission PDF
 dateGoodsUnloaded.title = When were the goods unloaded?
 dateGoodsUnloaded.heading = When were the goods unloaded?
 dateGoodsUnloaded.hint = For example, 14 1 2020
-dateGoodsUnloaded.checkYourAnswersLabel = What date were the goods unloaded?
-dateGoodsUnloaded.error.required.all = Enter when the goods were unloaded
+dateGoodsUnloaded.checkYourAnswersLabel = When were the goods unloaded?
+dateGoodsUnloaded.error.required.all = Enter the date when the goods were unloaded
 dateGoodsUnloaded.error.required.two = The date goods were unloaded must include {0} and {1}
 dateGoodsUnloaded.error.required = The date goods were unloaded must include {0}
 dateGoodsUnloaded.error.invalid = Enter a real date
 dateGoodsUnloaded.error.min.date = The date when the goods were unloaded must be on or after {0}
+dateGoodsUnloaded.error.max.date = The date when the goods were unloaded must be today or in the past
 dateGoodsUnloaded.visually.hidden = the date when the goods were unloaded
 
 vehicleNameRegistrationReference.title = What is the name, registration or reference of the new vehicle?
@@ -321,3 +322,10 @@ unauthorisedWithoutGroupAccess.title = You cannot use this service group authori
 unauthorisedWithoutGroupAccess.heading = You cannot use this service
 unauthorisedWithoutGroupAccess.requestAccess = request access to NCTS
 unauthorisedWithoutGroupAccess.beforeUseThisService =  before you can use this service.
+
+canNotSendUnloadingRemarks.title = You cannot send these unloading remarks
+canNotSendUnloadingRemarks.heading = You cannot send these unloading remarks
+canNotSendUnloadingRemarks.declarationNotFound = There is no departure declaration with these details.
+canNotSendUnloadingRemarks.message =  If you still need to send these unloading remarks, you must
+canNotSendUnloadingRemarks.contactLink = contact the New Computerised Transit System (NCTS) Helpdesk (opens in a new tab)
+canNotSendUnloadingRemarks.linkText = Back to arrival notification

@@ -45,84 +45,87 @@ class DateGoodsUnloadedController @Inject()(
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   unloadingPermissionService: UnloadingPermissionService,
-  frontendAppConfig: FrontendAppConfig
+  frontendAppConfig: FrontendAppConfig,
+  checkArrivalStatus: CheckArrivalStatusProvider
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with NunjucksSupport {
 
-  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      unloadingPermissionService
-        .getUnloadingPermission(arrivalId)
-        .flatMap {
-          case Some(up) => {
-            val form = formProvider(up.dateOfPreparation)
+  def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        unloadingPermissionService
+          .getUnloadingPermission(arrivalId)
+          .flatMap {
+            case Some(up) => {
+              val form = formProvider(up.dateOfPreparation)
 
-            val preparedForm = request.userAnswers.get(DateGoodsUnloadedPage) match {
-              case Some(value) => form.fill(value)
-              case None        => form
-            }
+              val preparedForm = request.userAnswers.get(DateGoodsUnloadedPage) match {
+                case Some(value) => form.fill(value)
+                case None        => form
+              }
 
-            val viewModel = DateInput.localDate(preparedForm("value"))
+              val viewModel = DateInput.localDate(preparedForm("value"))
 
-            val json = Json.obj(
-              "form"      -> preparedForm,
-              "mode"      -> mode,
-              "mrn"       -> request.userAnswers.mrn,
-              "arrivalId" -> arrivalId,
-              "date"      -> viewModel
-            )
-
-            renderer.render("dateGoodsUnloaded.njk", json).map(Ok(_))
-          }
-          case None =>
-            val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
-
-            renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
-        }
-
-  }
-
-  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] = (identify andThen getData(arrivalId) andThen requireData).async {
-    implicit request =>
-      unloadingPermissionService
-        .getUnloadingPermission(arrivalId)
-        .flatMap {
-          case Some(up) => {
-            formProvider(up.dateOfPreparation)
-              .bindFromRequest()
-              .fold(
-                formWithErrors => {
-
-                  val viewModel = DateInput.localDate(formWithErrors("value"))
-
-                  val json = Json.obj(
-                    "form"      -> formWithErrors,
-                    "mode"      -> mode,
-                    "mrn"       -> request.userAnswers.mrn,
-                    "arrivalId" -> arrivalId,
-                    "date"      -> viewModel
-                  )
-
-                  renderer.render("dateGoodsUnloaded.njk", json).map(BadRequest(_))
-                },
-                value =>
-                  for {
-                    updatedAnswers      <- Future.fromTry(request.userAnswers.set(DateGoodsUnloadedPage, value))
-                    _                   <- sessionRepository.set(updatedAnswers)
-                    unloadingPermission <- unloadingPermissionService.getUnloadingPermission(arrivalId)
-                  } yield {
-                    Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers, unloadingPermission))
-                }
+              val json = Json.obj(
+                "form"      -> preparedForm,
+                "mode"      -> mode,
+                "mrn"       -> request.userAnswers.mrn,
+                "arrivalId" -> arrivalId,
+                "date"      -> viewModel
               )
 
+              renderer.render("dateGoodsUnloaded.njk", json).map(Ok(_))
+            }
+            case None =>
+              val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
+
+              renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
           }
-          case None =>
-            val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
 
-            renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
-        }
+    }
 
-  }
+  def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
+    (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
+      implicit request =>
+        unloadingPermissionService
+          .getUnloadingPermission(arrivalId)
+          .flatMap {
+            case Some(up) => {
+              formProvider(up.dateOfPreparation)
+                .bindFromRequest()
+                .fold(
+                  formWithErrors => {
+
+                    val viewModel = DateInput.localDate(formWithErrors("value"))
+
+                    val json = Json.obj(
+                      "form"      -> formWithErrors,
+                      "mode"      -> mode,
+                      "mrn"       -> request.userAnswers.mrn,
+                      "arrivalId" -> arrivalId,
+                      "date"      -> viewModel
+                    )
+
+                    renderer.render("dateGoodsUnloaded.njk", json).map(BadRequest(_))
+                  },
+                  value =>
+                    for {
+                      updatedAnswers      <- Future.fromTry(request.userAnswers.set(DateGoodsUnloadedPage, value))
+                      _                   <- sessionRepository.set(updatedAnswers)
+                      unloadingPermission <- unloadingPermissionService.getUnloadingPermission(arrivalId)
+                    } yield {
+                      Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers, unloadingPermission))
+                  }
+                )
+
+            }
+            case None =>
+              val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
+
+              renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
+          }
+
+    }
 }
