@@ -74,7 +74,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows.head.value.content mustBe Literal("vehicle reference")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
     }
     "contain transport country details from unloading permission" in {
       val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermissionWithTransport, transportCountry)
@@ -87,7 +87,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows.head.value.content mustBe Literal("1000")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
     }
     "contain gross mass details" in {
       val userAnswers = emptyUserAnswers.set(GrossMassAmountPage, "500").success.value
@@ -95,7 +95,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows.head.value.content mustBe Literal("500")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
     "contain number of items details" in {
@@ -104,7 +104,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows(1).value.content mustBe Literal("10")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
     "contain number of items details with details from unloading permsission" in {
@@ -112,7 +112,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows(1).value.content mustBe Literal("1")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
     "contain number of packages details with detaials from unloading permsission" in {
@@ -120,7 +120,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows(2).value.content mustBe Literal("1")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
     "contain number of packages details" in {
@@ -129,7 +129,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
 
       data.sections.length mustBe 3
       data.sections(2).rows(2).value.content mustBe Literal("11")
-      data.sections(2).rows.head.actions.isEmpty mustBe false
+      data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
     "contain item details" in {

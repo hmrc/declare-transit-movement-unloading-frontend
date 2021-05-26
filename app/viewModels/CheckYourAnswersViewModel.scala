@@ -104,7 +104,7 @@ object CheckYourAnswersViewModel {
 
   private def buildRows(rows: Seq[Row], arrivalId: ArrivalId): Seq[Row] = rows match {
     case head :: tail => {
-      val changeAction = head.copy(
+      val changeAction = tail.last.copy(
         actions = List(
           Action(
             content            = msg"site.edit",
@@ -113,7 +113,8 @@ object CheckYourAnswersViewModel {
             attributes         = Map("id" -> s"""change-answers""")
           )))
 
-      Seq(changeAction) ++ tail
+      head :: tail.dropRight(1) ++ Seq(changeAction)
+
     }
     case _ => rows
 

@@ -45,7 +45,7 @@ checkYourAnswers.subHeading = What you found when unloading
 
 checkYourAnswers.confirmation.heading = Now send your unloading remarks
 checkYourAnswers.confirmation.paragraph = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
-checkYourAnswers.changeItems.hidden = change answers
+checkYourAnswers.changeItems.hidden = answers
 checkYourAnswers.confirmation.heading = Now send your unloading remarks
 checkYourAnswers.confirmation.paragraph = By sending this you are confirming that the details you are providing are correct, to the best of your knowledge.
 
