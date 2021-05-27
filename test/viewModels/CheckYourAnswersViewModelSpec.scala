@@ -106,7 +106,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
       data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
-    "contain number of items details with details from unloading permsission" in {
+    "contain number of items details with details from unloading permission" in {
       val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 3
@@ -114,7 +114,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
       data.sections(2).rows.last.actions.isEmpty mustBe false
       data.sections(2).rows(1).actions mustBe Nil
     }
-    "contain number of packages details with detaials from unloading permsission" in {
+    "contain number of packages details with details from unloading permission" in {
       val data = CheckYourAnswersViewModel(emptyUserAnswers, unloadingPermission, transportCountry)
 
       data.sections.length mustBe 3
