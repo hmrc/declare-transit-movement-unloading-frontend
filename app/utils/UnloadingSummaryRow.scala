@@ -84,24 +84,6 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
       )
   }
 
-  val vehicleUsedCYA: String => Row = {
-    value =>
-      Row(
-        key     = Key(msg"changeVehicle.reference.label"),
-        value   = Value(lit"$value"),
-        actions = Nil
-      )
-  }
-
-  val registeredCountryCYA: String => Row = {
-    value =>
-      Row(
-        key     = Key(msg"changeVehicle.registeredCountry.label"),
-        value   = Value(lit"$value"),
-        actions = Nil
-      )
-  }
-
   val registeredCountry: String => Row = {
     value =>
       Row(
@@ -166,33 +148,6 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
       )
   }
 
-  val grossMassCYA: String => Row = {
-    value =>
-      Row(
-        key     = Key(msg"changeItems.grossMass.label"),
-        value   = Value(lit"$value"),
-        actions = Nil
-      )
-  }
-
-  val totalNumberOfItemsCYA: Int => Row = {
-    value =>
-      Row(
-        key     = Key(msg"changeItems.totalNumberOfItems.label"),
-        value   = Value(lit"$value"),
-        actions = Nil
-      )
-  }
-
-  val totalNumberOfPackagesCYA: Int => Row = {
-    value =>
-      Row(
-        key     = Key(msg"changeItems.totalNumberOfPackages.label"),
-        value   = Value(lit"$value"),
-        actions = Nil
-      )
-  }
-
   val comments: String => Row = {
     value =>
       Row(
@@ -212,15 +167,6 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             attributes         = Map("id" -> s"""remove-comment""")
           )
         )
-      )
-  }
-
-  val commentsCYA: String => Row = {
-    value =>
-      Row(
-        key     = Key(msg"changeItems.comments.label"),
-        value   = Value(lit"$value"),
-        actions = Nil
       )
   }
 
