@@ -68,7 +68,7 @@ object CheckYourAnswersViewModel {
     val unloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
 
     val transportIdentityAnswer: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
-    val transportIdentityRow: Seq[Row]          = SummaryRow.row(transportIdentityAnswer)(unloadingPermission.transportIdentity)(unloadingSummaryRow.vehicleUsedCYA)
+    val transportIdentityRow: Seq[Row]          = SummaryRow.row(transportIdentityAnswer)(unloadingPermission.transportIdentity)(unloadingSummaryRow.vehicleUsed)
 
     val transportCountryDescription: Option[String] = summaryTransportCountry match {
       case Some(country) => Some(country.description)
@@ -76,46 +76,28 @@ object CheckYourAnswersViewModel {
     }
 
     val countryAnswer: Option[String] = SummaryRow.userAnswerCountry(userAnswers)(VehicleRegistrationCountryPage)
-    val transportCountryRow: Seq[Row] = SummaryRow.row(countryAnswer)(transportCountryDescription)(unloadingSummaryRow.registeredCountryCYA)
+    val transportCountryRow: Seq[Row] = SummaryRow.row(countryAnswer)(transportCountryDescription)(unloadingSummaryRow.registeredCountry)
 
-    val grossMassAnswer: Option[String] = userAnswers.get(GrossMassAmountPage)
-    val grossMassRow: Seq[Row]          = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(unloadingSummaryRow.grossMassCYA)
+    val grossMassAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(GrossMassAmountPage)
+    val grossMassRow: Seq[Row]          = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(unloadingSummaryRow.grossMass)
 
     val itemsRow: NonEmptyList[Row] = SummaryRow.rowGoodsItems(unloadingPermission.goodsItems)(userAnswers)(unloadingSummaryRow.items)
 
     val totalNumberOfItemsAnswer: Option[Int] = SummaryRow.userAnswerInt(userAnswers)(TotalNumberOfItemsPage)
     val totalNumberOfItemsRow: Seq[Row] =
-      SummaryRow.rowInt(totalNumberOfItemsAnswer)(Some(unloadingPermission.numberOfItems))(unloadingSummaryRow.totalNumberOfItemsCYA)
+      SummaryRow.rowInt(totalNumberOfItemsAnswer)(Some(unloadingPermission.numberOfItems))(unloadingSummaryRow.totalNumberOfItems)
 
     val totalNumberOfPackagesAnswer: Option[Int] = SummaryRow.userAnswerInt(userAnswers)(TotalNumberOfPackagesPage)
     val totalNumberOfPackagesRow: Seq[Row] =
-      SummaryRow.rowInt(totalNumberOfPackagesAnswer)(unloadingPermission.numberOfPackages)(unloadingSummaryRow.totalNumberOfPackagesCYA)
+      SummaryRow.rowInt(totalNumberOfPackagesAnswer)(unloadingPermission.numberOfPackages)(unloadingSummaryRow.totalNumberOfPackages)
 
     val commentsAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(ChangesToReportPage)
-    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(unloadingSummaryRow.commentsCYA)
+    val commentsRow: Seq[Row]          = SummaryRow.row(commentsAnswer)(None)(unloadingSummaryRow.comments)
 
     Section(
       msg"checkYourAnswers.subHeading",
-      buildRows(
-        transportIdentityRow ++ transportCountryRow ++ grossMassRow ++ totalNumberOfItemsRow ++ totalNumberOfPackagesRow ++ itemsRow.toList ++ commentsRow,
-        userAnswers.id)
+      transportIdentityRow ++ transportCountryRow ++ grossMassRow ++ totalNumberOfItemsRow ++ totalNumberOfPackagesRow ++ itemsRow.toList ++ commentsRow
     )
   }
 
-  private def buildRows(rows: Seq[Row], arrivalId: ArrivalId): Seq[Row] = rows match {
-    case head :: tail => {
-      val changeAction = head.copy(
-        actions = List(
-          Action(
-            content            = msg"site.edit",
-            href               = routes.UnloadingSummaryController.onPageLoad(arrivalId).url,
-            visuallyHiddenText = Some(msg"checkYourAnswers.changeItems.hidden"),
-            attributes         = Map("id" -> s"""change-answers""")
-          )))
-
-      Seq(changeAction) ++ tail
-    }
-    case _ => rows
-
-  }
 }

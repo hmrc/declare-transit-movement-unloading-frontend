@@ -36,7 +36,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.TotalNumberOfPackagesController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalNumberOfPackages.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"totalNumberOfPackages.checkYourAnswersLabel")
           )
         )
       )
@@ -51,7 +51,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.TotalNumberOfItemsController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalNumberOfItems.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"totalNumberOfItems.checkYourAnswersLabel")
           )
         )
       )
@@ -66,7 +66,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.ChangesToReportController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changesToReport.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"changesToReport.checkYourAnswersLabel")
           )
         )
       )
@@ -81,7 +81,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.AnythingElseToReportController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"anythingElseToReport.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"anythingElseToReport.checkYourAnswersLabel")
           )
         )
       )
@@ -96,7 +96,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.AreAnySealsBrokenController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"areAnySealsBroken.checkYourAnswersLabel")),
+            visuallyHiddenText = Some(msg"areAnySealsBroken.checkYourAnswersLabel"),
             attributes         = Map("id" -> "change-are-any-seals-broken")
           )
         )
@@ -112,7 +112,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.CanSealsBeReadController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"canSealsBeRead.checkYourAnswersLabel")),
+            visuallyHiddenText = Some(msg"canSealsBeRead.checkYourAnswersLabel"),
             attributes         = Map("id" -> "change-can-seals-be-read")
           )
         )
@@ -139,7 +139,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.GrossMassAmountController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"grossMassAmount.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"grossMassAmount.checkYourAnswersLabel")
           )
         )
       )
@@ -154,7 +154,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.VehicleRegistrationCountryController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"vehicleRegistrationCountry.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"vehicleRegistrationCountry.checkYourAnswersLabel")
           ))
       )
   }
@@ -168,7 +168,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.VehicleNameRegistrationReferenceController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"vehicleNameRegistrationReference.checkYourAnswersLabel"))
+            visuallyHiddenText = Some(msg"vehicleNameRegistrationReference.checkYourAnswersLabel")
           )
         )
       )
@@ -183,7 +183,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
           Action(
             content            = msg"site.edit",
             href               = routes.DateGoodsUnloadedController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"dateGoodsUnloaded.checkYourAnswersLabel")),
+            visuallyHiddenText = Some(msg"dateGoodsUnloaded.visually.hidden"),
             attributes         = Map("id" -> "change-date-goods-unloaded")
           )
         )
