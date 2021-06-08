@@ -46,7 +46,11 @@ class UnloadingPermissionPDFController @Inject()(identify: IdentifierAction,
               result =>
                 result.status match {
                   case OK =>
-                    Future.successful(Ok(result.bodyAsBytes.toArray))
+                    val contentDisposition = result.headers.get(CONTENT_DISPOSITION).map(value => Seq((CONTENT_DISPOSITION, value.head))).getOrElse(Seq.empty)
+                    val contentType        = result.headers.get(CONTENT_TYPE).map(value => Seq((CONTENT_TYPE, value.head))).getOrElse(Seq.empty)
+                    val headers            = contentDisposition ++ contentType
+
+                    Future.successful(Ok(result.bodyAsBytes.toArray).withHeaders(headers: _*))
                   case _ =>
                     renderTechnicalDifficultiesPage
                 }
