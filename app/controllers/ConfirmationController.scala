@@ -30,24 +30,24 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import scala.concurrent.ExecutionContext
 
 class ConfirmationController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        appConfig: FrontendAppConfig,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredAction,
-                                        sessionRepository: SessionRepository,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        renderer: Renderer
-                                      )(implicit ec: ExecutionContext)
-  extends FrontendBaseController
+  override val messagesApi: MessagesApi,
+  appConfig: FrontendAppConfig,
+  identify: IdentifierAction,
+  getData: DataRetrievalActionProvider,
+  requireData: DataRequiredAction,
+  sessionRepository: SessionRepository,
+  val controllerComponents: MessagesControllerComponents,
+  renderer: Renderer
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] =
     (identify andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
         val json = Json.obj(
-          "mrn" -> request.userAnswers.mrn,
-          "arrivalId" -> arrivalId,
+          "mrn"                       -> request.userAnswers.mrn,
+          "arrivalId"                 -> arrivalId,
           "manageTransitMovementsUrl" -> appConfig.manageTransitMovementsUrl
         )
 
