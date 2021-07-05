@@ -21,7 +21,6 @@ import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{ParseFailure, ParseSuccess, XmlReader}
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 
 import java.time.LocalDate
 import scala.xml.Utility.trim
@@ -31,7 +30,7 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
 
   import UnloadingPermissionSpec._
 
-  val genUnloadingPermission: Gen[UnloadingPermission] = arbitrary[UnloadingPermission].map(_.copy(dateOfPreparation = LocalDate.of(2020, 12, 31)))
+  val genUnloadingPermission = arbitrary[UnloadingPermission].map(_.copy(dateOfPreparation = LocalDate.of(2020, 12, 31)))
 
   "UnloadingPermission" - {
 
@@ -63,14 +62,7 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
                 }
                 <TotGroMasHEA307>{grossMass}</TotGroMasHEA307>
               </HEAHEA>
-              <TRADESTRD>
-                <NamTRD7>{traderAtDestination.name}</NamTRD7>
-                <StrAndNumTRD22>{traderAtDestination.streetAndNumber}</StrAndNumTRD22>
-                <PosCodTRD23>{traderAtDestination.postCode}</PosCodTRD23>
-                <CitTRD24>{traderAtDestination.city}</CitTRD24>
-                <CouTRD25>{traderAtDestination.countryCode}</CouTRD25>
-                <TINTRD59>{traderAtDestination.eori}</TINTRD59>
-              </TRADESTRD>
+              {traderXml(traderAtDestination)}
               <CUSOFFPREOFFRES>
                 <RefNumRES1>{presentationOffice}</RefNumRES1>
               </CUSOFFPREOFFRES>
@@ -102,14 +94,7 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
             }
             <TotGroMasHEA307>{unloadingPermission.grossMass}</TotGroMasHEA307>
           </HEAHEA>
-          <TRADESTRD>
-            <NamTRD7>{unloadingPermission.traderAtDestination.name}</NamTRD7>
-            <StrAndNumTRD22>{unloadingPermission.traderAtDestination.streetAndNumber}</StrAndNumTRD22>
-            <PosCodTRD23>{unloadingPermission.traderAtDestination.postCode}</PosCodTRD23>
-            <CitTRD24>{unloadingPermission.traderAtDestination.city}</CitTRD24>
-            <CouTRD25>{unloadingPermission.traderAtDestination.countryCode}</CouTRD25>
-            <TINTRD59>{unloadingPermission.traderAtDestination.eori}</TINTRD59>
-          </TRADESTRD>
+          {traderXml(unloadingPermission.traderAtDestination)}
           <CUSOFFPREOFFRES>
             <RefNumRES1>{unloadingPermission.presentationOffice}</RefNumRES1>
           </CUSOFFPREOFFRES>
@@ -141,14 +126,7 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
             }
             <TotGroMasHEA307>{unloadingPermission.grossMass}</TotGroMasHEA307>
           </HEAHEA>
-          <TRADESTRD>
-            <NamTRD7>{unloadingPermission.traderAtDestination.name}</NamTRD7>
-            <StrAndNumTRD22>{unloadingPermission.traderAtDestination.streetAndNumber}</StrAndNumTRD22>
-            <PosCodTRD23>{unloadingPermission.traderAtDestination.postCode}</PosCodTRD23>
-            <CitTRD24>{unloadingPermission.traderAtDestination.city}</CitTRD24>
-            <CouTRD25>{unloadingPermission.traderAtDestination.countryCode}</CouTRD25>
-            <TINTRD59>{unloadingPermission.traderAtDestination.eori}</TINTRD59>
-          </TRADESTRD>
+          {traderXml(unloadingPermission.traderAtDestination)}
           <CUSOFFPREOFFRES>
             <RefNumRES1>{unloadingPermission.presentationOffice}</RefNumRES1>
           </CUSOFFPREOFFRES>
@@ -247,4 +225,54 @@ object UnloadingPermissionSpec {
     case None => NodeSeq.Empty
   }
 
+  def traderXml(traderAtDestination: TraderAtDestination): Elem = traderAtDestination match {
+
+    case traderWithEori: TraderAtDestinationWithEori => {
+
+      val name = traderWithEori.name.map {
+        name =>
+          <NamTRD7>{name}</NamTRD7>
+      }
+
+      val streetAndNumber = traderWithEori.streetAndNumber.map {
+        streetAndNumber =>
+          <StrAndNumTRD22>{streetAndNumber}</StrAndNumTRD22>
+      }
+
+      val postCode = traderWithEori.postCode.map {
+        postCode =>
+          <PosCodTRD23>{postCode}</PosCodTRD23>
+      }
+
+      val city = traderWithEori.city.map {
+        city =>
+          <CitTRD24>{city}</CitTRD24>
+      }
+
+      val countryCode = traderWithEori.countryCode.map {
+        countryCode =>
+          <CouTRD25>{countryCode}</CouTRD25>
+      }
+
+      <TRADESTRD>
+        {name.getOrElse(NodeSeq.Empty)}
+        {streetAndNumber.getOrElse(NodeSeq.Empty)}
+        {postCode.getOrElse(NodeSeq.Empty)}
+        {city.getOrElse(NodeSeq.Empty)}
+        {countryCode.getOrElse(NodeSeq.Empty)}
+        <TINTRD59>{traderWithEori.eori}</TINTRD59>
+      </TRADESTRD>
+
+    }
+    case traderWithOutEori: TraderAtDestinationWithoutEori => {
+
+      <TRADESTRD>
+        <NamTRD7>{traderWithOutEori.name}</NamTRD7>
+        <StrAndNumTRD22>{traderWithOutEori.streetAndNumber}</StrAndNumTRD22>
+        <PosCodTRD23>{traderWithOutEori.postCode}</PosCodTRD23>
+        <CitTRD24>{traderWithOutEori.city}</CitTRD24>
+        <CouTRD25>{traderWithOutEori.countryCode}</CouTRD25>
+      </TRADESTRD>
+    }
+  }
 }

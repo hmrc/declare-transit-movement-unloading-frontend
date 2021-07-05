@@ -15,7 +15,6 @@
  */
 
 package services
-
 import javax.inject.Inject
 import models.{Seals, UnloadingPermission, UserAnswers}
 import models.messages._

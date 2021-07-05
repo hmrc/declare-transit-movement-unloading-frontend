@@ -18,7 +18,7 @@ package viewModels
 
 import base.SpecBase
 import cats.data.NonEmptyList
-import models.{Index, Seals, TraderAtDestination, UnloadingPermission}
+import models.{Index, Seals, UnloadingPermission}
 import pages.NewSealNumberPage
 import uk.gov.hmrc.viewmodels.Text.Literal
 import utils.UnloadingSummaryRow
@@ -35,7 +35,7 @@ class SealsSectionSpec extends SpecBase {
     grossMass               = "1000",
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    traderAtDestination     = traderWithoutEori,
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),

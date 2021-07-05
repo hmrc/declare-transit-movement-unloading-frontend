@@ -16,6 +16,8 @@
 
 package generators
 
+import java.time.{LocalDate, LocalTime}
+
 import models.ErrorType.GenericError
 import models.messages._
 import models.{
@@ -27,7 +29,8 @@ import models.{
   NumberOfItemsPointer,
   NumberOfPackagesPointer,
   Seals,
-  TraderAtDestination,
+  TraderAtDestinationWithEori,
+  TraderAtDestinationWithoutEori,
   UnloadingDatePointer,
   UnloadingPermission,
   UnloadingRemarksRejectionMessage,
@@ -38,8 +41,6 @@ import org.scalacheck.Gen.choose
 import org.scalacheck.{Arbitrary, Gen}
 import utils.Format
 import utils.Format.dateFormatted
-
-import java.time.{LocalDate, LocalTime}
 
 trait MessagesModelGenerators extends Generators {
 
@@ -148,7 +149,7 @@ trait MessagesModelGenerators extends Generators {
       for {
         meta               <- arbitrary[Meta]
         header             <- arbitrary[Header]
-        traderDestination  <- arbitrary[TraderAtDestination]
+        traderDestination  <- Gen.oneOf(arbitrary[TraderAtDestinationWithEori], arbitrary[TraderAtDestinationWithoutEori])
         presentationOffice <- Gen.pick(UnloadingRemarksRequest.presentationOfficeLength, 'A' to 'Z')
         remarks            <- Gen.oneOf(arbitrary[RemarksConform], arbitrary[RemarksConformWithSeals], arbitrary[RemarksNonConform])
         resultOfControl    <- listWithMaxLength[ResultsOfControl](RemarksNonConform.resultsOfControlLength)

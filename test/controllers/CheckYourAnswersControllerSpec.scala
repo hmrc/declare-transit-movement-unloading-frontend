@@ -20,9 +20,8 @@ import audit.services.AuditEventSubmissionService
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import cats.data.NonEmptyList
 import config.FrontendAppConfig
-import generators.ModelGenerators
 import matchers.JsonMatchers.containJson
-import models.{TraderAtDestination, UnloadingPermission}
+import models.UnloadingPermission
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -47,7 +46,7 @@ class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFix
     grossMass               = "1000",
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    traderAtDestination     = traderWithoutEori,
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),

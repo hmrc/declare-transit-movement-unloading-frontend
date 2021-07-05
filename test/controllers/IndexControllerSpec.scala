@@ -18,7 +18,7 @@ package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import cats.data.NonEmptyList
-import models.{EoriNumber, Seals, TraderAtDestination, UnloadingPermission, UserAnswers}
+import models.{EoriNumber, Seals, UnloadingPermission, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
@@ -42,7 +42,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
     grossMass               = "1000",
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    traderAtDestination     = traderWithoutEori,
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
@@ -126,7 +126,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
         grossMass               = "1000",
         numberOfItems           = 1,
         numberOfPackages        = Some(1),
-        traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+        traderAtDestination     = traderWithoutEori,
         presentationOffice      = "GB000060",
         seals                   = None,
         goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
