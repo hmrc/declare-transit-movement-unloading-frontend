@@ -18,7 +18,7 @@ package viewModels
 
 import base.SpecBase
 import cats.data.NonEmptyList
-import models.{UnloadingPermission, UserAnswers}
+import models.{TraderAtDestination, UnloadingPermission, UserAnswers}
 import pages._
 import uk.gov.hmrc.viewmodels.Text.Literal
 
@@ -33,7 +33,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
     grossMass               = "1000",
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
-    traderAtDestination     = traderWithoutEori,
+    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
@@ -47,7 +47,7 @@ class CheckYourAnswersViewModelSpec extends SpecBase {
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
     grossMass               = "1000",
-    traderAtDestination     = traderWithoutEori,
+    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),

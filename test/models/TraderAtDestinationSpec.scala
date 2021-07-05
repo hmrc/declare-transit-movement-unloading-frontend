@@ -29,45 +29,8 @@ class TraderDestinationSpec extends FreeSpec with MustMatchers with ScalaCheckPr
 
   "TraderDestination" - {
 
-    "must serialize TraderAtDestinationWithEori to xml" in {
-      forAll(arbitrary[TraderAtDestinationWithEori]) {
-        trader =>
-          val nameNode = trader.name.map(
-            name => <NamTRD7>{escapeXml(name)}</NamTRD7>
-          )
-          val streetNameNode = trader.streetAndNumber.map(
-            streetName => <StrAndNumTRD22>{streetName}</StrAndNumTRD22>
-          )
-          val postCodeNode = trader.postCode.map(
-            postcode => <PosCodTRD23>{postcode}</PosCodTRD23>
-          )
-          val cityNode = trader.city.map(
-            city => <CitTRD24>{city}</CitTRD24>
-          )
-          val countryCodeNode = trader.countryCode.map(
-            countryCode => <CouTRD25>{countryCode}</CouTRD25>
-          )
-
-          val expectedResult =
-            <TRADESTRD>
-              {
-                nameNode.getOrElse(NodeSeq.Empty) ++
-                streetNameNode.getOrElse(NodeSeq.Empty) ++
-                postCodeNode.getOrElse(NodeSeq.Empty) ++
-                cityNode.getOrElse(NodeSeq.Empty) ++
-                countryCodeNode.getOrElse(NodeSeq.Empty)
-              }
-              <NADLNGRD>EN</NADLNGRD>
-              <TINTRD59>{trader.eori}</TINTRD59>
-            </TRADESTRD>
-
-          trader.toXml mustEqual expectedResult
-      }
-
-    }
-
-    "must serialize TraderAtDestinationWithoutEori to xml" in {
-      forAll(arbitrary[TraderAtDestinationWithoutEori]) {
+    "must serialize" in {
+      forAll(arbitrary[TraderAtDestination]) {
         trader =>
           val expectedResult =
             <TRADESTRD>
@@ -77,13 +40,12 @@ class TraderDestinationSpec extends FreeSpec with MustMatchers with ScalaCheckPr
               <CitTRD24>{trader.city}</CitTRD24>
               <CouTRD25>{trader.countryCode}</CouTRD25>
               <NADLNGRD>EN</NADLNGRD>
+              <TINTRD59>{trader.eori}</TINTRD59>
             </TRADESTRD>
 
           trader.toXml mustEqual expectedResult
       }
-
     }
-
   }
 
 }
