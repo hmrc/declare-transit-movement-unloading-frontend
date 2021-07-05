@@ -20,7 +20,7 @@ import cats.syntax.all._
 import com.lucidchart.open.xtract.XmlReader.strictReadSeq
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.XMLWrites._
-import models.{Seals, TraderAtDestination, XMLWrites}
+import models.{Seals, TraderAtDestination, TraderAtDestinationWithEori, TraderAtDestinationWithoutEori, XMLWrites}
 
 import scala.xml.{Elem, Node, NodeSeq}
 
@@ -50,18 +50,18 @@ object UnloadingRemarksRequest {
 
   implicit def writes: XMLWrites[UnloadingRemarksRequest] = XMLWrites[UnloadingRemarksRequest] {
     unloadingRemarksRequest =>
-      val UnloadingRemarksRequest(meta, header, traderAtDestination, presentationOffice, unloadingRemark, resultOfControl, seals) = unloadingRemarksRequest
-
       val parentNode: Node = <CC044A></CC044A>
 
       val childNodes: NodeSeq = {
-        meta.toXml ++
-          header.toXml ++
-          traderAtDestination.toXml ++
-          <CUSOFFPREOFFRES><RefNumRES1>{presentationOffice}</RefNumRES1></CUSOFFPREOFFRES> ++
-          unloadingRemarkNode(unloadingRemark) ++
-          resultOfControlNode(resultOfControl) ++
-          seals.map(_.toXml).getOrElse(NodeSeq.Empty)
+        unloadingRemarksRequest.meta.toXml ++
+          unloadingRemarksRequest.header.toXml ++
+          traderAtDesinationNode(unloadingRemarksRequest.traderAtDestination) ++
+          <CUSOFFPREOFFRES>
+            <RefNumRES1>{unloadingRemarksRequest.presentationOffice}</RefNumRES1>
+          </CUSOFFPREOFFRES> ++
+          unloadingRemarkNode(unloadingRemarksRequest.unloadingRemark) ++
+          resultOfControlNode(unloadingRemarksRequest.resultOfControl) ++
+          unloadingRemarksRequest.seals.map(_.toXml).getOrElse(NodeSeq.Empty)
       }
 
       Elem(parentNode.prefix, parentNode.label, parentNode.attributes, parentNode.scope, parentNode.child.isEmpty, parentNode.child ++ childNodes: _*)
@@ -81,6 +81,11 @@ object UnloadingRemarksRequest {
       case y: ResultsOfControlOther           => y.toXml
       case y: ResultsOfControlDifferentValues => y.toXml
     }
+
+  private def traderAtDesinationNode(traderAtDestination: TraderAtDestination): NodeSeq = traderAtDestination match {
+    case traderAtDestinationWithEori: TraderAtDestinationWithEori       => traderAtDestinationWithEori.toXml
+    case traderAtDestinationWithoutEori: TraderAtDestinationWithoutEori => traderAtDestinationWithoutEori.toXml
+  }
 
   private def unloadingRemarkNode(unloadingRemark: Remarks): NodeSeq = unloadingRemark match {
     case remarksConform: RemarksConform                   => remarksConform.toXml

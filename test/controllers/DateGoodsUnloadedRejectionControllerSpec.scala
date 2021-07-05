@@ -23,7 +23,7 @@ import config.FrontendAppConfig
 import forms.DateGoodsUnloadedFormProvider
 import matchers.JsonMatchers
 import models.ErrorType.IncorrectValue
-import models.{DefaultPointer, FunctionalError, TraderAtDestination, UnloadingPermission, UnloadingRemarksRejectionMessage}
+import models.{DefaultPointer, FunctionalError, UnloadingPermission, UnloadingRemarksRejectionMessage}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
@@ -52,7 +52,7 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
     grossMass               = "1000",
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    traderAtDestination     = traderWithoutEori,
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),

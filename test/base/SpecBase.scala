@@ -17,7 +17,18 @@
 package base
 
 import cats.data.NonEmptyList
-import models.{ArrivalId, EoriNumber, GoodsItem, MovementReferenceNumber, Packages, ProducedDocument, UserAnswers}
+import config.FrontendAppConfig
+import models.{
+  ArrivalId,
+  EoriNumber,
+  GoodsItem,
+  MovementReferenceNumber,
+  Packages,
+  ProducedDocument,
+  TraderAtDestinationWithoutEori,
+  UnloadingPermission,
+  UserAnswers
+}
 import org.scalatest._
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
@@ -25,7 +36,10 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.i18n.Messages
 import play.api.libs.json.Json
 import play.api.mvc.AnyContentAsEmpty
+import play.api.test.Helpers.baseApplicationBuilder.injector
 import play.api.test.{FakeRequest, Helpers}
+
+import java.time.LocalDate
 
 trait SpecBase
     extends FreeSpec
@@ -42,6 +56,9 @@ trait SpecBase
   val mrn: MovementReferenceNumber  = MovementReferenceNumber("19", "GB", "1234567890123")
   val eoriNumber: EoriNumber        = EoriNumber("id")
   def emptyUserAnswers: UserAnswers = UserAnswers(arrivalId, mrn, eoriNumber, Json.obj())
+
+  protected lazy val traderWithoutEori: TraderAtDestinationWithoutEori =
+    TraderAtDestinationWithoutEori("The Luggage Carriers", "1 The Street,", "SS8 2BB", ",", "GB")
 
   protected lazy val packages: Packages = Packages(Some("Ref."), "BX", Some(1), None)
 
