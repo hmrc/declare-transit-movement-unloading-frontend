@@ -21,7 +21,7 @@ import cats.data.NonEmptyList
 import config.FrontendAppConfig
 import forms.DateGoodsUnloadedFormProvider
 import matchers.JsonMatchers
-import models.{NormalMode, UnloadingPermission}
+import models.{NormalMode, TraderAtDestination, UnloadingPermission}
 import navigation.{FakeUnloadingPermissionNavigator, NavigatorUnloadingPermission}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
@@ -52,7 +52,7 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
     grossMass               = "1000",
     numberOfItems           = 1,
     numberOfPackages        = Some(1),
-    traderAtDestination     = traderWithoutEori,
+    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
     presentationOffice      = "GB000060",
     seals                   = None,
     goodsItems              = NonEmptyList(goodsItemMandatory, Nil),

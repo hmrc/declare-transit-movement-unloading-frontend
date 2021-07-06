@@ -17,14 +17,13 @@
 package models.messages
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
-import models.{TraderAtDestination, TraderAtDestinationWithEori, TraderAtDestinationWithoutEori}
+import models.XMLWrites._
 import org.scalacheck.Arbitrary._
 import org.scalatest.{FreeSpec, MustMatchers, OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import models.XMLWrites._
 
-import scala.xml.{Node, NodeSeq}
 import scala.xml.Utility.trim
+import scala.xml.{Node, NodeSeq}
 
 class UnloadingRemarksRequestSpec
     extends FreeSpec
@@ -44,7 +43,7 @@ class UnloadingRemarksRequestSpec
             <CC044A>
               {unloadingRemarksRequest.meta.toXml}
               {unloadingRemarksRequest.header.toXml}
-              {traderAtDesinationNode(unloadingRemarksRequest.traderAtDestination)}
+              {unloadingRemarksRequest.traderAtDestination.toXml}
               <CUSOFFPREOFFRES>
                 <RefNumRES1>{unloadingRemarksRequest.presentationOffice}</RefNumRES1>
               </CUSOFFPREOFFRES>
@@ -70,13 +69,6 @@ class UnloadingRemarksRequestSpec
 
   }
 
-  //TODO: Get toXml on TraderAtDestination interface so we don't have to do this
-  private def traderAtDesinationNode(traderAtDestination: TraderAtDestination): NodeSeq = traderAtDestination match {
-    case traderAtDestinationWithEori: TraderAtDestinationWithEori       => traderAtDestinationWithEori.toXml
-    case traderAtDestinationWithoutEori: TraderAtDestinationWithoutEori => traderAtDestinationWithoutEori.toXml
-  }
-
-  //TODO: Get toXml on Remarks interface so we don't have to do this
   private def unloadingRemarkNode(unloadingRemark: Remarks): NodeSeq = unloadingRemark match {
     case remarksConform: RemarksConform                   => remarksConform.toXml
     case remarksConformWithSeals: RemarksConformWithSeals => remarksConformWithSeals.toXml
