@@ -50,6 +50,8 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   lazy val loginHmrcServiceUrl: String = configuration.get[String]("urls.loginHmrcService")
 
+  val isNIJourneyEnabled: Boolean = configuration.getOptional[Boolean]("microservice.services.features.isNIJourneyEnabled").getOrElse(false)
+
   lazy val nctsEnquiriesUrl: String = configuration.get[String]("urls.nctsEnquiries")
   lazy val timeoutSeconds: String   = configuration.get[String]("session.timeoutSeconds")
   lazy val countdownSeconds: String = configuration.get[String]("session.countdownSeconds")
