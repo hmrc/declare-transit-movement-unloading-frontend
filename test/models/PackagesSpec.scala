@@ -83,7 +83,7 @@ class PackagesSpec extends FreeSpec with MustMatchers with Generators with Scala
           val marksAndNumberPackage = packages.marksAndNumberPackage
             .map {
               marksAndNumber =>
-                <MarNumOfPacGS21>{escapeXml(marksAndNumber)}</MarNumOfPacGS21>
+                <MarNumOfPacGS21>{marksAndNumber}</MarNumOfPacGS21>
                   <MarNumOfPacGS21LNG>EN</MarNumOfPacGS21LNG>
             }
 

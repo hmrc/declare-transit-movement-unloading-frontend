@@ -35,7 +35,7 @@ object Header {
   implicit def writes: XMLWrites[Header] = XMLWrites[Header] {
     header =>
       <HEAHEA>
-        <DocNumHEA5>{escapeXml(header.movementReferenceNumber)}</DocNumHEA5>
+        <DocNumHEA5>{header.movementReferenceNumber}</DocNumHEA5>
         {
           header.transportIdentity.fold(NodeSeq.Empty) { transportIdentity =>
             <IdeOfMeaOfTraAtDHEA78>{escapeXml(transportIdentity)}</IdeOfMeaOfTraAtDHEA78>

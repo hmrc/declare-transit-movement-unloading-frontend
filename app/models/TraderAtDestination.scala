@@ -18,7 +18,6 @@ package models
 
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
-import models.messages.escapeXml
 
 case class TraderAtDestination(
   eori: String,
@@ -54,7 +53,7 @@ object TraderAtDestination {
       val TraderAtDestination(eori, name, streetAndNumber, postCode, city, countryCode) = trader
 
       <TRADESTRD>
-        <NamTRD7>{escapeXml(name)}</NamTRD7>
+        <NamTRD7>{name}</NamTRD7>
         <StrAndNumTRD22>{streetAndNumber}</StrAndNumTRD22>
         <PosCodTRD23>{postCode}</PosCodTRD23>
         <CitTRD24>{city}</CitTRD24>

@@ -31,7 +31,7 @@ object InterchangeControlReference {
   implicit val writes: XMLWrites[InterchangeControlReference] =
     XMLWrites {
       a =>
-        <IntConRefMES11>{escapeXml(s"$prefix${a.date}${a.index}")}</IntConRefMES11>
+        <IntConRefMES11>{(s"$prefix${a.date}${a.index}")}</IntConRefMES11>
     }
 
   implicit val interchangeControlReferenceXmlReads: XmlReader[InterchangeControlReference] = {
