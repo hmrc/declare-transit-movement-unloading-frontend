@@ -250,8 +250,8 @@ anythingElseToReport.heading = Is there anything else to report?
 anythingElseToReport.checkYourAnswersLabel = Is there anything else to report?
 anythingElseToReport.error.required = Select yes if there is anything else to report
 
-confirmation.title = confirmation
-confirmation.heading = Sent unloading remarks
+confirmation.title = Unloading remarks sent
+confirmation.heading = Unloading remarks sent
 
 confirmation.para = for movement reference number
 confirmation.subHeading= What happens next
