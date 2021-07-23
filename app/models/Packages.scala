@@ -15,7 +15,6 @@
  */
 
 package models
-import models.messages.escapeXml
 
 import com.lucidchart.open.xtract.{__, XmlReader}
 import com.lucidchart.open.xtract.XmlReader._
@@ -48,11 +47,11 @@ object Packages {
         {
         packages.marksAndNumberPackage.fold(NodeSeq.Empty) {
           marksAndNumberPackage =>
-            <MarNumOfPacGS21>{escapeXml(marksAndNumberPackage)}</MarNumOfPacGS21>
+            <MarNumOfPacGS21>{marksAndNumberPackage}</MarNumOfPacGS21>
               <MarNumOfPacGS21LNG>{LanguageCodeEnglish.code}</MarNumOfPacGS21LNG>
         }
         }
-        <KinOfPacGS23>{escapeXml(packages.kindOfPackage)}</KinOfPacGS23>
+        <KinOfPacGS23>{packages.kindOfPackage}</KinOfPacGS23>
         {
         packages.numberOfPackages.fold(NodeSeq.Empty) {
           numberOfPackages =>
