@@ -64,7 +64,7 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
         forAll(arbitrary[UnloadingPermission]) {
           unloadingPermission =>
             val userAnswersUpdated = emptyUserAnswers
-              .set(VehicleRegistrationCountryPage, Country("state", "FR", "description"))
+              .set(VehicleRegistrationCountryPage, Country("FR", "description"))
               .success
               .value
 
@@ -131,7 +131,7 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               .set(VehicleNameRegistrationReferencePage, "reference")
               .success
               .value
-              .set(VehicleRegistrationCountryPage, Country("state", "FR", "description"))
+              .set(VehicleRegistrationCountryPage, Country("FR", "description"))
               .success
               .value
 

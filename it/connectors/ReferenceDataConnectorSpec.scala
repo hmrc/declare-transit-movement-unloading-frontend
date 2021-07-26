@@ -28,8 +28,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMockSuite
-  with MustMatchers with ScalaCheckPropertyChecks with IntegrationPatience {
+class ReferenceDataConnectorSpec
+    extends FreeSpec
+    with ScalaFutures
+    with WireMockSuite
+    with MustMatchers
+    with ScalaCheckPropertyChecks
+    with IntegrationPatience {
 
   import ReferenceDataConnectorSpec._
 
@@ -51,8 +56,8 @@ class ReferenceDataConnectorSpec extends FreeSpec with ScalaFutures with WireMoc
 
         running(app) {
           val expectedResult = Seq(
-            Country("valid", "GB", "United Kingdom"),
-            Country("valid", "AD", "Andorra")
+            Country("GB", "United Kingdom"),
+            Country("AD", "Andorra")
           )
 
           val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]

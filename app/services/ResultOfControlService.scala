@@ -71,7 +71,7 @@ class ResultOfControlServiceImpl extends ResultOfControlService {
   private def resultsOfControlCountry(questionPage: QuestionPage[Country], pointerIdentity: PointerIdentity)(
     implicit ua: UserAnswers): Seq[ResultsOfControlDifferentValues] =
     ua.get(questionPage) match {
-      case Some(Country(_, code, _)) =>
+      case Some(Country(code, _)) =>
         Seq(
           ResultsOfControlDifferentValues(
             PointerToAttribute(pointerIdentity),

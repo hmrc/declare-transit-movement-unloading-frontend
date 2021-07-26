@@ -154,10 +154,9 @@ trait ModelGenerators {
   implicit lazy val arbitraryCountry: Arbitrary[Country] = {
     Arbitrary {
       for {
-        state <- Gen.oneOf(Seq("Valid", "Invalid"))
         code  <- Gen.pick(2, 'A' to 'Z')
         name  <- arbitrary[String]
-      } yield Country(state, code.mkString, name)
+      } yield Country(code.mkString, name)
     }
   }
 

@@ -40,7 +40,7 @@ import scala.concurrent.Future
 class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
   val formProvider                                       = new VehicleRegistrationCountryFormProvider()
-  private val country: Country                           = Country("valid", "GB", "United Kingdom")
+  private val country: Country                           = Country("GB", "United Kingdom")
   val countries                                          = Seq(country)
   val form: Form[Country]                                = formProvider(countries)
   val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
