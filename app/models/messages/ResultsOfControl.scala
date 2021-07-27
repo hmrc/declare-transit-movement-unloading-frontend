@@ -15,6 +15,7 @@
  */
 
 package models.messages
+
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.{LanguageCodeEnglish, XMLWrites}
@@ -40,13 +41,15 @@ object ResultsOfControlSealsNotReadable extends ResultsOfControlOther("Some seal
 object ResultsOfControlSealsUpdated extends ResultsOfControlOther("Seals have been updated")
 
 object ResultsOfControlOther {
-  implicit val writes: XMLWrites[ResultsOfControlOther] = {
-    XMLWrites(resultsOfControl => <RESOFCON534>
+
+  implicit val writes: XMLWrites[ResultsOfControlOther] =
+    XMLWrites(
+      resultsOfControl => <RESOFCON534>
         <DesTOC2>{resultsOfControl.description}</DesTOC2>
         <DesTOC2LNG>{LanguageCodeEnglish.code}</DesTOC2LNG>
         <ConInd424>{resultsOfControl.controlIndicator.indicator.value}</ConInd424>
-      </RESOFCON534>)
-  }
+      </RESOFCON534>
+    )
 
   implicit val xmlReader: XmlReader[ResultsOfControlOther] = (__ \ "DesTOC2").read[String] map apply
 
@@ -58,13 +61,14 @@ case class ResultsOfControlDifferentValues(pointerToAttribute: PointerToAttribut
 
 object ResultsOfControlDifferentValues {
 
-  implicit val writes: XMLWrites[ResultsOfControlDifferentValues] = {
-    XMLWrites(resultsOfControl => <RESOFCON534>
+  implicit val writes: XMLWrites[ResultsOfControlDifferentValues] =
+    XMLWrites(
+      resultsOfControl => <RESOFCON534>
       <ConInd424>{resultsOfControl.controlIndicator.indicator.value}</ConInd424>
       <PoiToTheAttTOC5>{resultsOfControl.pointerToAttribute.pointer.value}</PoiToTheAttTOC5>
       <CorValTOC4>{resultsOfControl.correctedValue}</CorValTOC4>
-    </RESOFCON534>)
-  }
+    </RESOFCON534>
+    )
 
   implicit val xmlReader: XmlReader[ResultsOfControlDifferentValues] =
     (__.read[PointerToAttribute], (__ \ "CorValTOC4").read[String]).mapN(apply)

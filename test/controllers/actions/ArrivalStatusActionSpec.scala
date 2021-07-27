@@ -56,12 +56,11 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
 
   "a check cancellation status action" - {
     "will get a 200 and will load the correct page when the departure status is UnloadingPermission" in {
-      val mockArrivalResponse: ResponseArrival = {
+      val mockArrivalResponse: ResponseArrival =
         ResponseArrival(
           ArrivalId(1),
           ArrivalStatus.UnloadingRemarksRejected
         )
-      }
 
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
@@ -80,12 +79,11 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
   }
 
   "will get a 400 and will load the cannot cancel page when the departure status is invalid" in {
-    val mockArrivalResponse: ResponseArrival = {
+    val mockArrivalResponse: ResponseArrival =
       ResponseArrival(
         ArrivalId(1),
         ArrivalStatus.ArrivalSubmitted
       )
-    }
 
     when(mockRenderer.render(any(), any())(any()))
       .thenReturn(Future.successful(Html("")))
@@ -103,7 +101,7 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
 
     status(result) mustEqual BAD_REQUEST
     verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-    contentAsString(result) must not be ("fake ok result value")
+    contentAsString(result) must not be "fake ok result value"
     templateCaptor.getValue mustEqual "canNotSendUnloadingRemarks.njk"
   }
 
@@ -125,7 +123,7 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
 
     status(result) mustEqual NOT_FOUND
     verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
-    contentAsString(result) must not be ("fake ok result value")
+    contentAsString(result) must not be "fake ok result value"
     templateCaptor.getValue mustEqual "canNotSendUnloadingRemarks.njk"
   }
 

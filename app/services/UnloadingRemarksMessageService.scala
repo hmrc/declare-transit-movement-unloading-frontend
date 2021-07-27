@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnloadingRemarksMessageService @Inject()(connector: UnloadingConnector) {
+class UnloadingRemarksMessageService @Inject() (connector: UnloadingConnector) {
 
   def unloadingRemarksMessage(arrivalId: ArrivalId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[UnloadingRemarksRequest]] =
     connector.getSummary(arrivalId) flatMap {

@@ -23,17 +23,15 @@ import pages.{ConfirmRemoveSealPage, _}
 import play.api.mvc.Call
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
 
     case UnloadingGuidancePage =>
-      ua =>
-        routes.DateGoodsUnloadedController.onPageLoad(ua.id, NormalMode)
+      ua => routes.DateGoodsUnloadedController.onPageLoad(ua.id, NormalMode)
 
     case DateGoodsUnloadedPage =>
-      ua =>
-        routes.CanSealsBeReadController.onPageLoad(ua.id, NormalMode)
+      ua => routes.CanSealsBeReadController.onPageLoad(ua.id, NormalMode)
 
     case CanSealsBeReadPage =>
       ua =>
@@ -50,49 +48,37 @@ class Navigator @Inject()() {
         }
 
     case ChangesToReportPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
 
     case NewSealNumberPage(_) =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
 
     case ConfirmRemoveCommentsPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
 
     case ConfirmRemoveSealPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
 
     case _ =>
-      ua =>
-        routes.IndexController.onPageLoad(ua.id)
+      ua => routes.IndexController.onPageLoad(ua.id)
 
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
     case VehicleNameRegistrationReferencePage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
     case VehicleRegistrationCountryPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
     case GrossMassAmountPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
     case TotalNumberOfItemsPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
     case TotalNumberOfPackagesPage =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
     case NewSealNumberPage(_) =>
-      ua =>
-        routes.UnloadingSummaryController.onPageLoad(ua.id)
+      ua => routes.UnloadingSummaryController.onPageLoad(ua.id)
     case _ =>
-      ua =>
-        routes.CheckYourAnswersController.onPageLoad(ua.id)
+      ua => routes.CheckYourAnswersController.onPageLoad(ua.id)
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {

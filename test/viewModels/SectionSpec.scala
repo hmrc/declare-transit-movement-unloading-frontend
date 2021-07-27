@@ -66,7 +66,7 @@ class SectionSpec extends FreeSpec with MustMatchers with NunjucksSupport with G
         sectionTitle = Some(sectionTitle),
         rows = Seq(
           Row(
-            key   = key,
+            key = key,
             value = value,
             actions = List(
               action

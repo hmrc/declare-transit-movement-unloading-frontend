@@ -47,16 +47,16 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
 
   val unloadingPermission = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
-    transportIdentity       = None,
-    transportCountry        = None,
-    grossMass               = "1000",
-    numberOfItems           = 1,
-    numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
-    presentationOffice      = "GB000060",
-    seals                   = None,
-    goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
-    dateOfPreparation       = dateOfPreparation
+    transportIdentity = None,
+    transportCountry = None,
+    grossMass = "1000",
+    numberOfItems = 1,
+    numberOfPackages = Some(1),
+    traderAtDestination = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    presentationOffice = "GB000060",
+    seals = None,
+    goodsItems = NonEmptyList(goodsItemMandatory, Nil),
+    dateOfPreparation = dateOfPreparation
   )
 
   private def form = new DateGoodsUnloadedFormProvider(stubClock)(dateOfPreparation)

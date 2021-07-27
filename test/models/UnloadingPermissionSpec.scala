@@ -48,8 +48,9 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
                                                        presentationOffice,
                                                        seals,
                                                        goodsItems,
-                                                       _) =>
-          val expectedResult = {
+                                                       _
+            ) =>
+          val expectedResult =
             <CC043A>
               <HEAHEA>
                 <DocNumHEA5>{movementReferenceNumber}</DocNumHEA5>
@@ -57,10 +58,11 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
                 {transportCountryXml(transportCountry).getOrElse(NodeSeq.Empty)}
                 <TotNumOfIteHEA305>{numberOfItems}</TotNumOfIteHEA305>
                 {
-                  numberOfPackages.fold(NodeSeq.Empty) { numberOfPackages =>
-                    <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
-                  }
-                }
+              numberOfPackages.fold(NodeSeq.Empty) {
+                numberOfPackages =>
+                  <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
+              }
+            }
                 <TotGroMasHEA307>{grossMass}</TotGroMasHEA307>
               </HEAHEA>
               <TRADESTRD>
@@ -78,7 +80,6 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
               {goodsItemsXml(goodsItems)}
               <DatOfPreMES9>20201231</DatOfPreMES9>
             </CC043A>
-          }
 
           XmlReader.of[UnloadingPermission].read(trim(expectedResult)) mustBe ParseSuccess(unloadingPermission)
       }
@@ -88,7 +89,7 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
 
       val unloadingPermission = genUnloadingPermission.sample.value
 
-      val expectedResult = {
+      val expectedResult =
         <CC043A>
           <HEAHEA>
             <DocNumHEA5>{unloadingPermission.movementReferenceNumber}</DocNumHEA5>
@@ -96,10 +97,11 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
             {transportCountryXml(unloadingPermission.transportCountry).getOrElse(NodeSeq.Empty)}
             <TotNumOfIteHEA305>{unloadingPermission.numberOfItems}</TotNumOfIteHEA305>
             {
-              unloadingPermission.numberOfPackages.fold(NodeSeq.Empty) { numberOfPackages =>
-                <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
-              }
-            }
+          unloadingPermission.numberOfPackages.fold(NodeSeq.Empty) {
+            numberOfPackages =>
+              <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
+          }
+        }
             <TotGroMasHEA307>{unloadingPermission.grossMass}</TotGroMasHEA307>
           </HEAHEA>
           <TRADESTRD>
@@ -116,7 +118,6 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
           {sealsXml(unloadingPermission.seals)}
           <DatOfPreMES9>20201231</DatOfPreMES9>
         </CC043A>
-      }
 
       XmlReader.of[UnloadingPermission].read(trim(expectedResult)) mustBe ParseFailure(List())
     }
@@ -127,7 +128,7 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
 
       val unloadingPermission = unloadingPermissionObject.sample.get
 
-      val expectedResult = {
+      val expectedResult =
         <CC043A>
           <HEAHEA>
             <DocNumHEA5>{unloadingPermission.movementReferenceNumber}</DocNumHEA5>
@@ -135,10 +136,11 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
             {transportCountryXml(unloadingPermission.transportCountry).getOrElse(NodeSeq.Empty)}
             <TotNumOfIteHEA305>{unloadingPermission.numberOfItems}</TotNumOfIteHEA305>
             {
-              unloadingPermission.numberOfPackages.fold(NodeSeq.Empty) { numberOfPackages =>
-                <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
-              }
-            }
+          unloadingPermission.numberOfPackages.fold(NodeSeq.Empty) {
+            numberOfPackages =>
+              <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
+          }
+        }
             <TotGroMasHEA307>{unloadingPermission.grossMass}</TotGroMasHEA307>
           </HEAHEA>
           <TRADESTRD>
@@ -156,7 +158,6 @@ class UnloadingPermissionSpec extends SpecBase with Generators {
           {goodsItemsXml(unloadingPermission.goodsItems, ignorePackages = true)}
           <DatOfPreMES9>20201231</DatOfPreMES9>
         </CC043A>
-      }
 
       XmlReader.of[UnloadingPermission].read(trim(expectedResult)) mustBe ParseFailure(List())
     }
@@ -172,14 +173,14 @@ object UnloadingPermissionSpec {
       transportIdentity.map {
         transportIdentity =>
           <IdeOfMeaOfTraAtDHEA78>{transportIdentity}</IdeOfMeaOfTraAtDHEA78>
-    }
+      }
 
   val transportCountryXml: Option[String] => Option[Elem] =
     transportCountry =>
       transportCountry.map {
         transportCountry =>
           <NatOfMeaOfTraAtDHEA80>{transportCountry}</NatOfMeaOfTraAtDHEA80>
-    }
+      }
 
   def goodsItemsXml(goodsItem: NonEmptyList[GoodsItem], ignorePackages: Boolean = false) = {
 
@@ -222,8 +223,8 @@ object UnloadingPermissionSpec {
           containers.map {
             x => <CONNR2>{x}</CONNR2>
           }
-          }
-          {if(!ignorePackages) packages(goodsItem) }
+        }
+          {if (!ignorePackages) packages(goodsItem)}
           {sensitiveGoodsInformation(goodsItem)}
         </GOOITEGDS>
     }
@@ -232,18 +233,17 @@ object UnloadingPermissionSpec {
   }
 
   def sealsXml(seals: Option[Seals]) = seals match {
-    case Some(sealValues) => {
+    case Some(sealValues) =>
       <SEAINFSLI>
         <SeaNumSLI2>{sealValues.numberOfSeals}</SeaNumSLI2>
         <SEAIDSID>
           {
-          sealValues.SealId.map {
-            sealId => <SeaIdeSID1>{sealId}</SeaIdeSID1>
-          }
-          }
+        sealValues.SealId.map {
+          sealId => <SeaIdeSID1>{sealId}</SeaIdeSID1>
+        }
+      }
         </SEAIDSID>
       </SEAINFSLI>
-    }
     case None => NodeSeq.Empty
   }
 

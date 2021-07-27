@@ -15,6 +15,7 @@
  */
 
 package viewModels
+
 import cats.data.NonEmptyList
 import models.reference.Country
 import models.{GoodsItem, Index, UserAnswers}
@@ -67,7 +68,7 @@ object SummaryRow {
             case (None, Some(x)) => Seq(buildRow(x))
             case (_, _)          => Nil
           }
-    }
+        }
 
   val rowInt: StandardRowInt =
     userAnswer =>
@@ -78,7 +79,7 @@ object SummaryRow {
             case (None, Some(x)) => Seq(buildRow(x))
             case (_, _)          => Nil
           }
-    }
+        }
 
   val rowWithIndex: RowWithIndex =
     index =>
@@ -89,18 +90,17 @@ object SummaryRow {
               case (Some(x), _) => buildRow(index, x)
               case (None, x)    => buildRow(index, x)
             }
-    }
+          }
 
   val rowSeals: SealRows =
     sequence =>
       userAnswers =>
         buildRow =>
-          sequence.zipWithIndex.map(
-            unloadingPermissionValue => {
+          sequence.zipWithIndex.map {
+            unloadingPermissionValue =>
               val sealAnswer = SummaryRow.userAnswerWithIndex(Index(unloadingPermissionValue._2))(userAnswers)(NewSealNumberPage)
               SummaryRow.rowWithIndex(Index(unloadingPermissionValue._2))(sealAnswer)(unloadingPermissionValue._1)(buildRow)
-            }
-    )
+          }
 
   val rowGoodsItemWithIndex: GoodsItemRow =
     index =>
@@ -111,16 +111,15 @@ object SummaryRow {
               case (Some(x), _) => buildRow(index, x)
               case (None, x)    => buildRow(index, x.description)
             }
-    }
+          }
 
   val rowGoodsItems: GoodsItemRows =
     sequence =>
       _ =>
         buildRow =>
-          sequence.zipWithIndex.map(
-            unloadingPermissionValue => {
+          sequence.zipWithIndex.map {
+            unloadingPermissionValue =>
               val answer = None //TODO: Call get on UserAnswers when this is available
               SummaryRow.rowGoodsItemWithIndex(Index(unloadingPermissionValue._2))(answer)(unloadingPermissionValue._1)(buildRow)
-            }
-    )
+          }
 }

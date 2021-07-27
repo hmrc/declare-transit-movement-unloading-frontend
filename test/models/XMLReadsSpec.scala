@@ -34,6 +34,7 @@ class XMLReadsSpec extends SpecBase with Generators {
   case class Sample(name: String, age: Int)
 
   object Sample {
+
     implicit val xmlReader: XmlReader[Sample] = (
       (__ \ "name").read[String],
       (__ \ "age").read[Int]

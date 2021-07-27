@@ -15,6 +15,7 @@
  */
 
 package models.messages
+
 import java.time.{LocalDate, LocalTime}
 
 import com.lucidchart.open.xtract.{__, XmlReader}
@@ -29,16 +30,17 @@ import scala.xml.NodeSeq
 case class Meta(interchangeControlReference: InterchangeControlReference,
                 dateOfPreparation: LocalDate,
                 timeOfPreparation: LocalTime,
-                senderIdentificationCodeQualifier: Option[String]    = None,
+                senderIdentificationCodeQualifier: Option[String] = None,
                 recipientIdentificationCodeQualifier: Option[String] = None,
-                recipientsReferencePassword: Option[String]          = None,
+                recipientsReferencePassword: Option[String] = None,
                 recipientsReferencePasswordQualifier: Option[String] = None,
-                priority: Option[String]                             = None,
-                acknowledgementRequest: Option[String]               = None,
-                communicationsAgreementId: Option[String]            = None,
-                commonAccessReference: Option[String]                = None,
-                messageSequenceNumber: Option[String]                = None,
-                firstAndLastTransfer: Option[String]                 = None)
+                priority: Option[String] = None,
+                acknowledgementRequest: Option[String] = None,
+                communicationsAgreementId: Option[String] = None,
+                commonAccessReference: Option[String] = None,
+                messageSequenceNumber: Option[String] = None,
+                firstAndLastTransfer: Option[String] = None
+)
 
 object Meta {
 
@@ -60,59 +62,60 @@ object Meta {
           <MesRecMES6>NCTS</MesRecMES6>
             <DatOfPreMES9>{Format.dateFormatted(a.dateOfPreparation)}</DatOfPreMES9>
             <TimOfPreMES10>{Format.timeFormatted(a.timeOfPreparation)}</TimOfPreMES10> ++ {
-          a.interchangeControlReference.toXml
-        } ++ {
-          a.recipientsReferencePassword.fold(NodeSeq.Empty) {
-            recipientsReferencePassword =>
-              <RecRefMES12>{recipientsReferencePassword}</RecRefMES12>
-          }
-        } ++ {
-          a.recipientsReferencePasswordQualifier.fold(NodeSeq.Empty) {
-            recipientsReferencePasswordQualifier =>
-              <RecRefQuaMES13>{recipientsReferencePasswordQualifier}</RecRefQuaMES13>
-          }
-        } ++
+            a.interchangeControlReference.toXml
+          } ++ {
+            a.recipientsReferencePassword.fold(NodeSeq.Empty) {
+              recipientsReferencePassword =>
+                <RecRefMES12>{recipientsReferencePassword}</RecRefMES12>
+            }
+          } ++ {
+            a.recipientsReferencePasswordQualifier.fold(NodeSeq.Empty) {
+              recipientsReferencePasswordQualifier =>
+                <RecRefQuaMES13>{recipientsReferencePasswordQualifier}</RecRefQuaMES13>
+            }
+          } ++
           <AppRefMES14>NCTS</AppRefMES14> ++ {
 
-          a.priority.fold(NodeSeq.Empty) {
-            priority =>
-              <PriMES15>{priority}</PriMES15>
-          }
-        } ++ {
+            a.priority.fold(NodeSeq.Empty) {
+              priority =>
+                <PriMES15>{priority}</PriMES15>
+            }
+          } ++ {
 
-          a.acknowledgementRequest.fold(NodeSeq.Empty) {
-            acknowledgementRequest =>
-              <AckReqMES16>{acknowledgementRequest}</AckReqMES16>
-          }
-        } ++ {
+            a.acknowledgementRequest.fold(NodeSeq.Empty) {
+              acknowledgementRequest =>
+                <AckReqMES16>{acknowledgementRequest}</AckReqMES16>
+            }
+          } ++ {
 
-          a.communicationsAgreementId.fold(NodeSeq.Empty) {
-            communicationsAgreementId =>
-              <ComAgrIdMES17>{communicationsAgreementId}</ComAgrIdMES17>
-          }
+            a.communicationsAgreementId.fold(NodeSeq.Empty) {
+              communicationsAgreementId =>
+                <ComAgrIdMES17>{communicationsAgreementId}</ComAgrIdMES17>
+            }
 
-        } ++
+          } ++
           <TesIndMES18>0</TesIndMES18>
             <MesIdeMES19>1</MesIdeMES19>
             <MesTypMES20>GB044A</MesTypMES20> ++ {
 
-          a.commonAccessReference.fold(NodeSeq.Empty) {
-            commonAccessReference =>
-              <ComAccRefMES21>{commonAccessReference}</ComAccRefMES21>
-          }
-        } ++ {
+            a.commonAccessReference.fold(NodeSeq.Empty) {
+              commonAccessReference =>
+                <ComAccRefMES21>{commonAccessReference}</ComAccRefMES21>
+            }
+          } ++ {
 
-          a.messageSequenceNumber.fold(NodeSeq.Empty) {
-            messageSequenceNumber =>
-              <MesSeqNumMES22>{messageSequenceNumber}</MesSeqNumMES22>
-          }
-        } ++ {
+            a.messageSequenceNumber.fold(NodeSeq.Empty) {
+              messageSequenceNumber =>
+                <MesSeqNumMES22>{messageSequenceNumber}</MesSeqNumMES22>
+            }
+          } ++ {
 
-          a.firstAndLastTransfer.fold(NodeSeq.Empty) {
-            firstAndLastTransfer =>
-              <FirAndLasTraMES23>{firstAndLastTransfer}</FirAndLasTraMES23>
+            a.firstAndLastTransfer.fold(NodeSeq.Empty) {
+              firstAndLastTransfer =>
+                <FirAndLasTraMES23>{firstAndLastTransfer}</FirAndLasTraMES23>
+            }
           }
-      })
+    )
 
   implicit val reads: XmlReader[Meta] = (
     (__ \ "IntConRefMES11").read[InterchangeControlReference],

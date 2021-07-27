@@ -15,6 +15,7 @@
  */
 
 package models
+
 import cats.data.NonEmptyList
 import com.lucidchart.open.xtract.{__, XmlReader}
 import com.lucidchart.open.xtract.XmlReader._

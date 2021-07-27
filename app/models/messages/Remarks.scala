@@ -15,6 +15,7 @@
  */
 
 package models.messages
+
 import java.time.LocalDate
 
 import cats.syntax.all._
@@ -31,10 +32,11 @@ sealed trait Remarks {
 }
 
 object Remarks {
+
   implicit lazy val xmlReader: XmlReader[Remarks] = XmlReader {
     xml =>
-      val confirm     = (__ \ "ConREM65")
-      val stateOfSeal = (__ \ "StaOfTheSeaOKREM19")
+      val confirm     = __ \ "ConREM65"
+      val stateOfSeal = __ \ "StaOfTheSeaOKREM19"
 
       (confirm(xml).text, stateOfSeal(xml).nonEmpty) match {
         case ("0", _)    => RemarksNonConform.xmlReader.read(xml)
@@ -49,24 +51,23 @@ case class RemarksConform(unloadingDate: LocalDate, unloadingRemark: Option[Stri
 }
 
 object RemarksConform {
-  implicit val writes: XMLWrites[RemarksConform] = {
 
-    XMLWrites(remarks => {
-
-      val unloadingRemarks = remarks.unloadingRemark.map {
-        remarks =>
-          <UnlRemREM53>{remarks}</UnlRemREM53>
+  implicit val writes: XMLWrites[RemarksConform] =
+    XMLWrites {
+      remarks =>
+        val unloadingRemarks = remarks.unloadingRemark.map {
+          remarks =>
+            <UnlRemREM53>{remarks}</UnlRemREM53>
             <UnlRemREM53LNG>{LanguageCodeEnglish.code}</UnlRemREM53LNG>
-      }
+        }
 
-      <UNLREMREM>
+        <UNLREMREM>
         {unloadingRemarks.getOrElse(NodeSeq.Empty)}
         <ConREM65>{remarks.conform}</ConREM65>
         <UnlComREM66>{remarks.unloadingCompleted}</UnlComREM66>
         <UnlDatREM67>{Format.dateFormatted(remarks.unloadingDate)}</UnlDatREM67>
       </UNLREMREM>
-    })
-  }
+    }
 
   implicit val xmlReader: XmlReader[RemarksConform] =
     (
@@ -81,17 +82,17 @@ case class RemarksConformWithSeals(unloadingDate: LocalDate, unloadingRemark: Op
 }
 
 object RemarksConformWithSeals {
-  implicit val writes: XMLWrites[RemarksConformWithSeals] = {
 
-    XMLWrites(remarks => {
-
-      val unloadingRemarks = remarks.unloadingRemark.map {
-        remarks =>
-          <UnlRemREM53>{remarks}</UnlRemREM53>
+  implicit val writes: XMLWrites[RemarksConformWithSeals] =
+    XMLWrites {
+      remarks =>
+        val unloadingRemarks = remarks.unloadingRemark.map {
+          remarks =>
+            <UnlRemREM53>{remarks}</UnlRemREM53>
             <UnlRemREM53LNG>{LanguageCodeEnglish.code}</UnlRemREM53LNG>
-      }
+        }
 
-      <UNLREMREM>
+        <UNLREMREM>
         <StaOfTheSeaOKREM19>{remarks.stateOfSeals}</StaOfTheSeaOKREM19>
         {unloadingRemarks.getOrElse(NodeSeq.Empty)}
         <ConREM65>{remarks.conform}</ConREM65>
@@ -99,8 +100,7 @@ object RemarksConformWithSeals {
         <UnlDatREM67>{Format.dateFormatted(remarks.unloadingDate)}</UnlDatREM67>
       </UNLREMREM>
 
-    })
-  }
+    }
 
   implicit val xmlReader: XmlReader[RemarksConformWithSeals] =
     (
@@ -122,22 +122,21 @@ object RemarksNonConform {
   val unloadingRemarkLength  = 350
   val resultsOfControlLength = 9
 
-  implicit val writes: XMLWrites[RemarksNonConform] = {
+  implicit val writes: XMLWrites[RemarksNonConform] =
+    XMLWrites {
+      remarks =>
+        val stateOfSeals = remarks.stateOfSeals.map {
+          int =>
+            <StaOfTheSeaOKREM19>{int}</StaOfTheSeaOKREM19>
+        }
 
-    XMLWrites(remarks => {
-
-      val stateOfSeals = remarks.stateOfSeals.map {
-        int =>
-          <StaOfTheSeaOKREM19>{int}</StaOfTheSeaOKREM19>
-      }
-
-      val unloadingRemarks = remarks.unloadingRemark.map {
-        remarks =>
-          <UnlRemREM53>{remarks}</UnlRemREM53>
+        val unloadingRemarks = remarks.unloadingRemark.map {
+          remarks =>
+            <UnlRemREM53>{remarks}</UnlRemREM53>
           <UnlRemREM53LNG>{LanguageCodeEnglish.code}</UnlRemREM53LNG>
-      }
+        }
 
-      <UNLREMREM>
+        <UNLREMREM>
         {stateOfSeals.getOrElse(NodeSeq.Empty)}
         {unloadingRemarks.getOrElse(NodeSeq.Empty)}
         <ConREM65>{remarks.conform}</ConREM65>
@@ -145,8 +144,7 @@ object RemarksNonConform {
         <UnlDatREM67>{Format.dateFormatted(remarks.unloadingDate)}</UnlDatREM67>
       </UNLREMREM>
 
-    })
-  }
+    }
 
   implicit val xmlReader: XmlReader[RemarksNonConform] = (
     (__ \ "StaOfTheSeaOKREM19").read[Int].optional,

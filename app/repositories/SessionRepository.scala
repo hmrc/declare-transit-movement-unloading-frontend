@@ -30,7 +30,7 @@ import reactivemongo.play.json.collection.JSONCollection
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DefaultSessionRepository @Inject()(
+class DefaultSessionRepository @Inject() (
   mongo: ReactiveMongoApi,
   config: Configuration
 )(implicit ec: ExecutionContext)
@@ -44,8 +44,8 @@ class DefaultSessionRepository @Inject()(
     mongo.database.map(_.collection[JSONCollection](collectionName))
 
   private val lastUpdatedIndex = Index(
-    key     = Seq("lastUpdated" -> IndexType.Ascending),
-    name    = Some("user-answers-last-updated-index"),
+    key = Seq("lastUpdated" -> IndexType.Ascending),
+    name = Some("user-answers-last-updated-index"),
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
 
@@ -54,7 +54,9 @@ class DefaultSessionRepository @Inject()(
       .flatMap {
         _.indexesManager.ensure(lastUpdatedIndex)
       }
-      .map(_ => ())
+      .map(
+        _ => ()
+      )
 
   override def get(id: ArrivalId, eoriNumber: EoriNumber): Future[Option[UserAnswers]] = {
     implicit val dateWriter: Writes[LocalDateTime] = MongoDateTimeFormats.localDateTimeWrite
@@ -95,7 +97,9 @@ class DefaultSessionRepository @Inject()(
 
   override def remove(id: ArrivalId): Future[Unit] = collection.flatMap {
     _.findAndRemove(Json.obj("_id" -> id))
-      .map(_ => ())
+      .map(
+        _ => ()
+      )
   }
 }
 

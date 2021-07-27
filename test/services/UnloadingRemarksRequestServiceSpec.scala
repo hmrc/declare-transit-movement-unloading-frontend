@@ -15,6 +15,7 @@
  */
 
 package services
+
 import java.time.LocalDateTime
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
@@ -41,7 +42,8 @@ class UnloadingRemarksRequestServiceSpec extends SpecBase with AppWithDefaultMoc
         forAll(arbitrary[UnloadingPermission],
                arbitrary[Meta],
                arbitrary[LocalDateTime],
-               Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))) {
+               Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))
+        ) {
           (unloadingPermission, meta, localDateTime, unloadingRemark) =>
             val unloadingRemarks = RemarksConform(localDateTime.toLocalDate, unloadingRemark)
 
@@ -65,7 +67,8 @@ class UnloadingRemarksRequestServiceSpec extends SpecBase with AppWithDefaultMoc
         forAll(arbitrary[UnloadingPermission],
                arbitrary[Meta],
                arbitrary[LocalDateTime],
-               Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))) {
+               Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))
+        ) {
           (unloadingPermission, meta, localDateTime, unloadingRemark) =>
             val unloadingRemarks = RemarksConformWithSeals(localDateTime.toLocalDate, unloadingRemark)
 
@@ -232,7 +235,8 @@ class UnloadingRemarksRequestServiceSpec extends SpecBase with AppWithDefaultMoc
                       PointerToAttribute(TransportIdentity),
                       "reference"
                     ),
-                    ResultsOfControlSealsUpdated),
+                    ResultsOfControlSealsUpdated
+                ),
                 seals = Some(Seals(3, Seq("seal 2", "seal 1", "seal 3")))
               )
         }
@@ -246,10 +250,10 @@ object UnloadingRemarksRequestServiceSpec {
   val header: UnloadingPermission => Header = unloadingPermission =>
     Header(
       movementReferenceNumber = unloadingPermission.movementReferenceNumber,
-      transportIdentity       = unloadingPermission.transportIdentity,
-      transportCountry        = unloadingPermission.transportCountry,
-      numberOfItems           = unloadingPermission.numberOfItems,
-      numberOfPackages        = unloadingPermission.numberOfPackages,
-      grossMass               = unloadingPermission.grossMass
-  )
+      transportIdentity = unloadingPermission.transportIdentity,
+      transportCountry = unloadingPermission.transportCountry,
+      numberOfItems = unloadingPermission.numberOfItems,
+      numberOfPackages = unloadingPermission.numberOfPackages,
+      grossMass = unloadingPermission.grossMass
+    )
 }

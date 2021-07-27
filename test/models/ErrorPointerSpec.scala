@@ -35,7 +35,11 @@ class ErrorPointerSpec extends FreeSpec with Generators with ScalaCheckPropertyC
 
     "must return DefaultPointer" in {
 
-      forAll(nonEmptyString suchThat (x => !ErrorPointer.values.contains(x))) {
+      forAll(
+        nonEmptyString suchThat (
+          x => !ErrorPointer.values.contains(x)
+        )
+      ) {
         string =>
           val xml = <test>{string}</test>
           XmlReader.of[ErrorPointer].read(xml).toOption.value mustBe DefaultPointer(string)

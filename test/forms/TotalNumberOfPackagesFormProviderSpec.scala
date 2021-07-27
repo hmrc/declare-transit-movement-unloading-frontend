@@ -42,15 +42,15 @@ class TotalNumberOfPackagesFormProviderSpec extends IntFieldBehaviours {
     behave like intField(
       form,
       fieldName,
-      nonNumericError  = FormError(fieldName, "totalNumberOfPackages.error.nonNumeric"),
+      nonNumericError = FormError(fieldName, "totalNumberOfPackages.error.nonNumeric"),
       wholeNumberError = FormError(fieldName, "totalNumberOfPackages.error.wholeNumber")
     )
 
     behave like intFieldWithRange(
       form,
       fieldName,
-      minimum       = minimum,
-      maximum       = maximum,
+      minimum = minimum,
+      maximum = maximum,
       expectedError = FormError(fieldName, "totalNumberOfPackages.error.outOfRange", Seq(minimum, maximum))
     )
 

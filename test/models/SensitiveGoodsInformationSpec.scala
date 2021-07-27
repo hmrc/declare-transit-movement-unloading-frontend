@@ -15,6 +15,7 @@
  */
 
 package models
+
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
@@ -39,12 +40,11 @@ class SensitiveGoodsInformationSpec extends FreeSpec with MustMatchers with Gene
                 <SenGooCodSD22>{code}</SenGooCodSD22>
             }
 
-          val result = {
+          val result =
             <SGICODSD2>
               {goodsCode.getOrElse(NodeSeq.Empty)}
               <SenQuaSD23>{sensitiveGoodsInformation.quantity}</SenQuaSD23>
             </SGICODSD2>
-          }
 
           XmlReader.of[SensitiveGoodsInformation].read(result) mustBe
             ParseSuccess(SensitiveGoodsInformation(sensitiveGoodsInformation.goodsCode, sensitiveGoodsInformation.quantity))
@@ -60,12 +60,11 @@ class SensitiveGoodsInformationSpec extends FreeSpec with MustMatchers with Gene
               <SenGooCodSD22>{code}</SenGooCodSD22>
           }
 
-          val result = {
+          val result =
             <SGICODSD2>
               {goodsCode}
               <SenQuaSD23>{sensitiveGoodsInformation.quantity}</SenQuaSD23>
             </SGICODSD2>
-          }
 
           sensitiveGoodsInformation.toXml mustEqual result
       }

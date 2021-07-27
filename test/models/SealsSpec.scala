@@ -15,6 +15,7 @@
  */
 
 package models
+
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import generators.Generators
 import models.XMLWrites._
@@ -42,12 +43,11 @@ class SealsSpec extends FreeSpec with MustMatchers with Generators with ScalaChe
               </SEAIDSID>
           }
 
-          val expectedResult = {
+          val expectedResult =
             <SEAINFSLI>
               <SeaNumSLI2>{seals.numberOfSeals}</SeaNumSLI2>
               {sealsNodes}
             </SEAINFSLI>
-          }
 
           XmlReader.of[Seals].read(trim(expectedResult)) mustBe
             ParseSuccess(Seals(seals.numberOfSeals, seals.SealId))
@@ -68,12 +68,11 @@ class SealsSpec extends FreeSpec with MustMatchers with Generators with ScalaChe
               </SEAIDSID>
           }
 
-          val expectedResult = {
+          val expectedResult =
             <SEAINFSLI>
               <SeaNumSLI2>{seals.numberOfSeals}</SeaNumSLI2>
               {sealsNodes}
             </SEAINFSLI>
-          }
 
           seals.toXml mustEqual expectedResult
       }

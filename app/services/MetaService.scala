@@ -15,12 +15,13 @@
  */
 
 package services
+
 import java.time.LocalDateTime
 
 import com.google.inject.Inject
 import models.messages.{InterchangeControlReference, Meta}
 
-class MetaServiceImpl @Inject()(dateTimeService: DateTimeService) extends MetaService {
+class MetaServiceImpl @Inject() (dateTimeService: DateTimeService) extends MetaService {
 
   def build(interchangeControlReference: InterchangeControlReference): Meta = {
     val currentDateTime: LocalDateTime = dateTimeService.currentDateTime

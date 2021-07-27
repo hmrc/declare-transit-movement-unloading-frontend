@@ -15,6 +15,7 @@
  */
 
 package models.messages
+
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.XMLWrites
 
@@ -22,9 +23,11 @@ import models.XMLWrites
 case class PointerToAttribute(pointer: PointerIdentity)
 
 object PointerToAttribute {
-  implicit val writes: XMLWrites[PointerToAttribute] = {
-    XMLWrites(pointerToAttribute => <PoiToTheAttTOC5>{pointerToAttribute.pointer.value}</PoiToTheAttTOC5>)
-  }
+
+  implicit val writes: XMLWrites[PointerToAttribute] =
+    XMLWrites(
+      pointerToAttribute => <PoiToTheAttTOC5>{pointerToAttribute.pointer.value}</PoiToTheAttTOC5>
+    )
 
   implicit val reads: XmlReader[PointerToAttribute] = (__ \ "PoiToTheAttTOC5").read[String] map {
     case TransportIdentity.value => PointerToAttribute(TransportIdentity)

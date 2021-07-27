@@ -34,7 +34,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class VehicleNameRegistrationRejectionController @Inject()(
+class VehicleNameRegistrationRejectionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   identify: IdentifierAction,
@@ -88,7 +88,7 @@ class VehicleNameRegistrationRejectionController @Inject()(
                 } yield Redirect(routes.RejectionCheckYourAnswersController.onPageLoad(arrivalId))
 
               case _ => renderTechnicalDifficultiesPage
-          }
+            }
         )
   }
 }

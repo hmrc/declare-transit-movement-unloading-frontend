@@ -15,6 +15,7 @@
  */
 
 package derivable
+
 import play.api.libs.json.JsPath
 import queries.SealsQuery
 

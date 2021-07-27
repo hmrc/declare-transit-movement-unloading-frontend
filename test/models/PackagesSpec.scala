@@ -60,7 +60,7 @@ class PackagesSpec extends FreeSpec with MustMatchers with Generators with Scala
                 </NumOfPieGS25>
             }
 
-          val expectedResult = {
+          val expectedResult =
             <PACGS2>
               {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
               <KinOfPacGS23>
@@ -69,7 +69,6 @@ class PackagesSpec extends FreeSpec with MustMatchers with Generators with Scala
               {numberOfPackage.getOrElse(NodeSeq.Empty)}
               {numberOfPieces.getOrElse(NodeSeq.Empty)}
             </PACGS2>
-          }
 
           XmlReader.of[Packages].read(trim(expectedResult)) mustBe
             ParseSuccess(Packages(packages.marksAndNumberPackage, packages.kindOfPackage, packages.numberOfPackages, packages.numberOfPieces))
@@ -99,14 +98,13 @@ class PackagesSpec extends FreeSpec with MustMatchers with Generators with Scala
                 <NumOfPieGS25>{number}</NumOfPieGS25>
             }
 
-          val expectedResult: Node = {
+          val expectedResult: Node =
             <PACGS2>
               {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
               <KinOfPacGS23>{escapeXml(packages.kindOfPackage)}</KinOfPacGS23>
               {numberOfPackage.getOrElse(NodeSeq.Empty)}
               {numberOfPieces.getOrElse(NodeSeq.Empty)}
             </PACGS2>
-          }
 
           packages.toXml.map(trim) mustBe expectedResult.map(trim)
       }

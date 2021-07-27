@@ -15,6 +15,7 @@
  */
 
 package models
+
 import generators.MessagesModelGenerators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{FreeSpec, MustMatchers, StreamlinedXmlEquality}

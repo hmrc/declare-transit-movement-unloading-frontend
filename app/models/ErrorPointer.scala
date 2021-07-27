@@ -30,6 +30,7 @@ object ErrorPointer extends Serializable {
           .find(_.value.equalsIgnoreCase(pointer))
           .getOrElse(DefaultPointer(pointer))
     }
+
   implicit val writes: Writes[ErrorPointer] = Writes[ErrorPointer] {
     pointer: ErrorPointer =>
       JsString(pointer.value)

@@ -15,6 +15,7 @@
  */
 
 package controllers
+
 import config.FrontendAppConfig
 
 import javax.inject.Inject
@@ -26,7 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
 
-class SessionExpiredController @Inject()(
+class SessionExpiredController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   val config: FrontendAppConfig,
   renderer: Renderer

@@ -90,10 +90,18 @@ object GoodsItem {
         <GooDesGDS23LNG>EN</GooDesGDS23LNG>
         {grossMass}
         {netMass}
-        {goodsItem.producedDocuments.map(x => x.toXml)}
+        {
+        goodsItem.producedDocuments.map(
+          x => x.toXml
+        )
+      }
         {containers}
         {goodsItem.packages.toList.map(_.toXml)}
-        {goodsItem.sensitiveGoodsInformation.map(x => x.toXml)}
+        {
+        goodsItem.sensitiveGoodsInformation.map(
+          x => x.toXml
+        )
+      }
       </GOOITEGDS>
   }
 }

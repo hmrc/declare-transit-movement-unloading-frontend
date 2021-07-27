@@ -48,14 +48,14 @@ trait SpecBase
   protected lazy val producedDocuments: ProducedDocument = ProducedDocument("235", Some("Ref."), None)
 
   protected lazy val goodsItemMandatory: GoodsItem = GoodsItem(
-    itemNumber                = 1,
-    commodityCode             = None,
-    description               = "Flowers",
-    grossMass                 = Some("1000"),
-    netMass                   = Some("999"),
-    producedDocuments         = Seq.empty,
-    containers                = Seq.empty,
-    packages                  = NonEmptyList(packages, Nil),
+    itemNumber = 1,
+    commodityCode = None,
+    description = "Flowers",
+    grossMass = Some("1000"),
+    netMass = Some("999"),
+    producedDocuments = Seq.empty,
+    containers = Seq.empty,
+    packages = NonEmptyList(packages, Nil),
     sensitiveGoodsInformation = Seq.empty
   )
 

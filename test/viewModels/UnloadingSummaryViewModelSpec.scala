@@ -28,16 +28,16 @@ class UnloadingSummaryViewModelSpec extends SpecBase {
 
   val unloadingPermission: UnloadingPermission = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
-    transportIdentity       = None,
-    transportCountry        = None,
-    grossMass               = "1000",
-    numberOfItems           = 1,
-    numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
-    presentationOffice      = "GB000060",
-    seals                   = None,
-    goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
-    dateOfPreparation       = LocalDate.now()
+    transportIdentity = None,
+    transportCountry = None,
+    grossMass = "1000",
+    numberOfItems = 1,
+    numberOfPackages = Some(1),
+    traderAtDestination = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    presentationOffice = "GB000060",
+    seals = None,
+    goodsItems = NonEmptyList(goodsItemMandatory, Nil),
+    dateOfPreparation = LocalDate.now()
   )
 
   private val transportCountry = None
@@ -66,8 +66,9 @@ class UnloadingSummaryViewModelSpec extends SpecBase {
       "display seals with transport details" in {
 
         val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))),
-                                                 transportCountry  = Some("registration"),
-                                                 transportIdentity = Some("registration"))
+                                                 transportCountry = Some("registration"),
+                                                 transportIdentity = Some("registration")
+        )
 
         val data = UnloadingSummaryViewModel(emptyUserAnswers, transportCountry)(withSeals)
 

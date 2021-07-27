@@ -15,6 +15,7 @@
  */
 
 package services
+
 import com.google.inject.Inject
 import connectors.ReferenceDataConnector
 import models.reference.Country
@@ -22,16 +23,19 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ReferenceDataServiceImpl @Inject()(connector: ReferenceDataConnector) extends ReferenceDataService {
+class ReferenceDataServiceImpl @Inject() (connector: ReferenceDataConnector) extends ReferenceDataService {
 
   def getCountryByCode(code: Option[String])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]] =
     code match {
-      case Some(countryCode) => {
+      case Some(countryCode) =>
         connector.getCountryList().flatMap {
           countries =>
-            Future.successful(countries.find(x => x.code.equals(countryCode)))
+            Future.successful(
+              countries.find(
+                x => x.code.equals(countryCode)
+              )
+            )
         }
-      }
       case None => Future.successful(None)
     }
 }

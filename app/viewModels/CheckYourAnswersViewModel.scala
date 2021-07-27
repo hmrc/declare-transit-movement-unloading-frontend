@@ -32,14 +32,16 @@ case class CheckYourAnswersViewModel(sections: Seq[Section])
 
 object CheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(
-    implicit messages: Messages): CheckYourAnswersViewModel =
+  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(implicit
+    messages: Messages
+  ): CheckYourAnswersViewModel =
     CheckYourAnswersViewModel(
       Seq(
         goodsUnloadedSection(userAnswers),
         sealsSection(userAnswers, unloadingPermission),
         itemsSection(userAnswers, unloadingPermission, summaryTransportCountry)
-      ))
+      )
+    )
 
   private def sealsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit messages: Messages): Section = {
     val checkYourAnswersRow = new CheckYourAnswersHelper(userAnswers)
@@ -62,8 +64,9 @@ object CheckYourAnswersViewModel {
     Section(rowGoodsUnloaded.toSeq)
   }
 
-  private def itemsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(
-    implicit messages: Messages): Section = {
+  private def itemsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(implicit
+    messages: Messages
+  ): Section = {
 
     val unloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
 

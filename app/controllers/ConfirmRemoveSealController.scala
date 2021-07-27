@@ -35,7 +35,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveSealController @Inject()(
+class ConfirmRemoveSealController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -84,9 +84,7 @@ class ConfirmRemoveSealController @Inject()(
             formProvider(seal)
               .bindFromRequest()
               .fold(
-                formWithErrors => {
-                  renderedPage(mode, formWithErrors, seal).map(BadRequest(_))
-                },
+                formWithErrors => renderedPage(mode, formWithErrors, seal).map(BadRequest(_)),
                 value =>
                   if (value) {
                     for {
@@ -96,7 +94,7 @@ class ConfirmRemoveSealController @Inject()(
                   } else {
                     Future.successful(Redirect(navigator.nextPage(ConfirmRemoveSealPage, mode, request.userAnswers)))
 
-                }
+                  }
               )
         }
     }

@@ -50,7 +50,7 @@ object Packages {
             <MarNumOfPacGS21>{marksAndNumberPackage}</MarNumOfPacGS21>
               <MarNumOfPacGS21LNG>{LanguageCodeEnglish.code}</MarNumOfPacGS21LNG>
         }
-        }
+      }
         <KinOfPacGS23>{packages.kindOfPackage}</KinOfPacGS23>
         {
         packages.numberOfPackages.fold(NodeSeq.Empty) {
@@ -61,7 +61,7 @@ object Packages {
             numberOfPieces =>
               <NumOfPieGS25>{numberOfPieces}</NumOfPieGS25>
           }
-        }
+      }
 
       </PACGS2>
   }

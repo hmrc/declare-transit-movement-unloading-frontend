@@ -15,6 +15,7 @@
  */
 
 package services
+
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
@@ -162,7 +163,7 @@ class RemarksServiceSpec extends SpecBase with Generators with ScalaCheckPropert
           forAll(
             arbitrary[UnloadingPermission],
             arbitrary[ResultsOfControl],
-            genDecimal(0.0, 50000.999),
+            genDecimal(0.0, 50000.999)
           ) {
             (unloadingPermission, resultsOfControlValues, grossMass) =>
               val unloadingPermissionWithNoSeals =
@@ -323,7 +324,7 @@ class RemarksServiceSpec extends SpecBase with Generators with ScalaCheckPropert
           forAll(
             arbitrary[UnloadingPermission],
             arbitrary[ResultsOfControl],
-            choose(min = 1: Int, 49: Int),
+            choose(min = 1: Int, 49: Int)
           ) {
             (unloadingPermission, resultsOfControlValues, numberOfPackages) =>
               val unloadingPermissionWithNoSeals =
@@ -452,9 +453,9 @@ class RemarksServiceSpec extends SpecBase with Generators with ScalaCheckPropert
 
               service.build(userAnswersUpdated, unloadingPermissionWithSeals).futureValue mustBe
                 RemarksNonConform(
-                  stateOfSeals    = Some(0),
+                  stateOfSeals = Some(0),
                   unloadingRemark = userAnswers.get(ChangesToReportPage),
-                  unloadingDate   = dateGoodsUnloaded
+                  unloadingDate = dateGoodsUnloaded
                 )
           }
         }
@@ -479,9 +480,9 @@ class RemarksServiceSpec extends SpecBase with Generators with ScalaCheckPropert
 
               service.build(userAnswersUpdated, unloadingPermissionWithSeals).futureValue mustBe
                 RemarksNonConform(
-                  stateOfSeals    = Some(0),
+                  stateOfSeals = Some(0),
                   unloadingRemark = userAnswersUpdated.get(ChangesToReportPage),
-                  unloadingDate   = dateGoodsUnloaded
+                  unloadingDate = dateGoodsUnloaded
                 )
           }
         }
@@ -542,9 +543,9 @@ class RemarksServiceSpec extends SpecBase with Generators with ScalaCheckPropert
 
               service.build(userAnswersUpdated, unloadingPermissionWithSeals).futureValue mustBe
                 RemarksNonConform(
-                  stateOfSeals    = Some(0),
+                  stateOfSeals = Some(0),
                   unloadingRemark = userAnswers.get(ChangesToReportPage),
-                  unloadingDate   = dateGoodsUnloaded
+                  unloadingDate = dateGoodsUnloaded
                 )
           }
 
@@ -575,9 +576,9 @@ class RemarksServiceSpec extends SpecBase with Generators with ScalaCheckPropert
 
               service.build(userAnswersUpdated, unloadingPermissionWithSeals).futureValue mustBe
                 RemarksNonConform(
-                  stateOfSeals    = Some(0),
+                  stateOfSeals = Some(0),
                   unloadingRemark = userAnswers.get(ChangesToReportPage),
-                  unloadingDate   = dateGoodsUnloaded
+                  unloadingDate = dateGoodsUnloaded
                 )
           }
 

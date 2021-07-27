@@ -15,6 +15,7 @@
  */
 
 package models
+
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import generators.Generators
 import models.XMLWrites._
@@ -56,7 +57,7 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
               <ConNumNR21>{value}</ConNumNR21>
           }
 
-          val expectedResult = {
+          val expectedResult =
             <GOOITEGDS>
               <IteNumGDS7>
                 {goodsItem.itemNumber}
@@ -69,14 +70,13 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
               {netMass.getOrElse(NodeSeq.Empty)}
               {producedDocument(goodsItem)}
               {
-                containers.map {
-                  x => <CONNR2>{x}</CONNR2>
-                }
+              containers.map {
+                x => <CONNR2>{x}</CONNR2>
               }
+            }
               {packages(goodsItem)}
               {sensitiveGoodsInformation(goodsItem)}
               </GOOITEGDS>
-          }
 
           XmlReader.of[GoodsItem].read(trim(expectedResult)) mustBe
             ParseSuccess(
@@ -120,7 +120,7 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
               <CONNR2><ConNumNR21>{value}</ConNumNR21></CONNR2>
           }
 
-          val expectedResult = {
+          val expectedResult =
             <GOOITEGDS>
               <IteNumGDS7>
                 {goodsItem.itemNumber}
@@ -132,12 +132,19 @@ class GoodsItemSpec extends FreeSpec with MustMatchers with Generators with Scal
               <GooDesGDS23LNG>EN</GooDesGDS23LNG>
               {grossMass.getOrElse(NodeSeq.Empty)}
               {netMass.getOrElse(NodeSeq.Empty)}
-              {goodsItem.producedDocuments.map(x => x.toXml)}
+              {
+              goodsItem.producedDocuments.map(
+                x => x.toXml
+              )
+            }
               {containers}
               {goodsItem.packages.toList.map(_.toXml)}
-              {goodsItem.sensitiveGoodsInformation.map(x => x.toXml)}
+              {
+              goodsItem.sensitiveGoodsInformation.map(
+                x => x.toXml
+              )
+            }
             </GOOITEGDS>
-          }
 
           //TODO: Strip off trim
           goodsItem.toXml.map(trim) mustBe expectedResult.map(trim)
@@ -169,8 +176,7 @@ object GoodsItemSpec {
               <NumOfPieGS25>{number}</NumOfPieGS25>
           }
 
-        {
-          <PACGS2>
+        <PACGS2>
           {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
           <KinOfPacGS23>
             {packages.kindOfPackage}
@@ -178,7 +184,6 @@ object GoodsItemSpec {
           {numberOfPackage.getOrElse(NodeSeq.Empty)}
           {numberOfPieces.getOrElse(NodeSeq.Empty)}
         </PACGS2>
-        }
     }.toList
 
   private[models] def producedDocument(goodsItem: GoodsItem) =
@@ -195,15 +200,13 @@ object GoodsItemSpec {
             <ComOfInfDC25>{information}</ComOfInfDC25>
         }
 
-        {
-          <PRODOCDC2>
+        <PRODOCDC2>
           <DocTypDC21>
             {producedDocument.documentType}
           </DocTypDC21>
           {reference.getOrElse(false)}
           {complementOfInformation.getOrElse(false)}
         </PRODOCDC2>
-        }
     }
 
   private[models] def sensitiveGoodsInformation(goodsItem: GoodsItem) =

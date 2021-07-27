@@ -34,7 +34,7 @@ import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DateGoodsUnloadedController @Inject()(
+class DateGoodsUnloadedController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: NavigatorUnloadingPermission,
@@ -58,7 +58,7 @@ class DateGoodsUnloadedController @Inject()(
         unloadingPermissionService
           .getUnloadingPermission(arrivalId)
           .flatMap {
-            case Some(up) => {
+            case Some(up) =>
               val form = formProvider(up.dateOfPreparation)
 
               val preparedForm = request.userAnswers.get(DateGoodsUnloadedPage) match {
@@ -77,7 +77,6 @@ class DateGoodsUnloadedController @Inject()(
               )
 
               renderer.render("dateGoodsUnloaded.njk", json).map(Ok(_))
-            }
             case None =>
               val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
 
@@ -92,7 +91,7 @@ class DateGoodsUnloadedController @Inject()(
         unloadingPermissionService
           .getUnloadingPermission(arrivalId)
           .flatMap {
-            case Some(up) => {
+            case Some(up) =>
               formProvider(up.dateOfPreparation)
                 .bindFromRequest()
                 .fold(
@@ -115,12 +114,9 @@ class DateGoodsUnloadedController @Inject()(
                       updatedAnswers      <- Future.fromTry(request.userAnswers.set(DateGoodsUnloadedPage, value))
                       _                   <- sessionRepository.set(updatedAnswers)
                       unloadingPermission <- unloadingPermissionService.getUnloadingPermission(arrivalId)
-                    } yield {
-                      Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers, unloadingPermission))
-                  }
+                    } yield Redirect(navigator.nextPage(DateGoodsUnloadedPage, mode, updatedAnswers, unloadingPermission))
                 )
 
-            }
             case None =>
               val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
 

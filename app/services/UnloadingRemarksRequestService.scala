@@ -21,17 +21,17 @@ import models.{Seals, UnloadingPermission, UserAnswers}
 import models.messages._
 import queries.SealsQuery
 
-class UnloadingRemarksRequestServiceImpl @Inject()(resultOfControlService: ResultOfControlService) extends UnloadingRemarksRequestService {
+class UnloadingRemarksRequestServiceImpl @Inject() (resultOfControlService: ResultOfControlService) extends UnloadingRemarksRequestService {
 
   def build(meta: Meta, unloadingRemarks: Remarks, unloadingPermission: UnloadingPermission, userAnswers: UserAnswers): UnloadingRemarksRequest = {
 
     val header = Header(
       movementReferenceNumber = unloadingPermission.movementReferenceNumber,
-      transportIdentity       = unloadingPermission.transportIdentity,
-      transportCountry        = unloadingPermission.transportCountry,
-      numberOfItems           = unloadingPermission.numberOfItems,
-      numberOfPackages        = unloadingPermission.numberOfPackages,
-      grossMass               = unloadingPermission.grossMass
+      transportIdentity = unloadingPermission.transportIdentity,
+      transportCountry = unloadingPermission.transportCountry,
+      numberOfItems = unloadingPermission.numberOfItems,
+      numberOfPackages = unloadingPermission.numberOfPackages,
+      grossMass = unloadingPermission.grossMass
     )
 
     val seals: Option[Seals] = unloadingRemarks match {
@@ -39,7 +39,7 @@ class UnloadingRemarksRequestServiceImpl @Inject()(resultOfControlService: Resul
       case _: RemarksConformWithSeals       => unloadingPermission.seals
       case RemarksNonConform(None, _, _)    => unloadingPermission.seals
       case RemarksNonConform(Some(1), _, _) => unloadingPermission.seals
-      case _ => {
+      case _ =>
         userAnswers
           .get(SealsQuery)
           .map {
@@ -47,7 +47,6 @@ class UnloadingRemarksRequestServiceImpl @Inject()(resultOfControlService: Resul
               Some(Seals(seals.length, seals))
           }
           .getOrElse(unloadingPermission.seals)
-      }
     }
     val resultsOfControl: Seq[ResultsOfControl] = resultOfControlService.build(userAnswers, unloadingPermission)
 

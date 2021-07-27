@@ -35,7 +35,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class VehicleRegistrationCountryController @Inject()(
+class VehicleRegistrationCountryController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -68,7 +68,8 @@ class VehicleRegistrationCountryController @Inject()(
     }
 
   private def renderPage(arrivalId: ArrivalId, mrn: MovementReferenceNumber, mode: Mode, form: Form[Country], countries: Seq[Country], status: Results.Status)(
-    implicit request: Request[AnyContent]): Future[Result] = {
+    implicit request: Request[AnyContent]
+  ): Future[Result] = {
     val json = Json.obj(
       "form"      -> form,
       "mrn"       -> mrn,
@@ -97,9 +98,7 @@ class VehicleRegistrationCountryController @Inject()(
             form
               .bindFromRequest()
               .fold(
-                formWithErrors => {
-                  renderPage(arrivalId, request.userAnswers.mrn, mode, formWithErrors, countries, Results.BadRequest)
-                },
+                formWithErrors => renderPage(arrivalId, request.userAnswers.mrn, mode, formWithErrors, countries, Results.BadRequest),
                 value =>
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.set(VehicleRegistrationCountryPage, value))

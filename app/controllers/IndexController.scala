@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class IndexController @Inject()(
+class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
@@ -56,14 +56,13 @@ class IndexController @Inject()(
                 case Some(mrn) =>
                   val updatedAnswers = request.userAnswers.getOrElse(UserAnswers(id = arrivalId, mrn = mrn, eoriNumber = request.eoriNumber))
 
-                  val userAnswersWithPrepopulatedSeals: UserAnswers = {
+                  val userAnswersWithPrepopulatedSeals: UserAnswers =
                     unloadingPermission.seals
                       .flatMap {
                         seals =>
                           updatedAnswers.setPrepopulateData(SealsQuery, seals.SealId).toOption
                       }
                       .getOrElse(updatedAnswers)
-                  }
 
                   sessionRepository.set(userAnswersWithPrepopulatedSeals).flatMap {
                     _ =>

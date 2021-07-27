@@ -67,8 +67,14 @@ object MovementReferenceNumber extends Logging {
     import play.api.libs.json._
 
     __.read[String].map(MovementReferenceNumber.apply).flatMap {
-      case Some(mrn) => Reads(_ => JsSuccess(mrn))
-      case None      => Reads(_ => JsError("Invalid Movement Reference Number"))
+      case Some(mrn) =>
+        Reads(
+          _ => JsSuccess(mrn)
+        )
+      case None =>
+        Reads(
+          _ => JsError("Invalid Movement Reference Number")
+        )
     }
   }
 

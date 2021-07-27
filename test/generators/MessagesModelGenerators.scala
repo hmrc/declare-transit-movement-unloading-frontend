@@ -43,14 +43,13 @@ import java.time.{LocalDate, LocalTime}
 
 trait MessagesModelGenerators extends Generators {
 
-  implicit lazy val arbitraryInterchangeControlReference: Arbitrary[InterchangeControlReference] = {
+  implicit lazy val arbitraryInterchangeControlReference: Arbitrary[InterchangeControlReference] =
     Arbitrary {
       for {
         date  <- localDateGen
         index <- Gen.posNum[Int]
       } yield InterchangeControlReference(dateFormatted(date), index)
     }
-  }
 
   implicit lazy val genericErrorType: Arbitrary[GenericError] =
     Arbitrary {
@@ -105,32 +104,30 @@ trait MessagesModelGenerators extends Generators {
       }
     }
 
-  implicit lazy val arbitraryMeta: Arbitrary[Meta] = {
+  implicit lazy val arbitraryMeta: Arbitrary[Meta] =
     Arbitrary {
       for {
         interchangeControlReference <- arbitrary[InterchangeControlReference]
         date                        <- arbitrary[LocalDate]
         time                        <- arbitrary[LocalTime]
-      } yield
-        Meta(
-          interchangeControlReference,
-          date,
-          LocalTime.of(time.getHour, time.getMinute),
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None,
-          None
-        )
+      } yield Meta(
+        interchangeControlReference,
+        date,
+        LocalTime.of(time.getHour, time.getMinute),
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None
+      )
     }
-  }
 
-  implicit lazy val arbitraryHeader: Arbitrary[Header] = {
+  implicit lazy val arbitraryHeader: Arbitrary[Header] =
     Arbitrary {
       for {
         movementReferenceNumber <- arbitrary[MovementReferenceNumber]
@@ -141,9 +138,8 @@ trait MessagesModelGenerators extends Generators {
         grossMass               <- Gen.choose(0.0, 99999999.999).map(BigDecimal(_).bigDecimal.setScale(3, BigDecimal.RoundingMode.DOWN))
       } yield Header(movementReferenceNumber.toString, transportIdentity, transportCountry.map(_.mkString), numberOfItems, numberOfPackages, grossMass.toString)
     }
-  }
 
-  implicit lazy val arbitraryUnloadingRemarksRequest: Arbitrary[UnloadingRemarksRequest] = {
+  implicit lazy val arbitraryUnloadingRemarksRequest: Arbitrary[UnloadingRemarksRequest] =
     Arbitrary {
       for {
         meta               <- arbitrary[Meta]
@@ -155,7 +151,6 @@ trait MessagesModelGenerators extends Generators {
         seals              <- Gen.option(arbitrary[Seals])
       } yield UnloadingRemarksRequest(meta, header, traderDestination, presentationOffice.mkString, remarks, resultOfControl, seals)
     }
-  }
 
   implicit lazy val arbitraryUnloadingRemarksRejectionMessage: Arbitrary[UnloadingRemarksRejectionMessage] =
     Arbitrary {

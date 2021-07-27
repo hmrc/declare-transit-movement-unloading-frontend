@@ -15,14 +15,17 @@
  */
 
 package models.messages
+
 import models.XMLWrites
 
 case class ControlIndicator(indicator: IndicatorValue)
 
 object ControlIndicator {
-  implicit val writes: XMLWrites[ControlIndicator] = {
-    XMLWrites(controlIndicator => <ConInd424>{controlIndicator.indicator.value}</ConInd424>)
-  }
+
+  implicit val writes: XMLWrites[ControlIndicator] =
+    XMLWrites(
+      controlIndicator => <ConInd424>{controlIndicator.indicator.value}</ConInd424>
+    )
 }
 
 sealed trait IndicatorValue extends Serializable {

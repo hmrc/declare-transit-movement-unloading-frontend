@@ -33,7 +33,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class GrossMassAmountRejectionController @Inject()(
+class GrossMassAmountRejectionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   identify: IdentifierAction,
@@ -89,7 +89,7 @@ class GrossMassAmountRejectionController @Inject()(
                 } yield Redirect(routes.RejectionCheckYourAnswersController.onPageLoad(arrivalId))
 
               case _ => renderTechnicalDifficultiesPage
-          }
+            }
         )
   }
 }

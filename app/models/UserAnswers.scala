@@ -28,9 +28,10 @@ import scala.util.{Failure, Success, Try}
 final case class UserAnswers(id: ArrivalId,
                              mrn: MovementReferenceNumber,
                              eoriNumber: EoriNumber,
-                             data: JsObject             = Json.obj(),
-                             prepopulateData: JsObject  = Json.obj(),
-                             lastUpdated: LocalDateTime = LocalDateTime.now) {
+                             data: JsObject = Json.obj(),
+                             prepopulateData: JsObject = Json.obj(),
+                             lastUpdated: LocalDateTime = LocalDateTime.now
+) {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     Reads.optionNoError(Reads.at(page.path)).reads(data).getOrElse(None)

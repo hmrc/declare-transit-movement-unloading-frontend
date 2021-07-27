@@ -15,6 +15,7 @@
  */
 
 package services
+
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
@@ -56,7 +57,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               ResultsOfControlDifferentValues(
                 PointerToAttribute(TransportIdentity),
                 "reference"
-              ))
+              )
+            )
         }
       }
 
@@ -72,7 +74,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               ResultsOfControlDifferentValues(
                 PointerToAttribute(TransportCountry),
                 "FR"
-              ))
+              )
+            )
         }
       }
 
@@ -88,7 +91,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               ResultsOfControlDifferentValues(
                 PointerToAttribute(NumberOfItems),
                 "123"
-              ))
+              )
+            )
         }
       }
 
@@ -104,7 +108,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               ResultsOfControlDifferentValues(
                 PointerToAttribute(NumberOfPackages),
                 "123"
-              ))
+              )
+            )
         }
       }
 
@@ -120,7 +125,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               ResultsOfControlDifferentValues(
                 PointerToAttribute(GrossMass),
                 "12234567"
-              ))
+              )
+            )
         }
       }
 
@@ -169,7 +175,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               val unloadingPermissionUpdated = unloadingPermission.copy(
                 seals = Some(
                   Seals(1, Seq("original value 1"))
-                ))
+                )
+              )
 
               val userAnswersUpdated =
                 emptyUserAnswers
@@ -194,7 +201,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               val unloadingPermissionUpdated = unloadingPermission.copy(
                 seals = Some(
                   Seals(1, Seq("original value 1"))
-                ))
+                )
+              )
 
               val userAnswersUpdated =
                 emptyUserAnswers
@@ -215,7 +223,8 @@ class ResultOfControlServiceSpec extends SpecBase with Generators with ScalaChec
               val unloadingPermissionUpdated = unloadingPermission.copy(
                 seals = Some(
                   Seals(2, Seq("original value 1", "original value 2"))
-                ))
+                )
+              )
 
               val userAnswersUpdated =
                 emptyUserAnswers

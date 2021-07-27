@@ -15,6 +15,7 @@
  */
 
 package services
+
 import java.time.LocalDate
 
 import com.google.inject.Inject
@@ -26,7 +27,7 @@ import queries.SealsQuery
 
 import scala.concurrent.Future
 
-class RemarksServiceImpl @Inject()(resultOfControlService: ResultOfControlService) extends RemarksService {
+class RemarksServiceImpl @Inject() (resultOfControlService: ResultOfControlService) extends RemarksService {
 
   import RemarksService._
 
@@ -48,77 +49,83 @@ class RemarksServiceImpl @Inject()(resultOfControlService: ResultOfControlServic
         Future.failed(new NoSuchElementException("date goods unloaded not found"))
     }
 
-  private def unloadingPermissionContainsSeals(userAnswers: UserAnswers)(implicit unloadingDate: LocalDate,
-                                                                         resultsOfControl: Seq[ResultsOfControl],
-                                                                         originalValues: UnloadingPermission): PartialFunction[Option[Seals], Response] = {
-    case Some(Seals(_, unloadingPermissionSeals)) if unloadingPermissionSeals.nonEmpty => {
-
-      if (haveSealsChanged(unloadingPermissionSeals, userAnswers) ||
-          sealsUnreadable(userAnswers.get(CanSealsBeReadPage)) ||
-          sealsBroken(userAnswers.get(AreAnySealsBrokenPage))) {
+  private def unloadingPermissionContainsSeals(userAnswers: UserAnswers)(implicit
+    unloadingDate: LocalDate,
+    resultsOfControl: Seq[ResultsOfControl],
+    originalValues: UnloadingPermission
+  ): PartialFunction[Option[Seals], Response] = {
+    case Some(Seals(_, unloadingPermissionSeals)) if unloadingPermissionSeals.nonEmpty =>
+      if (
+        haveSealsChanged(unloadingPermissionSeals, userAnswers) ||
+        sealsUnreadable(userAnswers.get(CanSealsBeReadPage)) ||
+        sealsBroken(userAnswers.get(AreAnySealsBrokenPage))
+      ) {
         Future.successful(
           RemarksNonConform(
-            stateOfSeals    = Some(0),
+            stateOfSeals = Some(0),
             unloadingRemark = userAnswers.get(ChangesToReportPage),
-            unloadingDate   = unloadingDate
-          ))
+            unloadingDate = unloadingDate
+          )
+        )
       } else {
         (hasGrossMassChanged(originalValues.grossMass, userAnswers),
          hasNumberOfItemsChanged(originalValues.numberOfItems, userAnswers),
-         hasTotalNumberOfPackagesChanged(originalValues.numberOfPackages, userAnswers)) match {
+         hasTotalNumberOfPackagesChanged(originalValues.numberOfPackages, userAnswers)
+        ) match {
           case (false, false, false) =>
             Future.successful(
               RemarksConformWithSeals(
                 unloadingRemark = userAnswers.get(ChangesToReportPage),
-                unloadingDate   = unloadingDate
+                unloadingDate = unloadingDate
               )
             )
           case (_, _, _) =>
             Future.successful(
               RemarksNonConform(
-                stateOfSeals    = Some(1),
+                stateOfSeals = Some(1),
                 unloadingRemark = userAnswers.get(ChangesToReportPage),
-                unloadingDate   = unloadingDate
+                unloadingDate = unloadingDate
               )
             )
         }
 
       }
-    }
 
   }
 
-  private def unloadingPermissionDoesNotContainSeals(userAnswers: UserAnswers)(
-    implicit unloadingDate: LocalDate,
+  private def unloadingPermissionDoesNotContainSeals(userAnswers: UserAnswers)(implicit
+    unloadingDate: LocalDate,
     resultsOfControl: Seq[ResultsOfControl],
-    originalValues: UnloadingPermission): PartialFunction[Option[Seals], Response] = {
+    originalValues: UnloadingPermission
+  ): PartialFunction[Option[Seals], Response] = {
     case None =>
       userAnswers.get(DeriveNumberOfSeals) match {
         case Some(_) =>
           Future.successful(
             RemarksNonConform(
-              stateOfSeals    = Some(0),
+              stateOfSeals = Some(0),
               unloadingRemark = userAnswers.get(ChangesToReportPage),
-              unloadingDate   = unloadingDate
+              unloadingDate = unloadingDate
             )
           )
         case None =>
           (hasGrossMassChanged(originalValues.grossMass, userAnswers),
            hasNumberOfItemsChanged(originalValues.numberOfItems, userAnswers),
-           hasTotalNumberOfPackagesChanged(originalValues.numberOfPackages, userAnswers)) match {
+           hasTotalNumberOfPackagesChanged(originalValues.numberOfPackages, userAnswers)
+          ) match {
             case (false, false, false) =>
               Future.successful(
                 RemarksConform(
                   unloadingRemark = userAnswers.get(ChangesToReportPage),
-                  unloadingDate   = unloadingDate
+                  unloadingDate = unloadingDate
                 )
               )
             case (_, _, _) =>
               Future.successful(
                 RemarksNonConform(
-                  stateOfSeals    = None,
+                  stateOfSeals = None,
                   unloadingRemark = userAnswers.get(ChangesToReportPage),
-                  unloadingDate   = unloadingDate
+                  unloadingDate = unloadingDate
                 )
               )
           }

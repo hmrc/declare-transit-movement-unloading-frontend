@@ -32,7 +32,7 @@ class ResultsOfControlSpec extends FreeSpec with MustMatchers with Generators wi
     "must serialize ResultsOfControl to xml" in {
 
       forAll(arbitrary[ResultsOfControl]) {
-        case resultsOfControl: ResultsOfControlOther => {
+        case resultsOfControl: ResultsOfControlOther =>
           val xml = <RESOFCON534>
                     <DesTOC2>{resultsOfControl.description}</DesTOC2>
                     <DesTOC2LNG>EN</DesTOC2LNG>
@@ -40,8 +40,7 @@ class ResultsOfControlSpec extends FreeSpec with MustMatchers with Generators wi
                   </RESOFCON534>
 
           resultsOfControl.toXml.map(trim) mustBe xml.map(trim)
-        }
-        case resultsOfControl: ResultsOfControlDifferentValues => {
+        case resultsOfControl: ResultsOfControlDifferentValues =>
           val xml = <RESOFCON534>
                     <ConInd424>{resultsOfControl.controlIndicator.indicator.value}</ConInd424>
                     <PoiToTheAttTOC5>{resultsOfControl.pointerToAttribute.pointer.value}</PoiToTheAttTOC5>
@@ -49,7 +48,6 @@ class ResultsOfControlSpec extends FreeSpec with MustMatchers with Generators wi
                   </RESOFCON534>
 
           resultsOfControl.toXml.map(trim) mustBe xml.map(trim)
-        }
 
       }
 
@@ -60,7 +58,7 @@ class ResultsOfControlSpec extends FreeSpec with MustMatchers with Generators wi
       val resultsOfControl = arbitrary[ResultsOfControl].sample.get
 
       resultsOfControl match {
-        case resultsOfControl: ResultsOfControlOther => {
+        case resultsOfControl: ResultsOfControlOther =>
           val xml = <RESOFCON534>
             <DesTOC2>{resultsOfControl.description}</DesTOC2>
             <DesTOC2LNG>EN</DesTOC2LNG>
@@ -70,8 +68,7 @@ class ResultsOfControlSpec extends FreeSpec with MustMatchers with Generators wi
           val result = XmlReader.of[ResultsOfControlOther].read(xml)
 
           result.toOption.value mustEqual resultsOfControl
-        }
-        case resultsOfControl: ResultsOfControlDifferentValues => {
+        case resultsOfControl: ResultsOfControlDifferentValues =>
           val xml = <RESOFCON534>
             <ConInd424>{resultsOfControl.controlIndicator.indicator.value}</ConInd424>
             <PoiToTheAttTOC5>{resultsOfControl.pointerToAttribute.pointer.value}</PoiToTheAttTOC5>
@@ -81,7 +78,6 @@ class ResultsOfControlSpec extends FreeSpec with MustMatchers with Generators wi
           val result = XmlReader.of[ResultsOfControlDifferentValues].read(xml)
 
           result.toOption.value mustEqual resultsOfControl
-        }
       }
 
     }

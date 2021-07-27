@@ -30,12 +30,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def totalNumberOfPackages: Option[Row] = userAnswers.get(TotalNumberOfPackagesPage) map {
     answer =>
       Row(
-        key   = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(answer.toString)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.TotalNumberOfPackagesController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.TotalNumberOfPackagesController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"totalNumberOfPackages.checkYourAnswersLabel")
           )
         )
@@ -45,12 +45,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def totalNumberOfItems: Option[Row] = userAnswers.get(TotalNumberOfItemsPage) map {
     answer =>
       Row(
-        key   = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(answer.toString)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.TotalNumberOfItemsController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.TotalNumberOfItemsController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"totalNumberOfItems.checkYourAnswersLabel")
           )
         )
@@ -60,12 +60,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def changesToReport: Option[Row] = userAnswers.get(ChangesToReportPage) map {
     answer =>
       Row(
-        key   = Key(msg"changesToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"changesToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.ChangesToReportController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.ChangesToReportController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"changesToReport.checkYourAnswersLabel")
           )
         )
@@ -75,12 +75,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def anythingElseToReport: Option[Row] = userAnswers.get(AnythingElseToReportPage) map {
     answer =>
       Row(
-        key   = Key(msg"anythingElseToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"anythingElseToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AnythingElseToReportController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AnythingElseToReportController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"anythingElseToReport.checkYourAnswersLabel")
           )
         )
@@ -90,14 +90,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def areAnySealsBroken: Option[Row] = userAnswers.get(AreAnySealsBrokenPage) map {
     answer =>
       Row(
-        key   = Key(msg"areAnySealsBroken.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"areAnySealsBroken.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.AreAnySealsBrokenController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.AreAnySealsBrokenController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"areAnySealsBroken.checkYourAnswersLabel"),
-            attributes         = Map("id" -> "change-are-any-seals-broken")
+            attributes = Map("id" -> "change-are-any-seals-broken")
           )
         )
       )
@@ -106,14 +106,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def canSealsBeRead: Option[Row] = userAnswers.get(CanSealsBeReadPage) map {
     answer =>
       Row(
-        key   = Key(msg"canSealsBeRead.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"canSealsBeRead.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.CanSealsBeReadController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.CanSealsBeReadController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"canSealsBeRead.checkYourAnswersLabel"),
-            attributes         = Map("id" -> "change-can-seals-be-read")
+            attributes = Map("id" -> "change-can-seals-be-read")
           )
         )
       )
@@ -123,22 +123,23 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
     case _ :: _ =>
       Some(
         Row(
-          key     = Key(msg"checkYourAnswers.seals.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-          value   = Value(Html(seals.mkString("<br>"))),
+          key = Key(msg"checkYourAnswers.seals.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          value = Value(Html(seals.mkString("<br>"))),
           actions = Nil
-        ))
+        )
+      )
     case _ => None
   }
 
   def grossMassAmount: Option[Row] = userAnswers.get(GrossMassAmountPage) map {
     answer =>
       Row(
-        key   = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.GrossMassAmountController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.GrossMassAmountController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"grossMassAmount.checkYourAnswersLabel")
           )
         )
@@ -148,26 +149,27 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def vehicleRegistrationCountry: Option[Row] = userAnswers.get(VehicleRegistrationCountryPage) map {
     answer =>
       Row(
-        key   = Key(msg"vehicleRegistrationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"vehicleRegistrationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.VehicleRegistrationCountryController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.VehicleRegistrationCountryController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"vehicleRegistrationCountry.checkYourAnswersLabel")
-          ))
+          )
+        )
       )
   }
 
   val vehicleNameRegistrationReference: Option[Row] = userAnswers.get(VehicleNameRegistrationReferencePage) map {
     answer =>
       Row(
-        key   = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.VehicleNameRegistrationReferenceController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.VehicleNameRegistrationReferenceController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"vehicleNameRegistrationReference.checkYourAnswersLabel")
           )
         )
@@ -177,14 +179,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit messages: Messag
   def dateGoodsUnloaded: Option[Row] = userAnswers.get(DateGoodsUnloadedPage) map {
     answer =>
       Row(
-        key   = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(answer.format(cyaDateFormatter))),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.DateGoodsUnloadedController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.DateGoodsUnloadedController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"dateGoodsUnloaded.visually.hidden"),
-            attributes         = Map("id" -> "change-date-goods-unloaded")
+            attributes = Map("id" -> "change-date-goods-unloaded")
           )
         )
       )

@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import scala.concurrent.ExecutionContext
 
-class AuditEventSubmissionService @Inject()(auditConnector: AuditConnector) {
+class AuditEventSubmissionService @Inject() (auditConnector: AuditConnector) {
 
   def auditUnloadingRemarks(userAnswers: UserAnswers, auditType: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
 

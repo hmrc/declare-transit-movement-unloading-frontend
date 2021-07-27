@@ -15,6 +15,7 @@
  */
 
 package viewModels.sections
+
 import play.api.i18n.Messages
 import play.api.libs.functional.syntax.unlift
 import play.api.libs.json.{__, OWrites}
