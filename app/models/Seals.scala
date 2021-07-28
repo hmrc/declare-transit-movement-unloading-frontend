@@ -38,14 +38,14 @@ object Seals {
       <SEAINFSLI>
         <SeaNumSLI2>{seals.numberOfSeals}</SeaNumSLI2>
         {
-          seals.SealId.map {
-            id =>
-              <SEAIDSID>
+        seals.SealId.map {
+          id =>
+            <SEAIDSID>
                 <SeaIdeSID1>{id}</SeaIdeSID1>
                 <SeaIdeSID1LNG>{LanguageCodeEnglish.code}</SeaIdeSID1LNG>
               </SEAIDSID>
-          }
         }
+      }
       </SEAINFSLI>
   }
 

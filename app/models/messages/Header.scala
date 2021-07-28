@@ -15,6 +15,7 @@
  */
 
 package models.messages
+
 import cats.syntax.all._
 import com.lucidchart.open.xtract.{__, XmlReader}
 import models.{LanguageCodeEnglish, XMLWrites}
@@ -37,22 +38,25 @@ object Header {
       <HEAHEA>
         <DocNumHEA5>{header.movementReferenceNumber}</DocNumHEA5>
         {
-          header.transportIdentity.fold(NodeSeq.Empty) { transportIdentity =>
+        header.transportIdentity.fold(NodeSeq.Empty) {
+          transportIdentity =>
             <IdeOfMeaOfTraAtDHEA78>{escapeXml(transportIdentity)}</IdeOfMeaOfTraAtDHEA78>
             <IdeOfMeaOfTraAtDHEA78LNG>{LanguageCodeEnglish.code}</IdeOfMeaOfTraAtDHEA78LNG>
-          }
         }
+      }
         {
-          header.transportCountry.fold(NodeSeq.Empty) { transportCountry =>
+        header.transportCountry.fold(NodeSeq.Empty) {
+          transportCountry =>
             <NatOfMeaOfTraAtDHEA80>{escapeXml(transportCountry)}</NatOfMeaOfTraAtDHEA80>
-          }
         }
+      }
         <TotNumOfIteHEA305>{header.numberOfItems}</TotNumOfIteHEA305>
         {
-          header.numberOfPackages.fold(NodeSeq.Empty) { numberOfPackages =>
+        header.numberOfPackages.fold(NodeSeq.Empty) {
+          numberOfPackages =>
             <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
-          }
         }
+      }
         <TotGroMasHEA307>{escapeXml(header.grossMass)}</TotGroMasHEA307>
       </HEAHEA>
   }

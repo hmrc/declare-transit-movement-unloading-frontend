@@ -31,12 +31,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnloadingRemarksService @Inject()(metaService: MetaService,
-                                        remarksService: RemarksService,
-                                        unloadingRemarksRequestService: UnloadingRemarksRequestService,
-                                        interchangeControlReferenceIdRepository: InterchangeControlReferenceIdRepository,
-                                        unloadingRemarksMessageService: UnloadingRemarksMessageService,
-                                        unloadingConnector: UnloadingConnector)(implicit ec: ExecutionContext)
+class UnloadingRemarksService @Inject() (metaService: MetaService,
+                                         remarksService: RemarksService,
+                                         unloadingRemarksRequestService: UnloadingRemarksRequestService,
+                                         interchangeControlReferenceIdRepository: InterchangeControlReferenceIdRepository,
+                                         unloadingRemarksMessageService: UnloadingRemarksMessageService,
+                                         unloadingConnector: UnloadingConnector
+)(implicit ec: ExecutionContext)
     extends Logging {
 
   def submit(arrivalId: ArrivalId, userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit hc: HeaderCarrier): Future[Option[Int]] =
@@ -44,26 +45,26 @@ class UnloadingRemarksService @Inject()(metaService: MetaService,
       .nextInterchangeControlReferenceId()
       .flatMap {
         interchangeControlReference =>
-          {
-            remarksService
-              .build(userAnswers, unloadingPermission)
-              .flatMap {
-                unloadingRemarks =>
-                  val meta: Meta = metaService.build(interchangeControlReference)
+          remarksService
+            .build(userAnswers, unloadingPermission)
+            .flatMap {
+              unloadingRemarks =>
+                val meta: Meta = metaService.build(interchangeControlReference)
 
-                  val unloadingRemarksRequest: UnloadingRemarksRequest =
-                    unloadingRemarksRequestService.build(meta, unloadingRemarks, unloadingPermission, userAnswers)
+                val unloadingRemarksRequest: UnloadingRemarksRequest =
+                  unloadingRemarksRequestService.build(meta, unloadingRemarks, unloadingPermission, userAnswers)
 
-                  unloadingConnector
-                    .post(arrivalId, unloadingRemarksRequest)
-                    .flatMap(response => Future.successful(Some(response.status)))
-                    .recover {
-                      case ex =>
-                        logger.error(s"$ex")
-                        Some(SERVICE_UNAVAILABLE)
-                    }
-              }
-          }
+                unloadingConnector
+                  .post(arrivalId, unloadingRemarksRequest)
+                  .flatMap(
+                    response => Future.successful(Some(response.status))
+                  )
+                  .recover {
+                    case ex =>
+                      logger.error(s"$ex")
+                      Some(SERVICE_UNAVAILABLE)
+                  }
+            }
       }
       .recover {
         case ex =>
@@ -75,16 +76,20 @@ class UnloadingRemarksService @Inject()(metaService: MetaService,
     unloadingRemarksMessageService.unloadingRemarksMessage(arrivalId) flatMap {
       case Some(unloadingRemarksRequest) =>
         getUpdatedUnloadingRemarkRequest(unloadingRemarksRequest, userAnswers) flatMap {
-          case Some(updatedUnloadingRemarks) => {
-            unloadingConnector.post(arrivalId, updatedUnloadingRemarks).map(response => Some(response.status))
-          }
+          case Some(updatedUnloadingRemarks) =>
+            unloadingConnector
+              .post(arrivalId, updatedUnloadingRemarks)
+              .map(
+                response => Some(response.status)
+              )
           case _ => logger.debug("Failed to get updated unloading remarks request"); Future.successful(None)
         }
       case _ => logger.debug("Failed to get unloading remarks request: Service.unloadingRemarksMessage(arrivalId)"); Future.successful(None)
     }
 
   private[services] def getUpdatedUnloadingRemarkRequest(unloadingRemarksRequest: UnloadingRemarksRequest,
-                                                         userAnswers: UserAnswers): Future[Option[UnloadingRemarksRequest]] =
+                                                         userAnswers: UserAnswers
+  ): Future[Option[UnloadingRemarksRequest]] =
     interchangeControlReferenceIdRepository
       .nextInterchangeControlReferenceId()
       .map {

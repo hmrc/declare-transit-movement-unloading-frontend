@@ -30,7 +30,7 @@ class UnloadingRemarksRejectionMessageSpec extends SpecBase with ScalaCheckDrive
       forAll(arbitrary[UnloadingRemarksRejectionMessage], arbitrary[FunctionalError](arbitraryRejectionError)) {
         (rejectionMessage, functionalError) =>
           val minimalFunctionalError = functionalError.copy(
-            reason                 = None,
+            reason = None,
             originalAttributeValue = None
           )
 
@@ -39,7 +39,7 @@ class UnloadingRemarksRejectionMessageSpec extends SpecBase with ScalaCheckDrive
             errors = Seq(minimalFunctionalError)
           )
 
-          val xml = {
+          val xml =
             <CC058A>
               <HEAHEA>
                 <DocNumHEA5>{minimalRejectionMessage.movementReferenceNumber}</DocNumHEA5>
@@ -50,7 +50,6 @@ class UnloadingRemarksRejectionMessageSpec extends SpecBase with ScalaCheckDrive
                 <ErrPoiER12>{functionalError.pointer.value}</ErrPoiER12>
               </FUNERRER1>
             </CC058A>
-          }
 
           val result = XmlReader.of[UnloadingRemarksRejectionMessage].read(xml)
 
@@ -62,7 +61,7 @@ class UnloadingRemarksRejectionMessageSpec extends SpecBase with ScalaCheckDrive
       forAll(arbitrary[UnloadingRemarksRejectionMessage], arbitrary[FunctionalError](arbitraryRejectionError)) {
         (rejectionMessage, functionalError) =>
           val fullFunctionalError = functionalError.copy(
-            reason                 = Some(arbitrary[String].sample.value),
+            reason = Some(arbitrary[String].sample.value),
             originalAttributeValue = Some(arbitrary[String].sample.value)
           )
 
@@ -71,7 +70,7 @@ class UnloadingRemarksRejectionMessageSpec extends SpecBase with ScalaCheckDrive
             errors = Seq(fullFunctionalError)
           )
 
-          val xml = {
+          val xml =
             <CC058A>
               <HEAHEA>
                 <DocNumHEA5>{fullRejectionMessage.movementReferenceNumber}</DocNumHEA5>
@@ -85,7 +84,6 @@ class UnloadingRemarksRejectionMessageSpec extends SpecBase with ScalaCheckDrive
                 <OriAttValER14>{fullFunctionalError.originalAttributeValue.value}</OriAttValER14>
               </FUNERRER1>
             </CC058A>
-          }
 
           val result = XmlReader.of[UnloadingRemarksRejectionMessage].read(xml).toOption.value
 

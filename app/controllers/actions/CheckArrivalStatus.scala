@@ -31,8 +31,9 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckArrivalStatusProvider @Inject()(unloadingConnector: UnloadingConnector, renderer: Renderer, appConfig: FrontendAppConfig)(
-  implicit ec: ExecutionContext) {
+class CheckArrivalStatusProvider @Inject() (unloadingConnector: UnloadingConnector, renderer: Renderer, appConfig: FrontendAppConfig)(implicit
+  ec: ExecutionContext
+) {
 
   def apply(arrivalId: ArrivalId): ActionFilter[IdentifierRequest] =
     new ArrivalStatusAction(arrivalId, unloadingConnector, renderer, appConfig)
@@ -58,8 +59,11 @@ class ArrivalStatusAction(
           .render("canNotSendUnloadingRemarks.njk",
                   Json.obj(
                     "arrivalNotifications" -> s"${appConfig.arrivalNotificationsUrl}"
-                  ))(request)
-          .map(html => Option(BadRequest(html)))
+                  )
+          )(request)
+          .map(
+            html => Option(BadRequest(html))
+          )
 
       case Some(responseArrival: ResponseArrival) if validStatus.contains(responseArrival.status) =>
         Future.successful(None)
@@ -69,8 +73,11 @@ class ArrivalStatusAction(
           .render("canNotSendUnloadingRemarks.njk",
                   Json.obj(
                     "arrivalNotifications" -> s"${appConfig.arrivalNotificationsUrl}"
-                  ))(request)
-          .map(html => Option(NotFound(html)))
+                  )
+          )(request)
+          .map(
+            html => Option(NotFound(html))
+          )
 
     }
   }

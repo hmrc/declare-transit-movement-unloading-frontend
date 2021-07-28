@@ -74,7 +74,8 @@ object UnloadingRemarksRequest {
      (__ \ "CUSOFFPREOFFRES" \ "RefNumRES1").read[String],
      (__ \ "UNLREMREM").read[Remarks],
      (__ \ "RESOFCON534").read(strictReadSeq[ResultsOfControl]),
-     (__ \ "SEAINFSLI").read[Seals].optional) mapN apply
+     (__ \ "SEAINFSLI").read[Seals].optional
+    ) mapN apply
 
   private def resultOfControlNode(resultsOfControl: Seq[ResultsOfControl]): NodeSeq =
     resultsOfControl.flatMap {

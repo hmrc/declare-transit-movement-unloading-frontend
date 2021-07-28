@@ -28,11 +28,12 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnloadingPermissionPDFController @Inject()(identify: IdentifierAction,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 unloadingConnector: UnloadingConnector,
-                                                 val renderer: Renderer,
-                                                 val appConfig: FrontendAppConfig)(implicit ec: ExecutionContext)
+class UnloadingPermissionPDFController @Inject() (identify: IdentifierAction,
+                                                  val controllerComponents: MessagesControllerComponents,
+                                                  unloadingConnector: UnloadingConnector,
+                                                  val renderer: Renderer,
+                                                  val appConfig: FrontendAppConfig
+)(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with TechnicalDifficultiesPage {
@@ -46,9 +47,19 @@ class UnloadingPermissionPDFController @Inject()(identify: IdentifierAction,
               result =>
                 result.status match {
                   case OK =>
-                    val contentDisposition = result.headers.get(CONTENT_DISPOSITION).map(value => Seq((CONTENT_DISPOSITION, value.head))).getOrElse(Seq.empty)
-                    val contentType        = result.headers.get(CONTENT_TYPE).map(value => Seq((CONTENT_TYPE, value.head))).getOrElse(Seq.empty)
-                    val headers            = contentDisposition ++ contentType
+                    val contentDisposition = result.headers
+                      .get(CONTENT_DISPOSITION)
+                      .map(
+                        value => Seq((CONTENT_DISPOSITION, value.head))
+                      )
+                      .getOrElse(Seq.empty)
+                    val contentType = result.headers
+                      .get(CONTENT_TYPE)
+                      .map(
+                        value => Seq((CONTENT_TYPE, value.head))
+                      )
+                      .getOrElse(Seq.empty)
+                    val headers = contentDisposition ++ contentType
 
                     Future.successful(Ok(result.bodyAsBytes.toArray).withHeaders(headers: _*))
                   case _ =>

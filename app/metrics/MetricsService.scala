@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.util.control.NonFatal
 
-class MetricsService @Inject()(metrics: Metrics) {
+class MetricsService @Inject() (metrics: Metrics) {
 
   private val registry: MetricRegistry = metrics.defaultRegistry
 
@@ -74,6 +74,6 @@ class MetricsService @Inject()(metrics: Metrics) {
   }
 }
 
-case class Meter(name: String) { val path   = s"$name.rate" }
-case class Timer(name: String) { val path   = s"$name.timer" }
+case class Meter(name: String) { val path = s"$name.rate" }
+case class Timer(name: String) { val path = s"$name.timer" }
 case class Counter(name: String) { val path = s"$name.counter" }

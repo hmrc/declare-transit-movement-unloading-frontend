@@ -28,7 +28,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class InterchangeControlReferenceIdRepository @Inject()(
+class InterchangeControlReferenceIdRepository @Inject() (
   mongo: ReactiveMongoApi,
   dateTimeService: DateTimeService
 ) {
@@ -60,7 +60,8 @@ class InterchangeControlReferenceIdRepository @Inject()(
         .map(
           _.result(indexKeyReads)
             .map(InterchangeControlReference(date, _))
-            .getOrElse(throw new Exception(s"Unable to generate InterchangeControlReferenceId for: $date")))
+            .getOrElse(throw new Exception(s"Unable to generate InterchangeControlReferenceId for: $date"))
+        )
     }
   }
 }

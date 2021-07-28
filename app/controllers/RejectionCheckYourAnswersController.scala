@@ -34,7 +34,7 @@ import viewModels.sections.Section
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RejectionCheckYourAnswersController @Inject()(
+class RejectionCheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
@@ -63,10 +63,8 @@ class RejectionCheckYourAnswersController @Inject()(
         renderer
           .render(
             "rejection-check-your-answers.njk",
-            Json.obj("mrn"         -> request.userAnswers.mrn,
-                     "sections"    -> Json.toJson(answers),
-                     "arrivalId"   -> arrivalId,
-                     "redirectUrl" -> redirectUrl(arrivalId).url)
+            Json
+              .obj("mrn" -> request.userAnswers.mrn, "sections" -> Json.toJson(answers), "arrivalId" -> arrivalId, "redirectUrl" -> redirectUrl(arrivalId).url)
           )
           .map(Ok(_))
     }
@@ -77,10 +75,9 @@ class RejectionCheckYourAnswersController @Inject()(
         unloadingRemarksService.resubmit(arrivalId, request.userAnswers) flatMap {
           case Some(status) =>
             status match {
-              case ACCEPTED => {
+              case ACCEPTED =>
                 auditEventSubmissionService.auditUnloadingRemarks(request.userAnswers, "resubmitUnloadingRemarks")
                 Future.successful(Redirect(routes.ConfirmationController.onPageLoad(arrivalId)))
-              }
               case UNAUTHORIZED => errorHandler.onClientError(request, UNAUTHORIZED)
               case _            => renderTechnicalDifficultiesPage
             }

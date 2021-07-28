@@ -44,17 +44,17 @@ object ProducedDocument {
       <PRODOCDC2>
         <DocTypDC21>{producedDocument.documentType}</DocTypDC21>
         {
-          producedDocument.reference.fold(NodeSeq.Empty) {
-            reference =>
-              <DocRefDC23>{reference}</DocRefDC23>
+        producedDocument.reference.fold(NodeSeq.Empty) {
+          reference =>
+            <DocRefDC23>{reference}</DocRefDC23>
               <DocRefDCLNG>{LanguageCodeEnglish.code}</DocRefDCLNG>
-          } ++
+        } ++
           producedDocument.complementOfInformation.fold(NodeSeq.Empty) {
             complementOfInformation =>
               <ComOfInfDC25>{complementOfInformation}</ComOfInfDC25>
               <ComOfInfDC25LNG>{LanguageCodeEnglish.code}</ComOfInfDC25LNG>
           }
-        }
+      }
 
       </PRODOCDC2>
   }

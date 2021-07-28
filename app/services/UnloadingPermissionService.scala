@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnloadingPermissionServiceImpl @Inject()(connector: UnloadingConnector) extends UnloadingPermissionService {
+class UnloadingPermissionServiceImpl @Inject() (connector: UnloadingConnector) extends UnloadingPermissionService {
 
   def getUnloadingPermission(arrivalId: ArrivalId)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[UnloadingPermission]] =
     connector.getSummary(arrivalId) flatMap {

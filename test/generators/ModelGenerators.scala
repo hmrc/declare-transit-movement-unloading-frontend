@@ -33,7 +33,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryMovementReferenceNumber: Arbitrary[MovementReferenceNumber] =
     Arbitrary {
       for {
-        year    <- Gen.choose(0, 99).map(y => f"$y%02d")
+        year <- Gen
+          .choose(0, 99)
+          .map(
+            y => f"$y%02d"
+          )
         country <- Gen.pick(2, 'A' to 'Z')
         serial  <- Gen.pick(13, ('A' to 'Z') ++ ('0' to '9'))
       } yield MovementReferenceNumber(year, country.mkString, serial.mkString)
@@ -100,20 +104,19 @@ trait ModelGenerators {
         seals                   <- Gen.option(arbitrary[Seals])
         goodsItems              <- nonEmptyListWithMaxSize(2: Int, arbitrary[GoodsItem])
         dateOfPreparation       <- arbitrary[LocalDate]
-      } yield
-        UnloadingPermission(
-          movementReferenceNumber,
-          transportIdentity,
-          transportCountry.map(_.mkString),
-          numberOfItems,
-          numberOfPackages,
-          grossMass,
-          traderAtDestination,
-          presentationOffice,
-          seals,
-          goodsItems,
-          dateOfPreparation
-        )
+      } yield UnloadingPermission(
+        movementReferenceNumber,
+        transportIdentity,
+        transportCountry.map(_.mkString),
+        numberOfItems,
+        numberOfPackages,
+        grossMass,
+        traderAtDestination,
+        presentationOffice,
+        seals,
+        goodsItems,
+        dateOfPreparation
+      )
     }
 
   implicit lazy val arbitrarySeals: Arbitrary[Seals] =
@@ -128,115 +131,106 @@ trait ModelGenerators {
   implicit lazy val arbitraryGoodsItem: Arbitrary[GoodsItem] =
     Arbitrary {
       for {
-        itemNumber                <- choose(min = 1, 10)
-        commodityCode             <- Gen.option(stringsWithMaxLength(GoodsItem.commodityCodeLength: Int))
-        description               <- stringsWithMaxLength(Packages.kindOfPackageLength)
-        grossMass                 <- Gen.option(Gen.choose(0.0, 99999999.999).map(BigDecimal(_).bigDecimal.setScale(3, BigDecimal.RoundingMode.DOWN))) //BigDecimal.RoundingMode.DOWN
-        netMass                   <- Gen.option(Gen.choose(0.0, 99999999.999).map(BigDecimal(_).bigDecimal.setScale(3, BigDecimal.RoundingMode.DOWN))) //todo does this need to be a bigDecimal
+        itemNumber    <- choose(min = 1, 10)
+        commodityCode <- Gen.option(stringsWithMaxLength(GoodsItem.commodityCodeLength: Int))
+        description   <- stringsWithMaxLength(Packages.kindOfPackageLength)
+        grossMass <- Gen.option(
+          Gen.choose(0.0, 99999999.999).map(BigDecimal(_).bigDecimal.setScale(3, BigDecimal.RoundingMode.DOWN))
+        ) //BigDecimal.RoundingMode.DOWN
+        netMass <- Gen.option(
+          Gen.choose(0.0, 99999999.999).map(BigDecimal(_).bigDecimal.setScale(3, BigDecimal.RoundingMode.DOWN))
+        ) //todo does this need to be a bigDecimal
         producedDocuments         <- listWithMaxLength[ProducedDocument](9: Int)
         containers                <- listWithMaxSize(GoodsItem.maxContainers, stringsWithMaxLength(GoodsItem.containerLength))
         packages                  <- nonEmptyListWithMaxSize(9: Int, arbitrary[Packages])
         sensitiveGoodsInformation <- listWithMaxLength[SensitiveGoodsInformation](GoodsItem.maxSensitiveGoods: Int)
-      } yield
-        GoodsItem(
-          itemNumber,
-          commodityCode,
-          description,
-          grossMass.map(_.toString),
-          netMass.map(_.toString),
-          producedDocuments,
-          containers,
-          packages,
-          sensitiveGoodsInformation
-        )
+      } yield GoodsItem(
+        itemNumber,
+        commodityCode,
+        description,
+        grossMass.map(_.toString),
+        netMass.map(_.toString),
+        producedDocuments,
+        containers,
+        packages,
+        sensitiveGoodsInformation
+      )
     }
 
-  implicit lazy val arbitraryCountry: Arbitrary[Country] = {
+  implicit lazy val arbitraryCountry: Arbitrary[Country] =
     Arbitrary {
       for {
-        state <- Gen.oneOf(Seq("Valid", "Invalid"))
-        code  <- Gen.pick(2, 'A' to 'Z')
-        name  <- arbitrary[String]
-      } yield Country(state, code.mkString, name)
+        code <- Gen.pick(2, 'A' to 'Z')
+        name <- arbitrary[String]
+      } yield Country(code.mkString, name)
     }
-  }
 
-  implicit lazy val arbitraryDifferentValuesFound: Arbitrary[IndicatorValue] = {
+  implicit lazy val arbitraryDifferentValuesFound: Arbitrary[IndicatorValue] =
     Arbitrary {
       Gen.oneOf(IndicatorValue.values)
     }
-  }
 
-  implicit lazy val arbitraryControlIndicator: Arbitrary[ControlIndicator] = {
+  implicit lazy val arbitraryControlIndicator: Arbitrary[ControlIndicator] =
     Arbitrary {
       for {
         indicator <- arbitrary[IndicatorValue]
       } yield ControlIndicator(indicator)
     }
-  }
 
-  implicit lazy val arbitraryPointerToAttribute: Arbitrary[PointerToAttribute] = {
+  implicit lazy val arbitraryPointerToAttribute: Arbitrary[PointerToAttribute] =
     Arbitrary {
       for {
         pointer <- Gen.oneOf(PointerIdentity.implementations)
       } yield PointerToAttribute(pointer)
 
     }
-  }
 
-  implicit lazy val arbitraryResultsOfControlOther: Arbitrary[ResultsOfControlOther] = {
+  implicit lazy val arbitraryResultsOfControlOther: Arbitrary[ResultsOfControlOther] =
     Arbitrary {
       for {
         description <- stringsWithMaxLength(ResultsOfControl.descriptionLength)
       } yield ResultsOfControlOther(description)
     }
-  }
 
-  implicit lazy val arbitraryResultsOfControlDifferentValues: Arbitrary[ResultsOfControlDifferentValues] = {
+  implicit lazy val arbitraryResultsOfControlDifferentValues: Arbitrary[ResultsOfControlDifferentValues] =
     Arbitrary {
       for {
         pointerToAttribute <- arbitrary[PointerToAttribute]
         correctedValue     <- stringsWithMaxLength(ResultsOfControl.correctedValueLength)
       } yield ResultsOfControlDifferentValues(pointerToAttribute, correctedValue)
     }
-  }
 
-  implicit lazy val arbitraryResultsOfControl: Arbitrary[ResultsOfControl] = {
+  implicit lazy val arbitraryResultsOfControl: Arbitrary[ResultsOfControl] =
     Arbitrary {
       Gen.oneOf(arbitrary[ResultsOfControlOther], arbitrary[ResultsOfControlDifferentValues])
     }
-  }
 
-  implicit lazy val arbitraryRemarksConform: Arbitrary[RemarksConform] = {
+  implicit lazy val arbitraryRemarksConform: Arbitrary[RemarksConform] =
     Arbitrary {
       for {
         date            <- arbitrary[LocalDate]
         unloadingRemark <- Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))
       } yield RemarksConform(date, unloadingRemark)
     }
-  }
 
-  implicit lazy val arbitraryRemarksConformWithSeals: Arbitrary[RemarksConformWithSeals] = {
+  implicit lazy val arbitraryRemarksConformWithSeals: Arbitrary[RemarksConformWithSeals] =
     Arbitrary {
       for {
         date            <- arbitrary[LocalDate]
         unloadingRemark <- Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))
       } yield RemarksConformWithSeals(date, unloadingRemark)
     }
-  }
 
-  implicit lazy val arbitraryRemarksNonConform: Arbitrary[RemarksNonConform] = {
+  implicit lazy val arbitraryRemarksNonConform: Arbitrary[RemarksNonConform] =
     Arbitrary {
       for {
         stateOfSeals    <- Gen.option(choose(min = 0: Int, 1: Int))
         date            <- arbitrary[LocalDate]
         unloadingRemark <- Gen.option(stringsWithMaxLength(RemarksNonConform.unloadingRemarkLength))
-      } yield
-        RemarksNonConform(
-          stateOfSeals    = stateOfSeals,
-          unloadingRemark = unloadingRemark,
-          unloadingDate   = date
-        )
+      } yield RemarksNonConform(
+        stateOfSeals = stateOfSeals,
+        unloadingRemark = unloadingRemark,
+        unloadingDate = date
+      )
     }
-  }
 }

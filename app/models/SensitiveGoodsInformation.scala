@@ -38,11 +38,11 @@ object SensitiveGoodsInformation {
     sensitiveGoodsInformation =>
       <SGICODSD2>
         {
-          sensitiveGoodsInformation.goodsCode.fold(NodeSeq.Empty) {
-            goodsCode =>
-              <SenGooCodSD22>{goodsCode}</SenGooCodSD22>
-          }
+        sensitiveGoodsInformation.goodsCode.fold(NodeSeq.Empty) {
+          goodsCode =>
+            <SenGooCodSD22>{goodsCode}</SenGooCodSD22>
         }
+      }
         <SenQuaSD23>{sensitiveGoodsInformation.quantity}</SenQuaSD23>
       </SGICODSD2>
   }

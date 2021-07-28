@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResp
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class UnloadingConnectorImpl @Inject()(
+class UnloadingConnectorImpl @Inject() (
   val config: FrontendAppConfig,
   val http: HttpClient,
   val ws: WSClient

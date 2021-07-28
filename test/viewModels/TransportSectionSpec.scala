@@ -31,16 +31,16 @@ class TransportSectionSpec extends SpecBase {
 
   val unloadingPermission: UnloadingPermission = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
-    transportIdentity       = None,
-    transportCountry        = None,
-    grossMass               = "1000",
-    numberOfItems           = 1,
-    numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
-    presentationOffice      = "GB000060",
-    seals                   = None,
-    goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
-    dateOfPreparation       = LocalDate.now()
+    transportIdentity = None,
+    transportCountry = None,
+    grossMass = "1000",
+    numberOfItems = 1,
+    numberOfPackages = Some(1),
+    traderAtDestination = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    presentationOffice = "GB000060",
+    seals = None,
+    goodsItems = NonEmptyList(goodsItemMandatory, Nil),
+    dateOfPreparation = LocalDate.now()
   )
 
   "TransportSection" - {
@@ -64,7 +64,7 @@ class TransportSectionSpec extends SpecBase {
       "correct country from Country object    " in {
 
         val regNumber          = unloadingPermission.copy(transportCountry = Some("FR"))
-        val data: Seq[Section] = TransportSection(emptyUserAnswers, Some(Country("", "FR", "France")))(regNumber, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = TransportSection(emptyUserAnswers, Some(Country("FR", "France")))(regNumber, new UnloadingSummaryRow(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("France")
       }
 
@@ -97,7 +97,7 @@ class TransportSectionSpec extends SpecBase {
         val regCountry = unloadingPermission.copy(transportCountry = Some("United Kingdom"))
 
         val updatedUserAnswers = emptyUserAnswers
-          .set(VehicleRegistrationCountryPage, Country("valid", "FR", "France"))
+          .set(VehicleRegistrationCountryPage, Country("FR", "France"))
           .success
           .value
 

@@ -74,48 +74,46 @@ class UnloadingRemarksServiceSpec extends SpecBase with AppWithDefaultMockFixtur
           arbitrary[LocalDate]
         ) {
           (unloadingPermission, meta, unloadingRemarks, interchangeControlReference, localDate) =>
-            {
-              val userAnswersUpdated =
-                emptyUserAnswers
-                  .set(DateGoodsUnloadedPage, localDate)
-                  .success
-                  .value
+            val userAnswersUpdated =
+              emptyUserAnswers
+                .set(DateGoodsUnloadedPage, localDate)
+                .success
+                .value
 
-              when(mockInterchangeControlReferenceIdRepository.nextInterchangeControlReferenceId())
-                .thenReturn(Future.successful(interchangeControlReference))
+            when(mockInterchangeControlReferenceIdRepository.nextInterchangeControlReferenceId())
+              .thenReturn(Future.successful(interchangeControlReference))
 
-              when(mockMetaService.build(interchangeControlReference))
-                .thenReturn(meta)
+            when(mockMetaService.build(interchangeControlReference))
+              .thenReturn(meta)
 
-              when(mockRemarksService.build(userAnswersUpdated, unloadingPermission))
-                .thenReturn(Future.successful(unloadingRemarks))
+            when(mockRemarksService.build(userAnswersUpdated, unloadingPermission))
+              .thenReturn(Future.successful(unloadingRemarks))
 
-              val unloadingRemarksRequest = UnloadingRemarksRequest(
-                meta,
-                header(unloadingPermission),
-                unloadingPermission.traderAtDestination,
-                unloadingPermission.presentationOffice,
-                unloadingRemarks,
-                Nil,
-                seals = None
+            val unloadingRemarksRequest = UnloadingRemarksRequest(
+              meta,
+              header(unloadingPermission),
+              unloadingPermission.traderAtDestination,
+              unloadingPermission.presentationOffice,
+              unloadingRemarks,
+              Nil,
+              seals = None
+            )
+
+            when(mockUnloadingRemarksRequestService.build(meta, unloadingRemarks, unloadingPermission, userAnswersUpdated))
+              .thenReturn(
+                unloadingRemarksRequest
               )
 
-              when(mockUnloadingRemarksRequestService.build(meta, unloadingRemarks, unloadingPermission, userAnswersUpdated))
-                .thenReturn(
-                  unloadingRemarksRequest
-                )
+            when(mockUnloadingConnector.post(any(), any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED)))
 
-              when(mockUnloadingConnector.post(any(), any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED)))
+            val arrivalNotificationService = app.injector.instanceOf[UnloadingRemarksService]
+            arrivalNotificationService.submit(arrivalId, userAnswersUpdated, unloadingPermission).futureValue mustBe Some(ACCEPTED)
 
-              val arrivalNotificationService = app.injector.instanceOf[UnloadingRemarksService]
-              arrivalNotificationService.submit(arrivalId, userAnswersUpdated, unloadingPermission).futureValue mustBe Some(ACCEPTED)
-
-              reset(mockInterchangeControlReferenceIdRepository)
-              reset(mockMetaService)
-              reset(mockRemarksService)
-              reset(mockUnloadingRemarksRequestService)
-              reset(mockUnloadingConnector)
-            }
+            reset(mockInterchangeControlReferenceIdRepository)
+            reset(mockMetaService)
+            reset(mockRemarksService)
+            reset(mockUnloadingRemarksRequestService)
+            reset(mockUnloadingConnector)
         }
       }
 
@@ -311,8 +309,8 @@ class UnloadingRemarksServiceSpec extends SpecBase with AppWithDefaultMockFixtur
           val userAnswers = emptyUserAnswers.set(GrossMassAmountPage, "1234").success.value
 
           val expectedResultOfControl: Seq[ResultsOfControl] = unloadingRemarksRequest.resultOfControl.map {
-            case y: ResultsOfControlDifferentValues if (y.pointerToAttribute.pointer == GrossMass) => y.copy(correctedValue = "1234")
-            case x                                                                                 => x
+            case y: ResultsOfControlDifferentValues if y.pointerToAttribute.pointer == GrossMass => y.copy(correctedValue = "1234")
+            case x                                                                               => x
           }
 
           val arrivalNotificationService = app.injector.instanceOf[UnloadingRemarksService]

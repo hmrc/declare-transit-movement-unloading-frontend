@@ -15,6 +15,7 @@
  */
 
 package services
+
 import models.{Seals, UnloadingPermission, UserAnswers}
 import models.messages._
 import models.reference.Country
@@ -41,11 +42,19 @@ class ResultOfControlServiceImpl extends ResultOfControlService {
 
     val sealsUpdated: Seq[ResultsOfControl] = resultsOfControlSealsUpdated(unloadingPermission.seals)
 
-    Seq(vehicleRegistrationReference, vehicleRegistrationCountry, totalNumberOfItemsPage, totalNumberOfPackagesPage, grossMassAmount, sealsBroken, sealsUpdated).flatten
+    Seq(vehicleRegistrationReference,
+        vehicleRegistrationCountry,
+        totalNumberOfItemsPage,
+        totalNumberOfPackagesPage,
+        grossMassAmount,
+        sealsBroken,
+        sealsUpdated
+    ).flatten
   }
 
-  private def resultsOfControlString(questionPage: QuestionPage[String], pointerIdentity: PointerIdentity)(
-    implicit ua: UserAnswers): Seq[ResultsOfControlDifferentValues] =
+  private def resultsOfControlString(questionPage: QuestionPage[String], pointerIdentity: PointerIdentity)(implicit
+    ua: UserAnswers
+  ): Seq[ResultsOfControlDifferentValues] =
     ua.get(questionPage)
       .map {
         value =>
@@ -56,8 +65,9 @@ class ResultOfControlServiceImpl extends ResultOfControlService {
       }
       .toSeq
 
-  private def resultsOfControlInt(questionPage: QuestionPage[Int], pointerIdentity: PointerIdentity)(
-    implicit ua: UserAnswers): Seq[ResultsOfControlDifferentValues] =
+  private def resultsOfControlInt(questionPage: QuestionPage[Int], pointerIdentity: PointerIdentity)(implicit
+    ua: UserAnswers
+  ): Seq[ResultsOfControlDifferentValues] =
     ua.get(questionPage)
       .map {
         value =>
@@ -68,15 +78,17 @@ class ResultOfControlServiceImpl extends ResultOfControlService {
       }
       .toSeq
 
-  private def resultsOfControlCountry(questionPage: QuestionPage[Country], pointerIdentity: PointerIdentity)(
-    implicit ua: UserAnswers): Seq[ResultsOfControlDifferentValues] =
+  private def resultsOfControlCountry(questionPage: QuestionPage[Country], pointerIdentity: PointerIdentity)(implicit
+    ua: UserAnswers
+  ): Seq[ResultsOfControlDifferentValues] =
     ua.get(questionPage) match {
-      case Some(Country(_, code, _)) =>
+      case Some(Country(code, _)) =>
         Seq(
           ResultsOfControlDifferentValues(
             PointerToAttribute(pointerIdentity),
             code
-          ))
+          )
+        )
       case _ => Seq.empty
     }
 

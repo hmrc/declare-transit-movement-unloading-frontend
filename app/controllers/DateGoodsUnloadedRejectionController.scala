@@ -35,7 +35,7 @@ import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DateGoodsUnloadedRejectionController @Inject()(
+class DateGoodsUnloadedRejectionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: NavigatorUnloadingPermission,
@@ -71,11 +71,13 @@ class DateGoodsUnloadedRejectionController @Inject()(
           "date"      -> viewModel
         )
 
-      }).foldF({
+      }).foldF {
         val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
 
         renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
-      })(json => renderer.render("dateGoodsUnloaded.njk", json).map(Ok(_)))
+      }(
+        json => renderer.render("dateGoodsUnloaded.njk", json).map(Ok(_))
+      )
 
   }
 
@@ -85,38 +87,34 @@ class DateGoodsUnloadedRejectionController @Inject()(
         up <- OptionT(unloadingPermissionService.getUnloadingPermission(arrivalId))
         dateOfPreparation = up.dateOfPreparation
         rejectionMessage <- OptionT(rejectionService.unloadingRemarksRejectionMessage(arrivalId))
-      } yield {
+      } yield formProvider(dateOfPreparation)
+        .bindFromRequest()
+        .fold(
+          formWithErrors => {
 
-        formProvider(dateOfPreparation)
-          .bindFromRequest()
-          .fold(
-            formWithErrors => {
+            val viewModel = DateInput.localDate(formWithErrors("value"))
 
-              val viewModel = DateInput.localDate(formWithErrors("value"))
+            val json = Json.obj(
+              "form"      -> formWithErrors,
+              "arrivalId" -> arrivalId,
+              "date"      -> viewModel
+            )
 
-              val json = Json.obj(
-                "form"      -> formWithErrors,
-                "arrivalId" -> arrivalId,
-                "date"      -> viewModel
-              )
+            renderer.render("dateGoodsUnloaded.njk", json).map(BadRequest(_))
+          },
+          value => {
+            val userAnswers = UserAnswers(arrivalId, rejectionMessage.movementReferenceNumber, request.eoriNumber)
+            for {
+              updatedAnswers <- Future.fromTry(userAnswers.set(DateGoodsUnloadedPage, value))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(routes.RejectionCheckYourAnswersController.onPageLoad(arrivalId))
 
-              renderer.render("dateGoodsUnloaded.njk", json).map(BadRequest(_))
-            },
-            value => {
-              val userAnswers = UserAnswers(arrivalId, rejectionMessage.movementReferenceNumber, request.eoriNumber)
-              for {
-                updatedAnswers <- Future.fromTry(userAnswers.set(DateGoodsUnloadedPage, value))
-                _              <- sessionRepository.set(updatedAnswers)
-              } yield Redirect(routes.RejectionCheckYourAnswersController.onPageLoad(arrivalId))
+          }
+        )).getOrElse {
+        val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
 
-            }
-          )
-      }).getOrElse({
-          val json = Json.obj("contactUrl" -> frontendAppConfig.nctsEnquiriesUrl)
-
-          renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
-        })
-        .flatten
+        renderer.render("technicalDifficulties.njk", json).map(InternalServerError(_))
+      }.flatten
 
   }
 

@@ -32,7 +32,7 @@ import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ConfirmRemoveCommentsController @Inject()(
+class ConfirmRemoveCommentsController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: Navigator,
@@ -90,7 +90,7 @@ class ConfirmRemoveCommentsController @Inject()(
                 } yield Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, updatedAnswers))
               } else {
                 Future.successful(Redirect(navigator.nextPage(ConfirmRemoveCommentsPage, mode, request.userAnswers)))
-            }
+              }
           )
     }
 }

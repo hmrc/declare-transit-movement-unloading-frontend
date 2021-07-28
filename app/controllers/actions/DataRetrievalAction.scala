@@ -24,7 +24,7 @@ import repositories.SessionRepository
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRetrievalActionProviderImpl @Inject()(sessionRepository: SessionRepository, ec: ExecutionContext) extends DataRetrievalActionProvider {
+class DataRetrievalActionProviderImpl @Inject() (sessionRepository: SessionRepository, ec: ExecutionContext) extends DataRetrievalActionProvider {
 
   def apply(arrivalId: ArrivalId): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
     new DataRetrievalAction(arrivalId, ec, sessionRepository)

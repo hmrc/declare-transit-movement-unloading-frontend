@@ -33,7 +33,7 @@ import viewModels.{SealsSection, UnloadingSummaryViewModel}
 
 import scala.concurrent.ExecutionContext
 
-class UnloadingSummaryController @Inject()(
+class UnloadingSummaryController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
@@ -51,6 +51,7 @@ class UnloadingSummaryController @Inject()(
 
   private val redirectUrl: ArrivalId => Call =
     arrivalId => controllers.routes.CheckYourAnswersController.onPageLoad(arrivalId)
+
   private val addCommentUrl: ArrivalId => Call =
     arrivalId => controllers.routes.ChangesToReportController.onPageLoad(arrivalId, NormalMode)
 
@@ -58,8 +59,7 @@ class UnloadingSummaryController @Inject()(
     (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
         unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
-          case Some(unloadingPermission) => {
-
+          case Some(unloadingPermission) =>
             //TODO: Move unloading summary into UnloadingSummaryViewModel
             val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(request.userAnswers)
             val sealsSection                             = SealsSection(request.userAnswers)(unloadingPermission, unloadingSummaryRow)
@@ -93,7 +93,6 @@ class UnloadingSummaryController @Inject()(
 
                 renderer.render("unloadingSummary.njk", json).map(Ok(_))
             }
-          }
           case _ =>
             errorHandler.onClientError(request, BAD_REQUEST, "errors.malformedSeals") //todo: get design and content to look at this
 

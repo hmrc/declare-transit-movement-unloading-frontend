@@ -23,10 +23,10 @@ case class MessagesLocation(unloadingPermission: String, unloadingRemarks: Optio
 object MessagesLocation {
 
   import play.api.libs.functional.syntax._
-  implicit val reads: Reads[MessagesLocation] = {
+
+  implicit val reads: Reads[MessagesLocation] =
     ((__ \ "IE043").read[String] and
       (__ \ "IE044").readNullable[String] and
       (__ \ "IE058").readNullable[String])(MessagesLocation.apply _)
 
-  }
 }

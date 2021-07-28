@@ -36,6 +36,7 @@ object MessageId {
   def fromIndex(index: Int): MessageId = new MessageId(index)
 
   implicit val pathBindableMessageId: PathBindable[MessageId] = new PathBindable[MessageId] {
+
     override def bind(key: String, value: String): Either[String, MessageId] =
       implicitly[PathBindable[Int]]
         .bind(key, value)

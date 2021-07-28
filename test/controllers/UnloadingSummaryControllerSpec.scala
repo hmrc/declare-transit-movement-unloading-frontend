@@ -38,16 +38,16 @@ class UnloadingSummaryControllerSpec extends SpecBase with AppWithDefaultMockFix
 
   val unloadingPermission: UnloadingPermission = UnloadingPermission(
     movementReferenceNumber = "19IT02110010007827",
-    transportIdentity       = None,
-    transportCountry        = None,
-    grossMass               = "1000",
-    numberOfItems           = 1,
-    numberOfPackages        = Some(1),
-    traderAtDestination     = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
-    presentationOffice      = "GB000060",
-    seals                   = None,
-    goodsItems              = NonEmptyList(goodsItemMandatory, Nil),
-    dateOfPreparation       = LocalDate.now()
+    transportIdentity = None,
+    transportCountry = None,
+    grossMass = "1000",
+    numberOfItems = 1,
+    numberOfPackages = Some(1),
+    traderAtDestination = TraderAtDestination("eori", "name", "streetAndNumber", "postcode", "city", "countryCode"),
+    presentationOffice = "GB000060",
+    seals = None,
+    goodsItems = NonEmptyList(goodsItemMandatory, Nil),
+    dateOfPreparation = LocalDate.now()
   )
 
   private val mockUnloadingPermissionService = mock[UnloadingPermissionService]

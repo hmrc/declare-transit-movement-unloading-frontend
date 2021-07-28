@@ -15,6 +15,7 @@
  */
 
 package services
+
 import connectors.ReferenceDataConnector
 import models.reference.Country
 import org.mockito.Mockito.when
@@ -61,15 +62,15 @@ class ReferenceDataServiceSpec extends FreeSpec with ScalaFutures with MustMatch
         when(mockConnector.getCountryList()).thenReturn(
           Future.successful(
             Seq(
-              Country("valid", "GB", "United Kingdom"),
-              Country("valid", "AD", "Andorra")
+              Country("GB", "United Kingdom"),
+              Country("AD", "Andorra")
             )
           )
         )
 
         val service = new ReferenceDataServiceImpl(mockConnector)
         service.getCountryByCode(Some("GB")).futureValue mustBe Some(
-          Country("valid", "GB", "United Kingdom")
+          Country("GB", "United Kingdom")
         )
       }
 

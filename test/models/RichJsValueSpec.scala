@@ -184,7 +184,8 @@ class RichJsValueSpec extends FreeSpec with MustMatchers with ScalaCheckProperty
       value.set(path, JsString("bar")) mustEqual JsSuccess(
         Json.obj(
           "foo" -> Json.arr("bar")
-        ))
+        )
+      )
     }
 
     "must set into an object which does not exist" in {
@@ -198,7 +199,8 @@ class RichJsValueSpec extends FreeSpec with MustMatchers with ScalaCheckProperty
           "foo" -> Json.obj(
             "bar" -> "baz"
           )
-        ))
+        )
+      )
     }
 
     "must set nested objects and arrays" in {
@@ -216,7 +218,8 @@ class RichJsValueSpec extends FreeSpec with MustMatchers with ScalaCheckProperty
               )
             )
           )
-        ))
+        )
+      )
     }
   }
 

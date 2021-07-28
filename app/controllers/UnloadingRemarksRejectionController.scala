@@ -30,7 +30,7 @@ import viewModels.UnloadingRemarksRejectionViewModel
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnloadingRemarksRejectionController @Inject()(
+class UnloadingRemarksRejectionController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   val controllerComponents: MessagesControllerComponents,

@@ -25,6 +25,7 @@ sealed trait ArrivalStatus {
 object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
 
   case object Initialized extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.ArrivalSubmitted                     => Right(ArrivalSubmitted)
       case MessageReceivedEvent.GoodsReleased                        => Right(GoodsReleased)
@@ -37,6 +38,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object ArrivalSubmitted extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.GoodsReleased                        => Right(GoodsReleased)
       case MessageReceivedEvent.UnloadingPermission                  => Right(UnloadingPermission)
@@ -48,6 +50,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object UnloadingPermission extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.UnloadingPermission       => Right(UnloadingPermission)
       case MessageReceivedEvent.UnloadingRemarksSubmitted => Right(UnloadingRemarksSubmitted)
@@ -61,6 +64,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object ArrivalRejected extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.ArrivalRejected => Right(ArrivalRejected)
       case MessageReceivedEvent.GoodsReleased   => Right(GoodsReleased)
@@ -69,6 +73,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object ArrivalXMLSubmissionNegativeAcknowledgement extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement => Right(ArrivalXMLSubmissionNegativeAcknowledgement)
       case MessageReceivedEvent.ArrivalSubmitted                     => Right(ArrivalSubmitted)
@@ -77,6 +82,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object UnloadingRemarksXMLSubmissionNegativeAcknowledgement extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement => Right(UnloadingRemarksXMLSubmissionNegativeAcknowledgement)
       case MessageReceivedEvent.UnloadingRemarksSubmitted            => Right(UnloadingRemarksSubmitted)
@@ -85,6 +91,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object UnloadingRemarksSubmitted extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.UnloadingRemarksRejected             => Right(UnloadingRemarksRejected)
       case MessageReceivedEvent.UnloadingPermission                  => Right(UnloadingPermission)
@@ -95,6 +102,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   }
 
   case object UnloadingRemarksRejected extends ArrivalStatus {
+
     override def transition(messageReceived: MessageReceivedEvent): Either[TransitionError, ArrivalStatus] = messageReceived match {
       case MessageReceivedEvent.UnloadingRemarksRejected  => Right(UnloadingRemarksRejected)
       case MessageReceivedEvent.UnloadingRemarksSubmitted => Right(UnloadingRemarksSubmitted)
@@ -117,6 +125,10 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
   )
 
   implicit val enumerable: Enumerable[ArrivalStatus] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+    Enumerable(
+      values.map(
+        v => v.toString -> v
+      ): _*
+    )
 
 }

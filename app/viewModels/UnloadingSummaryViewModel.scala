@@ -15,6 +15,7 @@
  */
 
 package viewModels
+
 import cats.data.NonEmptyList
 import models.reference.Country
 import models.{Index, UnloadingPermission, UserAnswers}
@@ -42,34 +43,29 @@ object SealsSection {
 
   def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Option[Seq[Section]] =
     userAnswers.get(SealsQuery) match {
-      case Some(seals) => {
+      case Some(seals) =>
         val rows: Seq[Row] = seals.zipWithIndex.map {
-          case (sealNumber, index) => {
-
+          case (sealNumber, index) =>
             unloadingPermission.seals match {
               case Some(existingSeals) if existingSeals.SealId.length >= index + 1 =>
                 SummaryRow.rowWithIndex(Index(index))(None)(sealNumber)(unloadingSummaryRow.seals)
 
               case _ => SummaryRow.rowWithIndex(Index(index))(None)(sealNumber)(unloadingSummaryRow.sealsWithRemove)
             }
-          }
         }
 
         Some(Seq(Section(msg"changeSeal.title", rows)))
-      }
 
       case None =>
         unloadingPermission.seals match {
-          case Some(seals) => {
+          case Some(seals) =>
             val rows: Seq[Row] = seals.SealId.zipWithIndex.map {
-              case (sealNumber, index) => {
+              case (sealNumber, index) =>
                 val sealAnswer = SummaryRow.userAnswerWithIndex(Index(index))(userAnswers)(NewSealNumberPage)
                 SummaryRow.rowWithIndex(Index(index))(sealAnswer)(sealNumber)(unloadingSummaryRow.seals)
-              }
             }
 
             Some(Seq(Section(msg"changeSeal.title", rows)))
-          }
           case None =>
             None
         }
@@ -78,8 +74,10 @@ object SealsSection {
 
 object TransportSection {
 
-  def apply(userAnswers: UserAnswers, summaryTransportCountry: Option[Country])(implicit unloadingPermission: UnloadingPermission,
-                                                                                unloadingSummaryRow: UnloadingSummaryRow): Seq[Section] = {
+  def apply(userAnswers: UserAnswers, summaryTransportCountry: Option[Country])(implicit
+    unloadingPermission: UnloadingPermission,
+    unloadingSummaryRow: UnloadingSummaryRow
+  ): Seq[Section] = {
 
     val vehicleAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(VehicleNameRegistrationReferencePage)
     val transportIdentity: Seq[Row]   = SummaryRow.row(vehicleAnswer)(unloadingPermission.transportIdentity)(unloadingSummaryRow.vehicleUsed)

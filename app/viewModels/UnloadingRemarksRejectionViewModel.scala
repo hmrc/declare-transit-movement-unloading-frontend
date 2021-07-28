@@ -15,6 +15,7 @@
  */
 
 package viewModels
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -32,8 +33,9 @@ case class UnloadingRemarksRejectionViewModel(page: String, json: JsObject)
 
 object UnloadingRemarksRejectionViewModel {
 
-  def apply(errors: Seq[FunctionalError], arrivalId: ArrivalId, nctsEnquiriesUrl: String)(
-    implicit messages: Messages): Option[UnloadingRemarksRejectionViewModel] = {
+  def apply(errors: Seq[FunctionalError], arrivalId: ArrivalId, nctsEnquiriesUrl: String)(implicit
+    messages: Messages
+  ): Option[UnloadingRemarksRejectionViewModel] = {
     val viewModel: Option[UnloadingRemarksRejectionViewModel] = errors match {
       case error if errors.length == 1 =>
         singleErrorPage(arrivalId, error.head, nctsEnquiriesUrl)
@@ -56,8 +58,9 @@ object UnloadingRemarksRejectionViewModel {
     Some(UnloadingRemarksRejectionViewModel("unloadingRemarksMultipleErrorsRejection.njk", json))
   }
 
-  private def singleErrorPage(arrivalId: ArrivalId, error: FunctionalError, nctsEnquiriesUrl: String)(
-    implicit messages: Messages): Option[UnloadingRemarksRejectionViewModel] = {
+  private def singleErrorPage(arrivalId: ArrivalId, error: FunctionalError, nctsEnquiriesUrl: String)(implicit
+    messages: Messages
+  ): Option[UnloadingRemarksRejectionViewModel] = {
     val rowOption: Option[Row] = error.originalAttributeValue flatMap {
       originalValue =>
         error.pointer match {
@@ -65,8 +68,11 @@ object UnloadingRemarksRejectionViewModel {
           case VehicleRegistrationPointer => Some(vehicleNameRegistrationReference(arrivalId, originalValue))
           case NumberOfItemsPointer       => Some(totalNumberOfItems(arrivalId, originalValue))
           case GrossMassPointer           => Some(grossMassAmount(arrivalId, originalValue))
-          case UnloadingDatePointer       => getDate(originalValue) map (date => unloadingDate(arrivalId, date))
-          case DefaultPointer(_)          => None
+          case UnloadingDatePointer =>
+            getDate(originalValue) map (
+              date => unloadingDate(arrivalId, date)
+            )
+          case DefaultPointer(_) => None
         }
     }
     rowOption map {
@@ -81,36 +87,39 @@ object UnloadingRemarksRejectionViewModel {
     }
   }
 
-  private def defaultErrorPage(arrivalId: ArrivalId, error: Option[FunctionalError], nctsEnquiriesUrl: String)(
-    implicit messages: Messages): Option[UnloadingRemarksRejectionViewModel] =
-    error.flatMap(functionalError =>
-      functionalError.pointer match {
-        case DefaultPointer(_) => multipleErrorPage(arrivalId, nctsEnquiriesUrl, Seq(functionalError))
-        case _                 => None
-    })
+  private def defaultErrorPage(arrivalId: ArrivalId, error: Option[FunctionalError], nctsEnquiriesUrl: String)(implicit
+    messages: Messages
+  ): Option[UnloadingRemarksRejectionViewModel] =
+    error.flatMap(
+      functionalError =>
+        functionalError.pointer match {
+          case DefaultPointer(_) => multipleErrorPage(arrivalId, nctsEnquiriesUrl, Seq(functionalError))
+          case _                 => None
+        }
+    )
 
   private def vehicleNameRegistrationReference(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key   = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
       value = Value(lit"$value"),
       actions = List(
         Action(
-          content            = msg"site.edit",
-          href               = routes.VehicleNameRegistrationRejectionController.onPageLoad(arrivalId).url,
+          content = msg"site.edit",
+          href = routes.VehicleNameRegistrationRejectionController.onPageLoad(arrivalId).url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changeVehicle.reference.label")),
-          attributes         = Map("id" -> "change-vehicle-registration-rejection")
+          attributes = Map("id" -> "change-vehicle-registration-rejection")
         )
       )
     )
 
   def totalNumberOfPackages(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key   = Key(msg"changeItems.totalNumberOfPackages.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.totalNumberOfPackages.label", classes = Seq("govuk-!-width-one-half")),
       value = Value(lit"$value"),
       actions = List(
         Action(
-          content            = msg"site.edit",
-          href               = routes.TotalNumberOfPackagesRejectionController.onPageLoad(arrivalId).url,
+          content = msg"site.edit",
+          href = routes.TotalNumberOfPackagesRejectionController.onPageLoad(arrivalId).url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changeItems.totalNumberOfPackages.label"))
         )
       )
@@ -118,12 +127,12 @@ object UnloadingRemarksRejectionViewModel {
 
   def totalNumberOfItems(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key   = Key(msg"changeItems.totalNumberOfItems.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.totalNumberOfItems.label", classes = Seq("govuk-!-width-one-half")),
       value = Value(lit"$value"),
       actions = List(
         Action(
-          content            = msg"site.edit",
-          href               = routes.TotalNumberOfItemsRejectionController.onPageLoad(arrivalId).url,
+          content = msg"site.edit",
+          href = routes.TotalNumberOfItemsRejectionController.onPageLoad(arrivalId).url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changeItems.totalNumberOfItems.label"))
         )
       )
@@ -131,12 +140,12 @@ object UnloadingRemarksRejectionViewModel {
 
   def grossMassAmount(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key   = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
       value = Value(lit"$value"),
       actions = List(
         Action(
-          content            = msg"site.edit",
-          href               = routes.GrossMassAmountRejectionController.onPageLoad(arrivalId).url,
+          content = msg"site.edit",
+          href = routes.GrossMassAmountRejectionController.onPageLoad(arrivalId).url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changeItems.grossMass.label"))
         )
       )
@@ -145,14 +154,14 @@ object UnloadingRemarksRejectionViewModel {
   def unloadingDate(arrivalId: ArrivalId, value: LocalDate): Row = {
     val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
     Row(
-      key   = Key(msg"changeItems.dateGoodsUnloaded.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.dateGoodsUnloaded.label", classes = Seq("govuk-!-width-one-half")),
       value = Value(Literal(value.format(dateFormatter))),
       actions = List(
         Action(
-          content            = msg"site.edit",
-          href               = routes.DateGoodsUnloadedRejectionController.onPageLoad(arrivalId).url,
+          content = msg"site.edit",
+          href = routes.DateGoodsUnloadedRejectionController.onPageLoad(arrivalId).url,
           visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"changeItems.dateGoodsUnloaded.label")),
-          attributes         = Map("id" -> "change-date-goods-unloaded")
+          attributes = Map("id" -> "change-date-goods-unloaded")
         )
       )
     )

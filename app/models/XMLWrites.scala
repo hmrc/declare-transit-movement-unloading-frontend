@@ -15,6 +15,7 @@
  */
 
 package models
+
 import scala.xml.NodeSeq
 
 trait XMLWrites[A] {

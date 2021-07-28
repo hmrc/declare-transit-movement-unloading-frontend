@@ -48,7 +48,7 @@ class ProducedDocumentSpec extends FreeSpec with MustMatchers with Generators wi
               </ComOfInfDC25>
           }
 
-          val expectedResult = {
+          val expectedResult =
             <PRODOCDC2>
               <DocTypDC21>
                 {producedDocument.documentType}
@@ -56,7 +56,6 @@ class ProducedDocumentSpec extends FreeSpec with MustMatchers with Generators wi
               {reference.getOrElse(NodeSeq.Empty)}
               {complementOfInformation.getOrElse(NodeSeq.Empty)}
             </PRODOCDC2>
-          }
 
           XmlReader.of[ProducedDocument].read(trim(expectedResult)) mustBe
             ParseSuccess(ProducedDocument(producedDocument.documentType, producedDocument.reference, producedDocument.complementOfInformation))
@@ -79,7 +78,7 @@ class ProducedDocumentSpec extends FreeSpec with MustMatchers with Generators wi
                 <ComOfInfDC25LNG>EN</ComOfInfDC25LNG>
           }
 
-          val expectedResult = {
+          val expectedResult =
             <PRODOCDC2>
               <DocTypDC21>
                 {producedDocument.documentType}
@@ -87,7 +86,6 @@ class ProducedDocumentSpec extends FreeSpec with MustMatchers with Generators wi
               {reference.getOrElse(NodeSeq.Empty)}
               {complementOfInformation.getOrElse(NodeSeq.Empty)}
             </PRODOCDC2>
-          }
 
           producedDocument.toXml mustEqual expectedResult
       }

@@ -27,7 +27,7 @@ import utils.{Date, IntValue}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UnloadingRemarksRejectionService @Inject()(connector: UnloadingConnector)(implicit ec: ExecutionContext) {
+class UnloadingRemarksRejectionService @Inject() (connector: UnloadingConnector)(implicit ec: ExecutionContext) {
 
   def unloadingRemarksRejectionMessage(arrivalId: ArrivalId)(implicit hc: HeaderCarrier): Future[Option[UnloadingRemarksRejectionMessage]] =
     connector.getSummary(arrivalId) flatMap {
@@ -41,8 +41,9 @@ class UnloadingRemarksRejectionService @Inject()(connector: UnloadingConnector)(
       case _ => Future.successful(None)
     }
 
-  def getRejectedValueAsString(arrivalId: ArrivalId, userAnswers: Option[UserAnswers])(page: QuestionPage[String])(
-    implicit hc: HeaderCarrier): Future[Option[String]] =
+  def getRejectedValueAsString(arrivalId: ArrivalId, userAnswers: Option[UserAnswers])(
+    page: QuestionPage[String]
+  )(implicit hc: HeaderCarrier): Future[Option[String]] =
     userAnswers match {
       case Some(userAnswers: UserAnswers) if userAnswers.get(page).isDefined => Future.successful(userAnswers.get(page))
       case _                                                                 => getRejectedValue(arrivalId)
@@ -54,8 +55,9 @@ class UnloadingRemarksRejectionService @Inject()(connector: UnloadingConnector)(
       case _                                                                 => getRejectedValue(arrivalId).map(_.flatMap(IntValue.getInt))
     }
 
-  def getRejectedValueAsDate(arrivalId: ArrivalId, userAnswers: Option[UserAnswers])(page: QuestionPage[LocalDate])(
-    implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
+  def getRejectedValueAsDate(arrivalId: ArrivalId, userAnswers: Option[UserAnswers])(
+    page: QuestionPage[LocalDate]
+  )(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
     userAnswers match {
       case Some(userAnswers: UserAnswers) if userAnswers.get(page).isDefined => Future.successful(userAnswers.get(page))
       case _                                                                 => getRejectedValue(arrivalId).map(_.flatMap(Date.getDate))

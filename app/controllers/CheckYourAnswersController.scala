@@ -37,7 +37,7 @@ import viewModels.sections.Section
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckYourAnswersController @Inject()(
+class CheckYourAnswersController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
@@ -64,7 +64,7 @@ class CheckYourAnswersController @Inject()(
     (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
         unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
-          case Some(unloadingPermission) => {
+          case Some(unloadingPermission) =>
             referenceDataService.getCountryByCode(unloadingPermission.transportCountry).flatMap {
               transportCountry =>
                 val viewModel = CheckYourAnswersViewModel(request.userAnswers, unloadingPermission, transportCountry)
@@ -77,11 +77,11 @@ class CheckYourAnswersController @Inject()(
                     Json.obj("mrn"         -> request.userAnswers.mrn,
                              "arrivalId"   -> arrivalId,
                              "sections"    -> Json.toJson(answers),
-                             "redirectUrl" -> redirectUrl(arrivalId).url)
+                             "redirectUrl" -> redirectUrl(arrivalId).url
+                    )
                   )
                   .map(Ok(_))
             }
-          }
           case _ => errorHandler.onClientError(request, BAD_REQUEST)
         }
     }
@@ -90,21 +90,19 @@ class CheckYourAnswersController @Inject()(
     (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
         unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
-          case Some(unloadingPermission) => {
+          case Some(unloadingPermission) =>
             unloadingRemarksService.submit(arrivalId, request.userAnswers, unloadingPermission) flatMap {
               case Some(status) =>
                 status match {
-                  case ACCEPTED => {
+                  case ACCEPTED =>
                     auditEventSubmissionService.auditUnloadingRemarks(request.userAnswers, "submitUnloadingRemarks")
                     Future.successful(Redirect(routes.ConfirmationController.onPageLoad(arrivalId)))
-                  }
                   case UNAUTHORIZED => errorHandler.onClientError(request, UNAUTHORIZED)
                   case _            => renderTechnicalDifficultiesPage
                 }
 
               case None => renderTechnicalDifficultiesPage
             }
-          }
           case _ => renderTechnicalDifficultiesPage
         }
     }

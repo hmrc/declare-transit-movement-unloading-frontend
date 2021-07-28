@@ -18,6 +18,7 @@ import cats.data.NonEmptyList
 import com.lucidchart.open.xtract._
 
 package object xml {
+
   implicit object NonEmptyListOps {
 
     implicit def nonEmptyListReader[A: XmlReader]: XmlReader[NonEmptyList[A]] =

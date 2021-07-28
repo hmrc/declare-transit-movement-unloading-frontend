@@ -33,26 +33,29 @@ object RejectionCheckYourAnswersViewModel {
   def apply(userAnswers: UserAnswers)(implicit messages: Messages): RejectionCheckYourAnswersViewModel =
     RejectionCheckYourAnswersViewModel(
       Seq(
-        Section(Seq(
-          vehicleNameRegistrationRejection(userAnswers),
-          dateGoodsUnloaded(userAnswers),
-          totalNumberOfItems(userAnswers),
-          totalNumberOfPackages(userAnswers),
-          grossMassAmount(userAnswers)
-        ).flatten))
+        Section(
+          Seq(
+            vehicleNameRegistrationRejection(userAnswers),
+            dateGoodsUnloaded(userAnswers),
+            totalNumberOfItems(userAnswers),
+            totalNumberOfPackages(userAnswers),
+            grossMassAmount(userAnswers)
+          ).flatten
+        )
+      )
     )
 
   def vehicleNameRegistrationRejection(userAnswers: UserAnswers): Option[Row] = userAnswers.get(VehicleNameRegistrationReferencePage) map {
     answer =>
       Row(
-        key   = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.VehicleNameRegistrationRejectionController.onPageLoad(userAnswers.id).url,
+            content = msg"site.edit",
+            href = routes.VehicleNameRegistrationRejectionController.onPageLoad(userAnswers.id).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"vehicleNameRegistrationReference.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-vehicle-registration-rejection")
+            attributes = Map("id" -> "change-vehicle-registration-rejection")
           )
         )
       )
@@ -61,14 +64,14 @@ object RejectionCheckYourAnswersViewModel {
   def dateGoodsUnloaded(userAnswers: UserAnswers): Option[Row] = userAnswers.get(DateGoodsUnloadedPage) map {
     answer =>
       Row(
-        key   = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(answer.format(cyaDateFormatter))),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.DateGoodsUnloadedRejectionController.onPageLoad(userAnswers.id).url,
+            content = msg"site.edit",
+            href = routes.DateGoodsUnloadedRejectionController.onPageLoad(userAnswers.id).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"dateGoodsUnloaded.checkYourAnswersLabel")),
-            attributes         = Map("id" -> "change-date-goods-unloaded")
+            attributes = Map("id" -> "change-date-goods-unloaded")
           )
         )
       )
@@ -77,12 +80,12 @@ object RejectionCheckYourAnswersViewModel {
   def totalNumberOfPackages(userAnswers: UserAnswers): Option[Row] = userAnswers.get(TotalNumberOfPackagesPage) map {
     answer =>
       Row(
-        key   = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(answer.toString)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.TotalNumberOfPackagesRejectionController.onPageLoad(userAnswers.id).url,
+            content = msg"site.edit",
+            href = routes.TotalNumberOfPackagesRejectionController.onPageLoad(userAnswers.id).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalNumberOfPackages.checkYourAnswersLabel"))
           )
         )
@@ -92,12 +95,12 @@ object RejectionCheckYourAnswersViewModel {
   def totalNumberOfItems(userAnswers: UserAnswers): Option[Row] = userAnswers.get(TotalNumberOfItemsPage) map {
     answer =>
       Row(
-        key   = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(Literal(answer.toString)),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.TotalNumberOfItemsController.onPageLoad(userAnswers.id, CheckMode).url,
+            content = msg"site.edit",
+            href = routes.TotalNumberOfItemsController.onPageLoad(userAnswers.id, CheckMode).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"totalNumberOfItems.checkYourAnswersLabel"))
           )
         )
@@ -107,12 +110,12 @@ object RejectionCheckYourAnswersViewModel {
   def grossMassAmount(userAnswers: UserAnswers): Option[Row] = userAnswers.get(GrossMassAmountPage) map {
     answer =>
       Row(
-        key   = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
         value = Value(lit"$answer"),
         actions = List(
           Action(
-            content            = msg"site.edit",
-            href               = routes.GrossMassAmountRejectionController.onPageLoad(userAnswers.id).url,
+            content = msg"site.edit",
+            href = routes.GrossMassAmountRejectionController.onPageLoad(userAnswers.id).url,
             visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"grossMassAmount.checkYourAnswersLabel"))
           )
         )

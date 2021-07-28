@@ -260,6 +260,7 @@ object UnloadingRemarksRejectionServiceSpec {
       arrivalId,
       MessagesLocation(s"/movements/arrivals/${arrivalId.value}/messages/3",
                        Some("/movements/arrivals/1234/messages/4"),
-                       Some("/movements/arrivals/1234/messages/5"))
+                       Some("/movements/arrivals/1234/messages/5")
+      )
     )
 }

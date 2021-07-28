@@ -29,7 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
 
-class ConfirmationController @Inject()(
+class ConfirmationController @Inject() (
   override val messagesApi: MessagesApi,
   appConfig: FrontendAppConfig,
   identify: IdentifierAction,

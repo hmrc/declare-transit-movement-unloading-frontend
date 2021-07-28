@@ -23,20 +23,18 @@ import pages._
 import play.api.mvc.Call
 
 @Singleton
-class NavigatorUnloadingPermission @Inject()() {
+class NavigatorUnloadingPermission @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Option[UnloadingPermission] => Call = {
     case DateGoodsUnloadedPage =>
-      ua =>
-        {
-          case Some(unloadingPermission) if unloadingPermission.seals.fold(false)(_.numberOfSeals > 0) =>
-            routes.CanSealsBeReadController.onPageLoad(ua.id, NormalMode)
-          case _ => routes.UnloadingSummaryController.onPageLoad(ua.id)
-        }
+      ua => {
+        case Some(unloadingPermission) if unloadingPermission.seals.fold(false)(_.numberOfSeals > 0) =>
+          routes.CanSealsBeReadController.onPageLoad(ua.id, NormalMode)
+        case _ => routes.UnloadingSummaryController.onPageLoad(ua.id)
+      }
 
     case _ =>
-      ua => _ =>
-        routes.IndexController.onPageLoad(ua.id)
+      ua => _ => routes.IndexController.onPageLoad(ua.id)
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, unloadingPermission: Option[UnloadingPermission]): Call = mode match {

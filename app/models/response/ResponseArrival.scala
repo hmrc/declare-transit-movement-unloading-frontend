@@ -49,10 +49,9 @@ object ResponseArrival {
       for {
         arrivalId <- (json \ "arrivalId").validate[ArrivalId]
         status    <- (json \ "status").validate[ArrivalStatus]
-      } yield
-        ResponseArrival(
-          arrivalId,
-          status
+      } yield ResponseArrival(
+        arrivalId,
+        status
       )
 
   implicit val writes: OWrites[ResponseArrival] = Json.writes[ResponseArrival]
