@@ -17,11 +17,7 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import controllers.routes
-import models.ArrivalId
 import play.api.Configuration
-import play.api.i18n.Lang
-import play.api.mvc.Call
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
@@ -56,9 +52,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val timeoutSeconds: String   = configuration.get[String]("session.timeoutSeconds")
   lazy val countdownSeconds: String = configuration.get[String]("session.countdownSeconds")
 
-  private val manageTransitMovementsHost = configuration.get[String]("manage-transit-movements-frontend.host")
-  val manageTransitMovementsUrl:String         = s"$manageTransitMovementsHost/manage-transit-movements"
-  lazy val serviceUrl: String            = s"$manageTransitMovementsUrl/view-arrivals"
+  private val manageTransitMovementsHost               = configuration.get[String]("manage-transit-movements-frontend.host")
+  lazy val manageTransitMovementsUrl:String            = s"$manageTransitMovementsHost/manage-transit-movements"
+  lazy val serviceUrl: String                          = s"$manageTransitMovementsUrl/view-arrivals"
 
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.reference-data").fullServiceUrl
 
@@ -66,7 +62,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val arrivalsBackendBaseUrl: String  = configuration.get[Service]("microservice.services.arrivals-backend").baseUrl
   lazy val arrivalNotificationsUrl: String = configuration.get[String]("urls.arrivalNotifications")
 
-  lazy val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("microservice.services.features.welsh-translation")
+  lazy val languageTranslationEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
 }

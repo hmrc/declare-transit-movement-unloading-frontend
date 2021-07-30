@@ -16,10 +16,8 @@
 
 package repositories
 import models.messages.InterchangeControlReference
-import org.scalatest.{BeforeAndAfterEach, FreeSpec, MustMatchers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
+import org.scalatest.{BeforeAndAfterEach, FreeSpec, MustMatchers}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
