@@ -98,7 +98,6 @@ class InterchangeControlReferenceIdRepositorySpec
         second.index mustEqual 3
       }
     }
-
   }
 
 }
