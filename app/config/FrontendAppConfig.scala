@@ -57,8 +57,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val countdownSeconds: String = configuration.get[String]("session.countdownSeconds")
 
   private val manageTransitMovementsHost = configuration.get[String]("manage-transit-movements-frontend.host")
-  val manageTransitMovementsUrl          = s"$manageTransitMovementsHost/manage-transit-movements"
-  lazy val serviceUrl: String            = s"$manageTransitMovementsUrl/index"
+  val manageTransitMovementsUrl:String         = s"$manageTransitMovementsHost/manage-transit-movements"
+  lazy val serviceUrl: String            = s"$manageTransitMovementsUrl/view-arrivals"
 
   lazy val referenceDataUrl: String = configuration.get[Service]("microservice.services.reference-data").fullServiceUrl
 
