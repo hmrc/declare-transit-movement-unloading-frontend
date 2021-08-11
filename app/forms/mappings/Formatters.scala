@@ -66,9 +66,10 @@ trait Formatters {
           .bind(key, data)
           .right
           .map(_.replace(",", ""))
+          .map(_.replaceAll("\\s", ""))
           .right
           .flatMap {
-            case s if s.replaceAll("\\s", "").matches(decimalRegexp) =>
+            case s if s.matches(decimalRegexp) =>
               Left(Seq(FormError(key, wholeNumberKey, args)))
             case s =>
               nonFatalCatch
