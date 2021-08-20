@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.DateGoodsUnloadedController.onSubmit(arrivalId, mode).url }}" method="post">
+        <form novalidate action="{{ routes.controllers.DateGoodsUnloadedController.onSubmit(arrivalId, mode).url }}" method="post">
 
         {{ csrf() | safe }}
 
