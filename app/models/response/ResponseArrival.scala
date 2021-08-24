@@ -16,18 +16,8 @@
 
 package models.response
 
-import controllers.routes
-import models.Arrival
-import models.ArrivalId
-import models.ArrivalStatus
-import models.MongoDateTimeFormats
-import models.MovementReferenceNumber
-import play.api.libs.json.JsObject
-import play.api.libs.json.Json
-import play.api.libs.json.OWrites
-import play.api.libs.json.Reads
-
-import java.time.LocalDateTime
+import models.{Arrival, ArrivalId, ArrivalStatus}
+import play.api.libs.json.{JsObject, Json, OWrites, Reads}
 
 case class ResponseArrival(arrivalId: ArrivalId, status: ArrivalStatus)
 

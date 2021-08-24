@@ -28,7 +28,7 @@ import services.UnloadingRemarksRejectionService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewModels.UnloadingRemarksRejectionViewModel
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class UnloadingRemarksRejectionController @Inject() (
   override val messagesApi: MessagesApi,
