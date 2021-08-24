@@ -26,7 +26,7 @@ import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
 import renderer.Renderer
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,7 +52,7 @@ class ArrivalStatusAction(
 
   override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     unloadingConnector.getArrival(arrivalId).flatMap {
       case Some(responseArrival: ResponseArrival) if !validStatus.contains(responseArrival.status) =>
         renderer

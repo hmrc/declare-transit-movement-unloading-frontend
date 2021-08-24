@@ -104,7 +104,7 @@ class UnloadingRemarksServiceSpec extends SpecBase with AppWithDefaultMockFixtur
                 unloadingRemarksRequest
               )
 
-            when(mockUnloadingConnector.post(any(), any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED)))
+            when(mockUnloadingConnector.post(any(), any())(any())).thenReturn(Future.successful(HttpResponse(ACCEPTED, "")))
 
             val arrivalNotificationService = app.injector.instanceOf[UnloadingRemarksService]
             arrivalNotificationService.submit(arrivalId, userAnswersUpdated, unloadingPermission).futureValue mustBe Some(ACCEPTED)
@@ -205,7 +205,7 @@ class UnloadingRemarksServiceSpec extends SpecBase with AppWithDefaultMockFixtur
         val interchangeControlReference = arbitrary[InterchangeControlReference].sample.value
 
         when(mockUnloadingRemarksMessageService.unloadingRemarksMessage(any())(any(), any())) thenReturn Future.successful(Some(unloadingRemarksRequest))
-        when(mockUnloadingConnector.post(any(), any())(any())) thenReturn Future.successful(HttpResponse(ACCEPTED))
+        when(mockUnloadingConnector.post(any(), any())(any())) thenReturn Future.successful(HttpResponse(ACCEPTED, ""))
         when(mockInterchangeControlReferenceIdRepository.nextInterchangeControlReferenceId())
           .thenReturn(Future.successful(interchangeControlReference))
         when(mockMetaService.build(interchangeControlReference))
