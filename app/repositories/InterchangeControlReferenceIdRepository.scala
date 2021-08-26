@@ -20,8 +20,8 @@ import com.google.inject.{Inject, Singleton}
 import models.messages.InterchangeControlReference
 import play.api.libs.json.{Json, Reads}
 import play.modules.reactivemongo.ReactiveMongoApi
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
-import reactivemongo.play.json.collection.JSONCollection
+import reactivemongo.play.json._
+import reactivemongo.play.json.collection._
 import services.DateTimeService
 
 import scala.concurrent.ExecutionContext.Implicits.global
