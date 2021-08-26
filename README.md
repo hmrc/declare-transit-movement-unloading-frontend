@@ -9,7 +9,7 @@ This code is open source software licensed under the [Apache 2.0 License]("http:
 ## How to run this service locally
 
 ### Start service manager with the following command
-    sm --start CTC_TRADERS_ARRIVAL --appendArgs ‘{“DECLARE_TRANSIT_MOVEMENT_UNLOADING_FRONTEND”:[“-Dmicroservice.services.arrivals-backend.port=9481", “-Dmicroservice.services.arrivals-backend.uri=/common-transit-convention-trader-at-destination”], “MANAGE_TRANSIT_MOVEMENTS_FRONTEND”:[“-Dmicroservice.services.destination.port=9481”, “-Dmicroservice.services.destination.startUrl=common-transit-convention-trader-at-destination”], “DECLARE_TRANSIT_MOVEMENT_ARRIVAL_FRONTEND”:[“-Dmicroservice.services.destination.port=9481",“-Dmicroservice.services.destination.startUrl=common-transit-convention-trader-at-destination”]}’ -r
+    sm --start CTC_TRADERS_ARRIVAL --appendArgs '{"DECLARE_TRANSIT_MOVEMENT_UNLOADING_FRONTEND":["-Dmicroservice.services.arrivals-backend.port=9481", "-Dmicroservice.services.arrivals-backend.uri=/common-transit-convention-trader-at-destination"], "MANAGE_TRANSIT_MOVEMENTS_FRONTEND":["-Dmicroservice.services.destination.port=9481", "-Dmicroservice.services.destination.startUrl=common-transit-convention-trader-at-destination"], "DECLARE_TRANSIT_MOVEMENT_ARRIVAL_FRONTEND":["-Dmicroservice.services.destination.port=9481","-Dmicroservice.services.destination.startUrl=common-transit-convention-trader-at-destination"]}' -r
 
 ### Change the port and start URL inside application.conf to
      arrivals-backend {

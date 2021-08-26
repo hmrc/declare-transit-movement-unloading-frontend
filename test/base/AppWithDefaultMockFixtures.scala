@@ -30,7 +30,7 @@ import play.api.Application
 import play.api.i18n.MessagesApi
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.{ActionFilter, ActionRefiner, Call, Result}
+import play.api.mvc.{ActionFilter, Call, Result}
 import play.api.test.Helpers
 import repositories.SessionRepository
 import uk.gov.hmrc.nunjucks.NunjucksRenderer

@@ -18,13 +18,12 @@ package services
 
 import java.time.LocalDate
 
-import audit.services.AuditEventSubmissionService
 import com.google.inject.Inject
 import connectors.UnloadingConnector
 import logging.Logging
 import models.messages._
-import models.{ArrivalId, EoriNumber, UnloadingPermission, UserAnswers}
-import pages.{DateGoodsUnloadedPage, GrossMassAmountPage, TotalNumberOfItemsPage, TotalNumberOfPackagesPage, VehicleNameRegistrationReferencePage}
+import models.{ArrivalId, UnloadingPermission, UserAnswers}
+import pages._
 import play.api.http.Status._
 import repositories.InterchangeControlReferenceIdRepository
 import uk.gov.hmrc.http.HeaderCarrier

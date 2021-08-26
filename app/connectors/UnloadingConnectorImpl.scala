@@ -17,14 +17,12 @@
 package connectors
 
 import config.FrontendAppConfig
-
 import javax.inject.Inject
 import logging.Logging
 import models.XMLWrites._
-import models.{XMLReads, _}
 import models.messages.UnloadingRemarksRequest
 import models.response.ResponseArrival
-import play.api.Logger
+import models.{XMLReads, _}
 import play.api.http.HeaderNames
 import play.api.libs.ws.{WSClient, WSResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpErrorFunctions, HttpResponse}

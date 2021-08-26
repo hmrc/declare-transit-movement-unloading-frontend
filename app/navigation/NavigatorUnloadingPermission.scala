@@ -18,7 +18,7 @@ package navigation
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
-import models.{CheckMode, Mode, NormalMode, Seals, UnloadingPermission, UserAnswers}
+import models.{CheckMode, Mode, NormalMode, UnloadingPermission, UserAnswers}
 import pages._
 import play.api.mvc.Call
 

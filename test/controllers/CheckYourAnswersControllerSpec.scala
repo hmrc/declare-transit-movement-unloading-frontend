@@ -16,11 +16,12 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import audit.services.AuditEventSubmissionService
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import cats.data.NonEmptyList
 import config.FrontendAppConfig
-import generators.ModelGenerators
 import matchers.JsonMatchers.containJson
 import models.{TraderAtDestination, UnloadingPermission}
 import org.mockito.ArgumentCaptor
@@ -35,7 +36,6 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.{UnloadingPermissionService, UnloadingRemarksService}
 
-import java.time.LocalDate
 import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends SpecBase with AppWithDefaultMockFixtures {

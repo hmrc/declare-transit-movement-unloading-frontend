@@ -17,16 +17,13 @@
 package models
 
 import generators.MessagesModelGenerators
+import models.XMLWrites._
+import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{FreeSpec, MustMatchers, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import models.XMLWrites._
-import models.messages.escapeXml
 
-import scala.xml.NodeSeq
-import models.messages.escapeXml
-
-class TraderDestinationSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with MessagesModelGenerators with StreamlinedXmlEquality {
+class TraderAtDestinationSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with MessagesModelGenerators with StreamlinedXmlEquality {
 
   "TraderDestination" - {
 
