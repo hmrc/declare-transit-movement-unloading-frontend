@@ -17,13 +17,12 @@
 package viewModels
 
 import cats.data.NonEmptyList
-import controllers.routes
 import models.reference.Country
-import models.{ArrivalId, UnloadingPermission, UserAnswers}
+import models.{UnloadingPermission, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import queries.SealsQuery
-import uk.gov.hmrc.viewmodels.SummaryList.{Action, Row}
+import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
 import utils.{CheckYourAnswersHelper, UnloadingSummaryRow}
 import viewModels.sections.Section

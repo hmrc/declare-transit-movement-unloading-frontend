@@ -16,10 +16,10 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
+import javax.inject.Inject
 import models.messages.UnloadingRemarksRequest
-import models.messages.UnloadingRemarksRequest.{alphaNumericRegex, stringFieldRegex}
+import models.messages.UnloadingRemarksRequest.alphaNumericRegex
 import play.api.data.Form
 
 class VehicleNameRegistrationReferenceFormProvider @Inject() extends Mappings {

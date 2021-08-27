@@ -225,7 +225,7 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
           FakeRequest(POST, routes.NewSealNumberController.onPageLoad(arrivalId, Index(0), NormalMode).url)
             .withFormUrlEncodedBody(("value", "answer"))
 
-        val result = route(app, request).value
+        route(app, request).value
 
         //todo: Test this
       }

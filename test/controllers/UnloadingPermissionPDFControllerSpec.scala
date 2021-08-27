@@ -26,18 +26,14 @@ import models.ArrivalId
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
-import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
 import play.api.libs.ws.ahc.AhcWSResponse
-import play.api.libs.ws.ahc.cache.{CacheableHttpResponseBodyPart, CacheableHttpResponseStatus}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.shaded.ahc.org.asynchttpclient.Response
-import play.shaded.ahc.org.asynchttpclient.uri.Uri
 import play.twirl.api.Html
 
 import scala.concurrent.Future
