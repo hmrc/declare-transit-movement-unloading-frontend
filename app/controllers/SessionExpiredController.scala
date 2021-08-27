@@ -39,11 +39,7 @@ class SessionExpiredController @Inject() (
 
     implicit request =>
       val json = Json.obj(
-        if (config.isNIJourneyEnabled) {
-          "nextPageUrl" -> s"${config.manageTransitMovementsUrl}/index"
-        } else {
-          "nextPageUrl" -> s"${config.manageTransitMovementsUrl}/what-do-you-want-to-do"
-        }
+        "nextPageUrl" -> s"${config.serviceUrl}"
       )
       renderer.render("session-expired.njk", json).map(Ok(_))
   }

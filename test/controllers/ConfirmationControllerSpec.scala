@@ -57,7 +57,7 @@ class ConfirmationControllerSpec extends SpecBase with AppWithDefaultMockFixture
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
       verify(mockSessionRepository, times(1)).remove(arrivalId)
 
-      val expectedJson = Json.obj("mrn" -> mrn, "manageTransitMovementsUrl" -> frontendAppConfig.serviceUrl)
+      val expectedJson = Json.obj("mrn" -> mrn, "manageTransitMovementsUrl" -> frontendAppConfig.viewArrivals)
 
       templateCaptor.getValue mustEqual "confirmation.njk"
       jsonCaptor.getValue must containJson(expectedJson)
