@@ -48,7 +48,7 @@ class ConfirmationController @Inject() (
         val json = Json.obj(
           "mrn"                       -> request.userAnswers.mrn,
           "arrivalId"                 -> arrivalId,
-          "manageTransitMovementsUrl" -> appConfig.serviceUrl
+          "manageTransitMovementsUrl" -> appConfig.viewArrivals
         )
 
         sessionRepository.remove(arrivalId)
