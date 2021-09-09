@@ -24,7 +24,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsArray, JsString, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -89,7 +89,7 @@ class IndexControllerSpec extends SpecBase with AppWithDefaultMockFixtures {
       userAnswersCaptor.getValue.mrn.toString mustBe unloadingPermission.movementReferenceNumber
       userAnswersCaptor.getValue.id mustBe arrivalId
       userAnswersCaptor.getValue.eoriNumber mustBe EoriNumber("id")
-      userAnswersCaptor.getValue.prepopulateData mustBe Json.obj("seals" -> ("Seal1", "Seal2"))
+      userAnswersCaptor.getValue.prepopulateData mustBe Json.obj("seals" -> JsArray(Seq(JsString("Seal1"), JsString("Seal2"))))
     }
 
     "must redirect to onward route for a when there are UserAnswers" in {

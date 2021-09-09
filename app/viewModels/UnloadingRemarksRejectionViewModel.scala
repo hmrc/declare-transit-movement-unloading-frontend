@@ -87,9 +87,7 @@ object UnloadingRemarksRejectionViewModel {
     }
   }
 
-  private def defaultErrorPage(arrivalId: ArrivalId, error: Option[FunctionalError], nctsEnquiriesUrl: String)(implicit
-    messages: Messages
-  ): Option[UnloadingRemarksRejectionViewModel] =
+  private def defaultErrorPage(arrivalId: ArrivalId, error: Option[FunctionalError], nctsEnquiriesUrl: String): Option[UnloadingRemarksRejectionViewModel] =
     error.flatMap(
       functionalError =>
         functionalError.pointer match {

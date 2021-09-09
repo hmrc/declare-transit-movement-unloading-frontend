@@ -16,8 +16,6 @@
 
 package services
 
-import java.time.LocalDate
-
 import com.google.inject.Inject
 import derivable.DeriveNumberOfSeals
 import models.messages._
@@ -25,6 +23,7 @@ import models.{Seals, UnloadingPermission, UserAnswers}
 import pages._
 import queries.SealsQuery
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class RemarksServiceImpl @Inject() (resultOfControlService: ResultOfControlService) extends RemarksService {
@@ -39,8 +38,6 @@ class RemarksServiceImpl @Inject() (resultOfControlService: ResultOfControlServi
 
         implicit val originalValues: UnloadingPermission = unloadingPermission
 
-        implicit val resultsOfControl: Seq[ResultsOfControl] = resultOfControlService.build(userAnswers, unloadingPermission)
-
         Seq(unloadingPermissionContainsSeals(userAnswers), unloadingPermissionDoesNotContainSeals(userAnswers))
           .reduce(_ orElse _)
           .apply(unloadingPermission.seals)
@@ -51,7 +48,6 @@ class RemarksServiceImpl @Inject() (resultOfControlService: ResultOfControlServi
 
   private def unloadingPermissionContainsSeals(userAnswers: UserAnswers)(implicit
     unloadingDate: LocalDate,
-    resultsOfControl: Seq[ResultsOfControl],
     originalValues: UnloadingPermission
   ): PartialFunction[Option[Seals], Response] = {
     case Some(Seals(_, unloadingPermissionSeals)) if unloadingPermissionSeals.nonEmpty =>
@@ -95,7 +91,6 @@ class RemarksServiceImpl @Inject() (resultOfControlService: ResultOfControlServi
 
   private def unloadingPermissionDoesNotContainSeals(userAnswers: UserAnswers)(implicit
     unloadingDate: LocalDate,
-    resultsOfControl: Seq[ResultsOfControl],
     originalValues: UnloadingPermission
   ): PartialFunction[Option[Seals], Response] = {
     case None =>

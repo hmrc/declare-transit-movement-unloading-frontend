@@ -18,8 +18,7 @@ package viewModels
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.{DateGoodsUnloadedPage, GrossMassAmountPage, TotalNumberOfItemsPage, TotalNumberOfPackagesPage, VehicleNameRegistrationReferencePage}
-import play.api.i18n.Messages
+import pages._
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 import uk.gov.hmrc.viewmodels._
@@ -30,7 +29,7 @@ case class RejectionCheckYourAnswersViewModel(sections: Seq[Section])
 
 object RejectionCheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages): RejectionCheckYourAnswersViewModel =
+  def apply(userAnswers: UserAnswers): RejectionCheckYourAnswersViewModel =
     RejectionCheckYourAnswersViewModel(
       Seq(
         Section(
