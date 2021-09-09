@@ -137,9 +137,37 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
       redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
     }
 
+    "must redirect to Session Expired for a GET if NewSealNumberPage is undefined" in {
+      checkArrivalStatus()
+      setExistingUserAnswers(emptyUserAnswers)
+
+      val request = FakeRequest(GET, confirmRemoveSealRoute)
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+    }
+
     "must redirect to Session Expired for a POST if no existing data is found" in {
       checkArrivalStatus()
       setNoExistingUserAnswers()
+
+      val request =
+        FakeRequest(POST, confirmRemoveSealRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(app, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustEqual routes.SessionExpiredController.onPageLoad().url
+    }
+
+    "must redirect to Session Expired for a POST if NewSealNumberPage is undefined" in {
+      checkArrivalStatus()
+      setExistingUserAnswers(emptyUserAnswers)
 
       val request =
         FakeRequest(POST, confirmRemoveSealRoute)

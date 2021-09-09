@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions._
 import forms.ConfirmRemoveSealFormProvider
-import javax.inject.Inject
 import models.requests.DataRequest
 import models.{ArrivalId, Index, Mode}
 import navigation.Navigator
@@ -33,6 +32,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ConfirmRemoveSealController @Inject() (
@@ -93,9 +93,9 @@ class ConfirmRemoveSealController @Inject() (
                     } yield Redirect(navigator.nextPage(ConfirmRemoveSealPage, mode, updatedAnswers))
                   } else {
                     Future.successful(Redirect(navigator.nextPage(ConfirmRemoveSealPage, mode, request.userAnswers)))
-
                   }
               )
+          case _ => Future.successful(Redirect(routes.SessionExpiredController.onPageLoad()))
         }
     }
 }

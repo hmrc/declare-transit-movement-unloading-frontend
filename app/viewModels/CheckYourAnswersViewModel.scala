@@ -20,7 +20,6 @@ import cats.data.NonEmptyList
 import models.reference.Country
 import models.{UnloadingPermission, UserAnswers}
 import pages._
-import play.api.i18n.Messages
 import queries.SealsQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
@@ -31,9 +30,7 @@ case class CheckYourAnswersViewModel(sections: Seq[Section])
 
 object CheckYourAnswersViewModel {
 
-  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(implicit
-    messages: Messages
-  ): CheckYourAnswersViewModel =
+  def apply(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country]): CheckYourAnswersViewModel =
     CheckYourAnswersViewModel(
       Seq(
         goodsUnloadedSection(userAnswers),
@@ -42,7 +39,7 @@ object CheckYourAnswersViewModel {
       )
     )
 
-  private def sealsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission)(implicit messages: Messages): Section = {
+  private def sealsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission): Section = {
     val checkYourAnswersRow = new CheckYourAnswersHelper(userAnswers)
 
     val rowCanSealsBeRead: Option[Row]    = checkYourAnswersRow.canSealsBeRead
@@ -57,15 +54,13 @@ object CheckYourAnswersViewModel {
     Section(msg"checkYourAnswers.seals.subHeading", seals.toSeq ++ rowCanSealsBeRead ++ rowAreAnySealsBroken)
   }
 
-  private def goodsUnloadedSection(userAnswers: UserAnswers)(implicit messages: Messages): Section = {
+  private def goodsUnloadedSection(userAnswers: UserAnswers): Section = {
     val checkYourAnswersRow           = new CheckYourAnswersHelper(userAnswers)
     val rowGoodsUnloaded: Option[Row] = checkYourAnswersRow.dateGoodsUnloaded
     Section(rowGoodsUnloaded.toSeq)
   }
 
-  private def itemsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country])(implicit
-    messages: Messages
-  ): Section = {
+  private def itemsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country]): Section = {
 
     val unloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
 
