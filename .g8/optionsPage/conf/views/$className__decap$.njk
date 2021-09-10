@@ -29,9 +29,9 @@
 
         <form action="{{ routes.controllers.$className$Controller.onSubmit(arrivalId, mode).url }}" method="post">
 
-          {{ csrf() | safe }}
-
           {{ headingCaption(mrn) }}
+
+          {{ csrf() | safe }}
 
           {{ govukRadios({
             idPrefix: messages('$className;format="decap"$.heading'),
