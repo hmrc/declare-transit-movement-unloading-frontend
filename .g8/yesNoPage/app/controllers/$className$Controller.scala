@@ -3,7 +3,7 @@ package controllers
 import controllers.actions._
 import forms.$className$FormProvider
 import javax.inject.Inject
-import models.{Mode, MovementReferenceNumber}
+import models.{Mode, MovementReferenceNumber, ArrivalId}
 import navigation.Navigator
 import pages.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,7 +41,9 @@ class $className;format="cap"$Controller @Inject()(
       val json = Json.obj(
         "form"   -> preparedForm,
         "mode"   -> mode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> Radios.yesNo(preparedForm("value"))
+        "mrn"    -> request.userAnswers.mrn,
+        "arrivalId" -> arrivalId,
+        "radios" -> Radios.yesNo(form("value"))
       )
 
       renderer.render("$className;format="decap"$.njk", json).map(Ok(_))
@@ -56,7 +58,9 @@ class $className;format="cap"$Controller @Inject()(
           val json = Json.obj(
             "form"   -> formWithErrors,
             "mode"   -> mode,
-            "mrn"    -> request.userAnswers.mrn,"radios" -> Radios.yesNo(formWithErrors("value"))
+            "mrn"    -> request.userAnswers.mrn,
+            "arrivalId" -> arrivalId,
+            "radios" -> Radios.yesNo(form("value"))
           )
     
           renderer.render("$className;format="decap"$.njk", json).map(BadRequest(_))

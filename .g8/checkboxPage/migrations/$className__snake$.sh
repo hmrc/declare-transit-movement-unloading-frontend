@@ -22,7 +22,7 @@ echo "$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/mes
 echo "$className;format="decap"$.error.required = Select $className;format="decap"$" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
-awk '/self: Generators =>/ {\
+awk '/trait UserAnswersEntryGenerators/ {\
     print;\
     print "";\
     print "  implicit lazy val arbitrary$className$UserAnswersEntry: Arbitrary[($className$Page.type, JsValue)] =";\
