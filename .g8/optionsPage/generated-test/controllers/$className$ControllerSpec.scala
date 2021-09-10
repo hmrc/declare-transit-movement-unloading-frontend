@@ -22,9 +22,7 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
-
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(mrn, NormalMode).url
+  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(arrivalId, NormalMode).url
 
   val formProvider = new $className$FormProvider()
   val form = formProvider()
@@ -51,7 +49,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> form,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(form)
+        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(form),
+        "arrivalId" -> arrivalId
       )
 
       templateCaptor.getValue mustEqual "$className;format="decap"$.njk"
@@ -81,7 +80,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> filledForm,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(filledForm)
+        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(filledForm),
+        "arrivalId" -> arrivalId
       )
 
       templateCaptor.getValue mustEqual "$className;format="decap"$.njk"
@@ -126,7 +126,8 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> boundForm,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(boundForm)
+        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(boundForm),
+        "arrivalId" -> arrivalId
       )
 
       templateCaptor.getValue mustEqual "$className;format="decap"$.njk"

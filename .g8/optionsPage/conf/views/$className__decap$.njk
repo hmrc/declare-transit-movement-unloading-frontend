@@ -27,13 +27,14 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.$className$Controller.onSubmit(mrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.$className$Controller.onSubmit(arrivalId, mode).url }}" method="post">
 
           {{ csrf() | safe }}
 
           {{ headingCaption(mrn) }}
 
           {{ govukRadios({
+            idPrefix: messages('$className;format="decap"$.heading'),
             name: 'value',
             fieldset: {
               legend: {
