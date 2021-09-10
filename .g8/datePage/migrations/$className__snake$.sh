@@ -24,7 +24,7 @@ echo "$className;format="decap"$.error.required = The $className;format="decap"$
 echo "$className;format="decap"$.error.invalid = Enter a real $className$" >> ../conf/messages.en
 
 echo "Adding to UserAnswersEntryGenerators"
-awk '/self: Generators =>/ {\
+awk '/trait UserAnswersEntryGenerators/ {\
     print;\
     print "";\
     print "  implicit lazy val arbitrary$className$UserAnswersEntry: Arbitrary[($className$Page.type, JsValue)] =";\

@@ -28,11 +28,9 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
   val formProvider = new $className$FormProvider()
   private def form = formProvider()
 
-  def onwardRoute = Call("GET", "/foo")
-
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(mrn, NormalMode).url
+  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(arrivalId, NormalMode).url
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest(GET, $className;format="decap"$Route)
@@ -69,6 +67,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
         "form" -> form,
         "mode" -> NormalMode,
         "mrn"  -> mrn,
+        "arrivalId" -> arrivalId,
         "date" -> viewModel
       )
 
@@ -81,7 +80,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(arrivalId, mrn).set($className$Page, validAnswer).success.value
+      val userAnswers = emptyUserAnswers.set($className$Page, validAnswer).success.value
       setExistingUserAnswers(userAnswers)
 
       val templateCaptor = ArgumentCaptor.forClass(classOf[String])
@@ -107,6 +106,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
         "form" -> filledForm,
         "mode" -> NormalMode,
         "mrn"  -> mrn,
+        "arrivalId" -> arrivalId,
         "date" -> viewModel
       )
 
@@ -151,6 +151,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
         "form" -> boundForm,
         "mode" -> NormalMode,
         "mrn"  -> mrn,
+        "arrivalId" -> arrivalId,
         "date" -> viewModel
       )
 
