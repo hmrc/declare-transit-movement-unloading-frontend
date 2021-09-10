@@ -49,7 +49,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> form,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(form),
+        "mrn"    -> mrn,"radios" -> $className$.radios(form),
         "arrivalId" -> arrivalId
       )
 
@@ -62,7 +62,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(arrivalId, mrn).set($className$Page, $className$.values.head).success.value
+      val userAnswers = UserAnswers(arrivalId, mrn, eoriNumber).set($className$Page, $className$.values.head).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
@@ -80,7 +80,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> filledForm,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(filledForm),
+        "mrn"    -> mrn,"radios" -> $className$.radios(filledForm),
         "arrivalId" -> arrivalId
       )
 
@@ -126,7 +126,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> boundForm,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> $className$.radios(boundForm),
+        "mrn"    -> mrn,"radios" -> $className$.radios(boundForm),
         "arrivalId" -> arrivalId
       )
 
