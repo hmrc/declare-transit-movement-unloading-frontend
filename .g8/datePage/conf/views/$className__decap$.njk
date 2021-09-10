@@ -40,6 +40,8 @@
 
           {{ csrf() | safe }}
 
+          {{ headingCaption(mrn) }}
+
           {{ govukDateInput({
             hint: {
               text: messages('$className;format="decap"$.hint')

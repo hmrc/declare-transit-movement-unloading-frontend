@@ -40,6 +40,8 @@
 
           {{ csrf() | safe }}
 
+          {{ headingCaption(mrn) }}
+
           {{ govukCheckboxes({
             name: 'value',
             items: checkboxes,
