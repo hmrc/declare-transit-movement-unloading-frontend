@@ -24,8 +24,6 @@
           {{ messages("unloadingRemarksRejection.heading") }}
         </h1>
 
-        <p class="govuk-body">{{ messages("unloadingRemarksRejection.conflicting.information") }}</p>
-
         {% for section in sections %}
           {{ sectionMacro(section.sectionTitle, section.rows) }}
         {% endfor %}
