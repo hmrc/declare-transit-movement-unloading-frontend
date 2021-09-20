@@ -21,7 +21,9 @@ import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues, TryValues}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.{OptionValues, TryValues}
 import pages.QuestionPage
 import play.api.libs.json._
 

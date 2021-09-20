@@ -20,7 +20,9 @@ import com.lucidchart.open.xtract.XmlReader
 import generators.{Generators, ModelGenerators}
 import models.XMLWrites._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.OptionValues
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import utils.Format
 

@@ -16,7 +16,9 @@
 
 package models
 
-import org.scalatest.{EitherValues, FreeSpec, MustMatchers}
+import org.scalatest.EitherValues
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import play.api.mvc.PathBindable
 
 class ArrivalIdSpec extends FreeSpec with MustMatchers with EitherValues {
@@ -27,7 +29,7 @@ class ArrivalIdSpec extends FreeSpec with MustMatchers with EitherValues {
       val arrivalId    = ArrivalId(12)
 
       val bind: Either[String, ArrivalId] = pathBindable.bind("arrivalId", "12")
-      bind.right.value mustBe arrivalId
+      bind.value mustBe arrivalId
     }
 
     "unbind to path value" in {

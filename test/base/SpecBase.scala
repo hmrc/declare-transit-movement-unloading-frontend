@@ -19,6 +19,8 @@ package base
 import cats.data.NonEmptyList
 import models.{ArrivalId, EoriNumber, GoodsItem, MovementReferenceNumber, Packages, ProducedDocument, UserAnswers}
 import org.scalatest._
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

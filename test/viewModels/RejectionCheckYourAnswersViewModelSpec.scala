@@ -19,7 +19,8 @@ package viewModels
 import java.time.LocalDate
 
 import base.SpecBase
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import pages.{DateGoodsUnloadedPage, GrossMassAmountPage, TotalNumberOfItemsPage, TotalNumberOfPackagesPage, VehicleNameRegistrationReferencePage}
 import uk.gov.hmrc.viewmodels.Text.Literal
 

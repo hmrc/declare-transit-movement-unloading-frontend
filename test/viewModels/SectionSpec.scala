@@ -17,7 +17,8 @@
 package viewModels
 
 import config.FrontendAppConfig
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector

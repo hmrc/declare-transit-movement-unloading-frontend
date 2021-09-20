@@ -21,11 +21,13 @@ import generators.Generators
 import models.XMLWrites._
 import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.{FreeSpec, MustMatchers, StreamlinedXmlEquality}
+import org.scalatest.StreamlinedXmlEquality
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-import scala.xml.{Node, NodeSeq}
 import scala.xml.Utility.trim
+import scala.xml.{Node, NodeSeq}
 
 class PackagesSpec extends FreeSpec with MustMatchers with Generators with ScalaCheckPropertyChecks with StreamlinedXmlEquality {
 

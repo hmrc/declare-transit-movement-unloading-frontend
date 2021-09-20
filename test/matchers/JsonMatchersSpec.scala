@@ -17,7 +17,9 @@
 package matchers
 
 import org.scalatest.exceptions.TestFailedException
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues, Succeeded}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.{OptionValues, Succeeded}
 import play.api.libs.json.Json
 
 class JsonMatchersSpec extends FreeSpec with MustMatchers with JsonMatchers with OptionValues {

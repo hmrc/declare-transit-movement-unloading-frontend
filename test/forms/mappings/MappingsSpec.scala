@@ -16,9 +16,11 @@
 
 package forms.mappings
 
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
-import play.api.data.{Form, FormError}
 import models.Enumerable
+import org.scalatest.OptionValues
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import play.api.data.{Form, FormError}
 
 object MappingsSpec {
 

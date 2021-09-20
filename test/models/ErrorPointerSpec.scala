@@ -19,7 +19,9 @@ package models
 import com.lucidchart.open.xtract.XmlReader
 import generators.Generators
 import org.scalacheck.Gen
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class ErrorPointerSpec extends FreeSpec with Generators with ScalaCheckPropertyChecks with MustMatchers with OptionValues {

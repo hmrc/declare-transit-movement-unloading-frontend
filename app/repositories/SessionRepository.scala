@@ -16,18 +16,19 @@
 
 package repositories
 
+import java.time.LocalDateTime
+
+import javax.inject.Inject
 import models.{ArrivalId, EoriNumber, MongoDateTimeFormats, UserAnswers}
 import play.api.Configuration
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.WriteConcern
-import reactivemongo.api.indexes.{Index, IndexType}
+import reactivemongo.api.indexes.IndexType
 import reactivemongo.bson.BSONDocument
-import reactivemongo.play.json.ImplicitBSONHandlers.JsObjectDocumentWriter
+import reactivemongo.play.json.compat._
 import reactivemongo.play.json.collection.JSONCollection
 
-import java.time.LocalDateTime
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DefaultSessionRepository @Inject() (
@@ -43,7 +44,7 @@ class DefaultSessionRepository @Inject() (
   private def collection: Future[JSONCollection] =
     mongo.database.map(_.collection[JSONCollection](collectionName))
 
-  private val lastUpdatedIndex = Index(
+  private val lastUpdatedIndex = SimpleMongoIndexConfig(
     key = Seq("lastUpdated" -> IndexType.Ascending),
     name = Some("user-answers-last-updated-index"),
     options = BSONDocument("expireAfterSeconds" -> cacheTtl)

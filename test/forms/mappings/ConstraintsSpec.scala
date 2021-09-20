@@ -21,7 +21,8 @@ import java.time.LocalDate
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import play.api.data.validation.{Invalid, Valid}
 
 class ConstraintsSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with Constraints {

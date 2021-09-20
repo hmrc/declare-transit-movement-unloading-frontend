@@ -16,7 +16,8 @@
 
 package models
 
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import play.api.libs.json.Json
 
 class MessagesSummarySpec extends FreeSpec with MustMatchers {

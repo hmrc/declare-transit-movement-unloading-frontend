@@ -16,7 +16,9 @@
 
 package models
 
-import org.scalatest.{EitherValues, FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
+import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.{EitherValues, OptionValues}
 import play.api.libs.json._
 
 object EnumerableSpec {
@@ -51,7 +53,7 @@ class EnumerableSpec extends FreeSpec with MustMatchers with EitherValues with O
     Foo.values.foreach {
       value =>
         s"must bind correctly for: $value" in {
-          Json.fromJson[Foo](JsString(value.toString)).asEither.right.value mustEqual value
+          Json.fromJson[Foo](JsString(value.toString)).asEither.value mustEqual value
         }
     }
 
