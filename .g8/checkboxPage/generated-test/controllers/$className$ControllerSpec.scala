@@ -22,7 +22,7 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(mrn, NormalMode).url
+  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(arrivalId, NormalMode).url
 
   val formProvider = new $className$FormProvider()
   val form = formProvider()
@@ -60,7 +60,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
 
       when(mockRenderer.render(any(), any())(any())) thenReturn Future.successful(Html(""))
 
-      val userAnswers = UserAnswers(arrivalId, mrn).set($className$Page, $className$.values.toSet).success.value
+      val userAnswers = UserAnswers(arrivalId, mrn, eoriNumber).set($className$Page, $className$.values.toSet).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
