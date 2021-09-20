@@ -1,5 +1,6 @@
 package models
 
+import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -8,7 +9,7 @@ import org.scalatest.matchers.must.{Matchers => MustMatchers}
 import org.scalatest.OptionValues
 import play.api.libs.json.{JsError, JsString, Json}
 
-class $className$Spec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
+class $className$Spec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues with Generators {
 
   "$className$" - {
 

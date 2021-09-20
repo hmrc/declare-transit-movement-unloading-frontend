@@ -23,15 +23,15 @@ import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new $className$FormProvider()
   val form = formProvider()
 
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(mrn, NormalMode).url
+  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(arrivalId, NormalMode).url
 
   val userAnswers = UserAnswers(
+    arrivalId,
     mrn,
+    eoriNumber,
     Json.obj(
       $className$Page.toString -> Json.obj(
         "$field1Name$" -> "value 1",
@@ -62,6 +62,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form" -> form,
         "mrn"  -> mrn,
+        "arrivalId" -> arrivalId,
         "mode" -> NormalMode
       )
 
@@ -96,6 +97,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form" -> filledForm,
         "mrn"  -> mrn,
+        "arrivalId" -> arrivalId,
         "mode" -> NormalMode
       )
 
@@ -141,6 +143,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form" -> boundForm,
         "mrn"  -> mrn,
+        "arrivalId" -> arrivalId,
         "mode" -> NormalMode
       )
 

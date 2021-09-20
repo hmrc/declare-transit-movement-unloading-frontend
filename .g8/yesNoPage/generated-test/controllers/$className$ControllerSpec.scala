@@ -1,33 +1,27 @@
 package controllers
 
-import base.SpecBase
+import base.{AppWithDefaultMockFixtures, SpecBase}
 import forms.$className$FormProvider
 import matchers.JsonMatchers
 import models.{NormalMode, UserAnswers}
-import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import pages.$className$Page
-import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import repositories.SessionRepository
 import uk.gov.hmrc.viewmodels.{NunjucksSupport, Radios}
 
 import scala.concurrent.Future
 
 class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
-  def onwardRoute = Call("GET", "/foo")
-
   val formProvider = new $className$FormProvider()
   val form = formProvider()
 
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(mrn, NormalMode).url
+  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(arrivalId, NormalMode).url
 
   "$className$ Controller" - {
 
@@ -51,7 +45,9 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> form,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> Radios.yesNo(form("value"))
+        "mrn"    -> mrn,
+        "arrivalId" -> arrivalId,
+        "radios" -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "$className;format="decap"$.njk"
@@ -63,7 +59,7 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      val userAnswers = UserAnswers(arrivalId, mrn).set($className$Page, true).success.value
+      val userAnswers = UserAnswers(arrivalId, mrn, eoriNumber).set($className$Page, true).success.value
       setExistingUserAnswers(userAnswers)
 
       val request = FakeRequest(GET, $className;format="decap"$Route)
@@ -81,7 +77,9 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> filledForm,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> Radios.yesNo(filledForm("value"))
+        "mrn"    -> mrn,
+        "arrivalId" -> arrivalId,
+        "radios" -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "$className;format="decap"$.njk"
@@ -126,7 +124,9 @@ class $className$ControllerSpec extends SpecBase with AppWithDefaultMockFixtures
       val expectedJson = Json.obj(
         "form"   -> boundForm,
         "mode"   -> NormalMode,
-        "mrn"    -> request.userAnswers.mrn,"radios" -> Radios.yesNo(boundForm("value"))
+        "mrn"    -> mrn,
+        "arrivalId" -> arrivalId,
+        "radios" -> Radios.yesNo(form("value"))
       )
 
       templateCaptor.getValue mustEqual "$className;format="decap"$.njk"

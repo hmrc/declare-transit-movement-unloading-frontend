@@ -3,7 +3,7 @@ package controllers
 import controllers.actions._
 import forms.$className$FormProvider
 import javax.inject.Inject
-import models.{Mode, MovementReferenceNumber, $className$}
+import models.{Mode, ArrivalId, MovementReferenceNumber, $className$}
 import navigation.Navigator
 import pages.$className$Page
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,7 +41,8 @@ class $className$Controller @Inject()(
       val json = Json.obj(
         "form"       -> preparedForm,
         "mode"       -> mode,
-        "mrn"        -> mrn,
+        "mrn"       -> request.userAnswers.mrn,
+        "arrivalId" -> arrivalId,
         "checkboxes" -> $className$.checkboxes(preparedForm)
       )
 
@@ -57,7 +58,8 @@ class $className$Controller @Inject()(
           val json = Json.obj(
             "form"       -> formWithErrors,
             "mode"       -> mode,
-            "mrn"        -> mrn,
+            "mrn"       -> request.userAnswers.mrn,
+            "arrivalId" -> arrivalId,
             "checkboxes" -> $className$.checkboxes(formWithErrors)
           )
 

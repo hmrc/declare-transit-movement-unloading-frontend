@@ -5,6 +5,7 @@
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "macros/title.njk"                         import title %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 
 {% block pageTitle %}
   {{ title(messages("$className;format="decap"$.title"), form.errors) }}
@@ -27,15 +28,19 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.$className$Controller.onSubmit(mrn, mode).url }}" method="post">
-
-          {{ csrf() | safe }}
+        <form action="{{ routes.controllers.$className$Controller.onSubmit(arrivalId, mode).url }}" method="post">
 
           {{ headingCaption(mrn) }}
 
-        <h1 class="govuk-heading-xl">
-          {{ messages("$className;format="decap"$.heading") }}
-        </h1>
+          {{ csrf() | safe }}
+
+          {% call govukFieldset({
+            legend: {
+              text: messages("$className;format="decap"$.heading"),
+              classes: "govuk-fieldset__legend--xl",
+              isPageHeading: true
+            }
+          }) %}
 
           {{ govukInput({
             label: {
@@ -56,6 +61,8 @@
             value: form.$field2Name$.value,
             errorMessage: form.$field2Name$.error
           }) }}
+
+          {% endcall %}
 
           {{ govukButton({
             text: messages("site.continue"),
