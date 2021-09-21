@@ -26,6 +26,21 @@ import utils.Format._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
+  def kev: Option[Row] = userAnswers.get(KevPage) map {
+    answer =>
+      Row(
+        key = Key(msg"kev.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        value = Value(Literal(answer.format(dateFormatter))),
+        actions = List(
+          Action(
+            content = msg"site.edit",
+            href = routes.KevController.onPageLoad(userAnswers.id, CheckMode).url,
+            visuallyHiddenText = Some(msg"site.edit.hidden".withArgs(msg"kev.checkYourAnswersLabel"))
+          )
+        )
+      )
+  }
+
   def totalNumberOfPackages: Option[Row] = userAnswers.get(TotalNumberOfPackagesPage) map {
     answer =>
       Row(

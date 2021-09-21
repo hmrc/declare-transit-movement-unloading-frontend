@@ -22,6 +22,9 @@ import pages._
 
 trait PageGenerators {
 
+  implicit lazy val arbitraryKevPage: Arbitrary[KevPage.type] =
+    Arbitrary(KevPage)
+
   implicit lazy val arbitraryTotalNumberOfPackagesPage: Arbitrary[TotalNumberOfPackagesPage.type] =
     Arbitrary(TotalNumberOfPackagesPage)
 
