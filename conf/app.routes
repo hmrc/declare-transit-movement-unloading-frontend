@@ -107,8 +107,3 @@ POST       /:arrivalId/date-goods-unloaded-rejection                        cont
 
 GET        /:arrivalId/unloading-permission-pdf                             controllers.UnloadingPermissionPDFController.getPDF(arrivalId: ArrivalId)
 
-
-GET        /:arrivalId/kev                  controllers.KevController.onPageLoad(arrivalId: ArrivalId, mode: Mode = NormalMode)
-POST       /:arrivalId/kev                  controllers.KevController.onSubmit(arrivalId: ArrivalId, mode: Mode = NormalMode)
-GET        /:arrivalId/changeKev                        controllers.KevController.onPageLoad(arrivalId: ArrivalId, mode: Mode = CheckMode)
-POST       /:arrivalId/changeKev                        controllers.KevController.onSubmit(arrivalId: ArrivalId, mode: Mode = CheckMode)

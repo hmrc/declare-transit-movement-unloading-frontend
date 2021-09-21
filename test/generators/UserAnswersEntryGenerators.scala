@@ -23,14 +23,6 @@ import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators {
 
-  implicit lazy val arbitraryKevUserAnswersEntry: Arbitrary[(KevPage.type, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[KevPage.type]
-        value <- arbitrary[Int].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
   implicit lazy val arbitraryChangesToReportEntry: Arbitrary[(ChangesToReportPage.type, JsValue)] =
     Arbitrary {
       for {
