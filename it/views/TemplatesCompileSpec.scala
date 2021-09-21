@@ -18,8 +18,8 @@ package views
 
 import java.io.File
 
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.Json
@@ -30,8 +30,8 @@ import play.twirl.api.Html
 import renderer.Renderer
 
 class TemplatesCompileSpec
-  extends FreeSpec
-    with MustMatchers
+  extends AnyFreeSpec
+    with Matchers
     with ScalaFutures
     with IntegrationPatience
     with GuiceOneAppPerSuite {

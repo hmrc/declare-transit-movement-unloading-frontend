@@ -17,11 +17,11 @@
 package models
 
 import org.scalatest.EitherValues
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import play.api.mvc.PathBindable
 
-class ArrivalIdSpec extends FreeSpec with MustMatchers with EitherValues {
+class ArrivalIdSpec extends AnyFreeSpec with Matchers with EitherValues {
 
   "Arrival Id" - {
     "must bind from url" in {

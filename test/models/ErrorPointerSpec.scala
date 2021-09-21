@@ -20,11 +20,11 @@ import com.lucidchart.open.xtract.XmlReader
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class ErrorPointerSpec extends FreeSpec with Generators with ScalaCheckPropertyChecks with MustMatchers with OptionValues {
+class ErrorPointerSpec extends AnyFreeSpec with Generators with ScalaCheckPropertyChecks with Matchers with OptionValues {
 
   "ErrorPointer" - {
     "must read xml for single items" in {

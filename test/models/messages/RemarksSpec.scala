@@ -20,8 +20,8 @@ import com.lucidchart.open.xtract.XmlReader
 import generators.{Generators, ModelGenerators}
 import models.XMLWrites._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatest.OptionValues
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import utils.Format
@@ -29,7 +29,7 @@ import utils.Format
 import scala.xml.Utility.trim
 import scala.xml.{Elem, Node, NodeSeq}
 
-class RemarksSpec extends FreeSpec with MustMatchers with Generators with ModelGenerators with ScalaCheckPropertyChecks with OptionValues {
+class RemarksSpec extends AnyFreeSpec with Matchers with Generators with ModelGenerators with ScalaCheckPropertyChecks with OptionValues {
 
   "RemarksSpec" - {
 

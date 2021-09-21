@@ -21,14 +21,14 @@ import generators.MessagesModelGenerators
 import models.XMLWrites._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.OptionValues
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import scala.xml.Node
 import scala.xml.Utility.trim
 
-class PointerToAttributeSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with OptionValues with MessagesModelGenerators {
+class PointerToAttributeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with MessagesModelGenerators {
 
   "PointerToAttributeSpec" - {
 

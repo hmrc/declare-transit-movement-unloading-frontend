@@ -21,14 +21,14 @@ import generators.Generators
 import models.XMLWrites._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.StreamlinedXmlEquality
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import scala.xml.Elem
 import scala.xml.Utility.trim
 
-class SealsSpec extends FreeSpec with MustMatchers with Generators with ScalaCheckPropertyChecks with StreamlinedXmlEquality {
+class SealsSpec extends AnyFreeSpec with Matchers with Generators with ScalaCheckPropertyChecks with StreamlinedXmlEquality {
 
   "SealsSpec" - {
 

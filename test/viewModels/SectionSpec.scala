@@ -17,8 +17,8 @@
 package viewModels
 
 import config.FrontendAppConfig
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
@@ -29,7 +29,7 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import viewModels.sections.Section
 
-class SectionSpec extends FreeSpec with MustMatchers with NunjucksSupport with GuiceOneAppPerSuite {
+class SectionSpec extends AnyFreeSpec with Matchers with NunjucksSupport with GuiceOneAppPerSuite {
 
   def injector: Injector = app.injector
 

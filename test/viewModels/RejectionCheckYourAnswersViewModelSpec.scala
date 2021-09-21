@@ -19,12 +19,12 @@ package viewModels
 import java.time.LocalDate
 
 import base.SpecBase
-import org.scalatest.freespec.{AnyFreeSpec => FreeSpec}
-import org.scalatest.matchers.must.{Matchers => MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import pages.{DateGoodsUnloadedPage, GrossMassAmountPage, TotalNumberOfItemsPage, TotalNumberOfPackagesPage, VehicleNameRegistrationReferencePage}
 import uk.gov.hmrc.viewmodels.Text.Literal
 
-class RejectionCheckYourAnswersViewModelSpec extends FreeSpec with MustMatchers with SpecBase {
+class RejectionCheckYourAnswersViewModelSpec extends AnyFreeSpec with Matchers with SpecBase {
 
   "RejectionCheckYourAnswersViewModel" - {
 
