@@ -22,7 +22,6 @@ import forms.DateGoodsUnloadedFormProvider
 import models.{ArrivalId, Mode}
 import navigation.NavigatorUnloadingPermission
 import pages.DateGoodsUnloadedPage
-import play.api.data.Forms.date
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -32,7 +31,6 @@ import services.UnloadingPermissionService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.{DateInput, NunjucksSupport}
 
-import java.time.LocalDateTime
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
