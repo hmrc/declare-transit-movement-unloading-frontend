@@ -30,7 +30,7 @@
 
         <p class="govuk-body">{{ messages("checkYourAnswers.confirmation.paragraph") }}</p>
 
-        <form action="{{ routes.controllers.RejectionCheckYourAnswersController.onSubmit.url }}" method="post">
+        <form action="{{ routes.controllers.RejectionCheckYourAnswersController.onSubmit(arrivalId).url }}" method="post">
             {{ csrf() | safe }}
 
             {{ govukButton({

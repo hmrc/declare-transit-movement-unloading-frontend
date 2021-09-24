@@ -78,7 +78,8 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
         "form"      -> form,
         "mrn"       -> mrn,
         "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "mode"      -> NormalMode,
+        "index"     -> index.display
       )
 
       templateCaptor.getValue mustEqual "newSealNumber.njk"
@@ -110,7 +111,8 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
         "form"      -> filledForm,
         "mrn"       -> mrn,
         "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "mode"      -> NormalMode,
+        "index"     -> index.display
       )
 
       templateCaptor.getValue mustEqual "newSealNumber.njk"
@@ -161,9 +163,11 @@ class NewSealNumberControllerSpec extends SpecBase with AppWithDefaultMockFixtur
         verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
         val expectedJson = Json.obj(
-          "form" -> boundForm,
-          "mrn"  -> mrn,
-          "mode" -> NormalMode
+          "form"      -> boundForm,
+          "mrn"       -> mrn,
+          "arrivalId" -> arrivalId,
+          "mode"      -> NormalMode,
+          "index"     -> index.display
         )
 
         templateCaptor.getValue mustEqual "newSealNumber.njk"

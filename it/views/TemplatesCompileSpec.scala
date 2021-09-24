@@ -16,10 +16,11 @@
 
 package views
 
-import java.io.File
-
-import org.scalatest.{FreeSpec, MustMatchers}
+import models.{Mode, NormalMode}
+import org.jsoup.Jsoup
+import org.jsoup.select.Elements
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
+import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.Json
 import play.api.mvc.RequestHeader
@@ -27,6 +28,9 @@ import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import renderer.Renderer
+
+import java.io.File
+import scala.collection.JavaConverters._
 
 class TemplatesCompileSpec
   extends FreeSpec
@@ -47,6 +51,8 @@ class TemplatesCompileSpec
     }
   }
 
+  private val normalMode: Mode = NormalMode
+
   "must render all the templates" in {
 
     implicit val request: RequestHeader = FakeRequest("", "").withCSRFToken
@@ -59,8 +65,23 @@ class TemplatesCompileSpec
         note(s"Render $filename...")
         val path = filename.toPath
         val pathInsideViews = path.subpath(2, path.getNameCount)
-        val result = renderer.render(pathInsideViews.toString, Json.obj())
-        result.futureValue mustBe an[Html]
+        val result = renderer.render(pathInsideViews.toString, Json.obj(
+          "mrn"         -> "testMrn",
+          "arrivalId"   -> "testArrivalId",
+          "index"       -> "testIndex",
+          "mode"        -> normalMode,
+          "onSubmitUrl" -> "testOnSubmitUrl"
+        ))
+        val html: Html = result.futureValue
+        html mustBe an[Html]
+        val document = Jsoup.parse(html.toString())
+        val forms: Elements = document.getElementsByTag("form")
+        asScalaBuffer(forms).map {
+          form =>
+            val action = form.attr("action")
+            action mustNot be("")
+            action mustNot include("undefined")
+        }
     }
   }
 }

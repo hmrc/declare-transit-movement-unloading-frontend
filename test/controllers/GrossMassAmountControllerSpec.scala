@@ -59,10 +59,9 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> form,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.GrossMassAmountController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "grossMassAmount.njk"
@@ -90,10 +89,9 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
       val filledForm = form.bind(Map("value" -> "123456.123"))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> filledForm,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.GrossMassAmountController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "grossMassAmount.njk"
@@ -135,10 +133,9 @@ class GrossMassAmountControllerSpec extends SpecBase with AppWithDefaultMockFixt
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> boundForm,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.GrossMassAmountController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "grossMassAmount.njk"

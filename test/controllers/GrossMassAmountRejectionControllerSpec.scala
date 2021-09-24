@@ -79,8 +79,8 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form.fill(originalValue),
-        "arrivalId" -> arrivalId
+        "form"        -> form.fill(originalValue),
+        "onSubmitUrl" -> routes.GrossMassAmountRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "grossMassAmount.njk"
@@ -172,8 +172,8 @@ class GrossMassAmountRejectionControllerSpec extends SpecBase with AppWithDefaul
     verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
     val expectedJson = Json.obj(
-      "form"      -> boundForm,
-      "arrivalId" -> arrivalId
+      "form"        -> boundForm,
+      "onSubmitUrl" -> routes.GrossMassAmountRejectionController.onSubmit(arrivalId).url
     )
 
     templateCaptor.getValue mustEqual "grossMassAmount.njk"
