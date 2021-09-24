@@ -24,14 +24,16 @@
           {{ messages("unloadingRemarksRejection.heading") }}
         </h1>
 
-        <p class="govuk-body">{{ messages("unloadingRemarksRejection.conflicting.information") }}</p>
-
         {% for section in sections %}
           {{ sectionMacro(section.sectionTitle, section.rows) }}
         {% endfor %}
 
-        <p class="govuk-body">{{ messages("unloadingRemarksRejection.contact.message") }}
-        <a class="govuk-link" href={{contactUrl}} target="_blank">{{ messages("unloadingRemarksRejection.contact") }}</a>
+        <p class="govuk-body">
+           {{ messages("unloadingRemarksRejection.review") }} <a class="govuk-link" href={{declareUnloadingRemarksUrl}} >{{ messages("unloadingRemarksRejection.newUnloadingRemarks") }}</a>.
+        </p>
+
+        <p class="govuk-body">
+            {{ messages("unloadingRemarksRejection.youCan") }} <a class="govuk-link" href={{contactUrl}} target="_blank">{{ messages("unloadingRemarksRejection.contact") }}</a>.
         </p>
 
       </div>

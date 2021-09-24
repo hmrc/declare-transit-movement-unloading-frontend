@@ -302,7 +302,13 @@ unloadingRemarksRejection.contact.message = If this information is correct, you 
 unloadingRemarksRejection.conflicting.information = There is conflicting information that must be fixed before you can continue.
 unloadingRemarksRejection.contact = contact the New Computerised Transit System helpdesk to fix this(opens in a new tab)
 unloadingRemarksRejection.create.unloadingRemarks = create new unloading remarks
-unloadingRemarksRejection.you.can = You can:
+
+unloadingRemarksRejection.review = You must review the error and
+unloadingRemarksRejection.newUnloadingRemarks = send new unloading remarks with the right information
+unloadingRemarksRejection.youCan = You can
+unloadingRemarksRejection.contact = contact the New Computerised Transit System helpdesk if you need help understanding the error (opens in a new tab)
+
+
 unloadingRemarksRejection.errorCode = Error code
 unloadingRemarksRejection.pointer = Pointer
 unloadingRemarksRejection.originalAttributeValue = Attribute value
