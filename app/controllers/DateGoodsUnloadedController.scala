@@ -69,11 +69,10 @@ class DateGoodsUnloadedController @Inject() (
               val viewModel = DateInput.localDate(preparedForm("value"))
 
               val json = Json.obj(
-                "form"      -> preparedForm,
-                "mode"      -> mode,
-                "mrn"       -> request.userAnswers.mrn,
-                "arrivalId" -> arrivalId,
-                "date"      -> viewModel
+                "form"        -> preparedForm,
+                "mrn"         -> request.userAnswers.mrn,
+                "date"        -> viewModel,
+                "onSubmitUrl" -> routes.DateGoodsUnloadedController.onSubmit(arrivalId, mode).url
               )
 
               renderer.render("dateGoodsUnloaded.njk", json).map(Ok(_))
@@ -100,11 +99,10 @@ class DateGoodsUnloadedController @Inject() (
                     val viewModel = DateInput.localDate(formWithErrors("value"))
 
                     val json = Json.obj(
-                      "form"      -> formWithErrors,
-                      "mode"      -> mode,
-                      "mrn"       -> request.userAnswers.mrn,
-                      "arrivalId" -> arrivalId,
-                      "date"      -> viewModel
+                      "form"        -> formWithErrors,
+                      "mrn"         -> request.userAnswers.mrn,
+                      "date"        -> viewModel,
+                      "onSubmitUrl" -> routes.DateGoodsUnloadedController.onSubmit(arrivalId, mode).url
                     )
 
                     renderer.render("dateGoodsUnloaded.njk", json).map(BadRequest(_))

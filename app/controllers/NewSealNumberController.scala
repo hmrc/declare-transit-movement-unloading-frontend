@@ -67,7 +67,8 @@ class NewSealNumberController @Inject() (
           "form"      -> preparedForm,
           "mrn"       -> request.userAnswers.mrn,
           "arrivalId" -> arrivalId,
-          "mode"      -> mode
+          "mode"      -> mode,
+          "index"     -> index.display
         )
 
         renderer.render("newSealNumber.njk", json).map(Ok(_))
@@ -87,7 +88,14 @@ class NewSealNumberController @Inject() (
               .bindFromRequest()
               .fold(
                 formWithErrors => {
-                  val json = Json.obj("form" -> formWithErrors, "mrn" -> request.userAnswers.mrn, "arrivalId" -> arrivalId, "mode" -> mode)
+                  val json = Json.obj(
+                    "form"      -> formWithErrors,
+                    "mrn"       -> request.userAnswers.mrn,
+                    "arrivalId" -> arrivalId,
+                    "mode"      -> mode,
+                    "index"     -> index.display
+                  )
+
                   renderer.render("newSealNumber.njk", json).map(BadRequest(_))
                 },
                 value =>

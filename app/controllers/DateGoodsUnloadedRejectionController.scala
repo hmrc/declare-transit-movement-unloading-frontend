@@ -66,9 +66,9 @@ class DateGoodsUnloadedRejectionController @Inject() (
         val viewModel    = DateInput.localDate(preparedForm("value"))
 
         Json.obj(
-          "form"      -> preparedForm,
-          "arrivalId" -> arrivalId,
-          "date"      -> viewModel
+          "form"        -> preparedForm,
+          "date"        -> viewModel,
+          "onSubmitUrl" -> routes.DateGoodsUnloadedRejectionController.onSubmit(arrivalId).url
         )
 
       }).foldF {
@@ -95,9 +95,9 @@ class DateGoodsUnloadedRejectionController @Inject() (
             val viewModel = DateInput.localDate(formWithErrors("value"))
 
             val json = Json.obj(
-              "form"      -> formWithErrors,
-              "arrivalId" -> arrivalId,
-              "date"      -> viewModel
+              "form"        -> formWithErrors,
+              "date"        -> viewModel,
+              "onSubmitUrl" -> routes.DateGoodsUnloadedRejectionController.onSubmit(arrivalId).url
             )
 
             renderer.render("dateGoodsUnloaded.njk", json).map(BadRequest(_))

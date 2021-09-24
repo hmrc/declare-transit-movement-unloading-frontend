@@ -60,10 +60,9 @@ class GrossMassAmountController @Inject() (
         }
 
         val json = Json.obj(
-          "form"      -> preparedForm,
-          "mrn"       -> request.userAnswers.mrn,
-          "arrivalId" -> arrivalId,
-          "mode"      -> mode
+          "form"        -> preparedForm,
+          "mrn"         -> request.userAnswers.mrn,
+          "onSubmitUrl" -> routes.GrossMassAmountController.onSubmit(arrivalId, mode).url
         )
 
         renderer.render("grossMassAmount.njk", json).map(Ok(_))
@@ -78,10 +77,9 @@ class GrossMassAmountController @Inject() (
             formWithErrors => {
 
               val json = Json.obj(
-                "form"      -> formWithErrors,
-                "mrn"       -> request.userAnswers.mrn,
-                "arrivalId" -> arrivalId,
-                "mode"      -> mode
+                "form"        -> formWithErrors,
+                "mrn"         -> request.userAnswers.mrn,
+                "onSubmitUrl" -> routes.GrossMassAmountController.onSubmit(arrivalId, mode).url
               )
 
               renderer.render("grossMassAmount.njk", json).map(BadRequest(_))

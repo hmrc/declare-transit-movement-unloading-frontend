@@ -100,11 +100,10 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
       val viewModel = DateInput.localDate(form("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "mode"      -> NormalMode,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> form,
+        "mrn"         -> mrn,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"
@@ -139,11 +138,10 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
       val viewModel = DateInput.localDate(filledForm("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "mode"      -> NormalMode,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> filledForm,
+        "mrn"         -> mrn,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"
@@ -224,11 +222,10 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
       val viewModel = DateInput.localDate(boundForm("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "mode"      -> NormalMode,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> boundForm,
+        "mrn"         -> mrn,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"
@@ -267,11 +264,10 @@ class DateGoodsUnloadedControllerSpec extends SpecBase with AppWithDefaultMockFi
       val viewModel = DateInput.localDate(boundForm("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "mode"      -> NormalMode,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> boundForm,
+        "mrn"         -> mrn,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"

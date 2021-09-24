@@ -33,7 +33,7 @@
             <h2 class="govuk-heading-m">{{ messages("unloadingSummary.seals.subheading") }}</h2>
             <p class="govuk-body">{{ messages("unloadingSummary.noSeals") }}</p>
         {% endif %}
-        <p class ="govuk-body"><a id="value" href="{{ addSealUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addSeal.link.text") }}</a></p>
+        <p class ="govuk-body"><a id="add-seal" href="{{ addSealUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addSeal.link.text") }}</a></p>
 
         {% for section in sections %}
           {{ sectionMacro(section.sectionTitle, section.rows) }}
@@ -41,7 +41,7 @@
 
         {% if showAddCommentLink %}
           <p class ="govuk-body">
-             <a id="value" href="{{ addCommentUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addComment.link.text") }} </a>
+             <a id="add-comment" href="{{ addCommentUrl }}" class="govuk-link"> {{ messages("unloadingSummary.addComment.link.text") }} </a>
           </p>
         {% endif %}
 

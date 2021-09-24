@@ -59,10 +59,9 @@ class VehicleNameRegistrationReferenceControllerSpec extends SpecBase with AppWi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> form,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.VehicleNameRegistrationReferenceController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "vehicleNameRegistrationReference.njk"
@@ -90,10 +89,9 @@ class VehicleNameRegistrationReferenceControllerSpec extends SpecBase with AppWi
       val filledForm = form.bind(Map("value" -> "answer"))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> filledForm,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.VehicleNameRegistrationReferenceController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "vehicleNameRegistrationReference.njk"
@@ -135,10 +133,9 @@ class VehicleNameRegistrationReferenceControllerSpec extends SpecBase with AppWi
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> boundForm,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.VehicleNameRegistrationReferenceController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "vehicleNameRegistrationReference.njk"

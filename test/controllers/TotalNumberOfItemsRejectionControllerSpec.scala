@@ -83,8 +83,8 @@ class TotalNumberOfItemsRejectionControllerSpec extends SpecBase with AppWithDef
       val filledForm = form.bind(Map("value" -> validAnswer.toString))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "arrivalId" -> arrivalId
+        "form"        -> filledForm,
+        "onSubmitUrl" -> routes.TotalNumberOfItemsRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfItems.njk"
@@ -154,8 +154,8 @@ class TotalNumberOfItemsRejectionControllerSpec extends SpecBase with AppWithDef
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "arrivalId" -> arrivalId
+        "form"        -> boundForm,
+        "onSubmitUrl" -> routes.TotalNumberOfItemsRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfItems.njk"

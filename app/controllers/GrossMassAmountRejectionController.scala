@@ -57,8 +57,8 @@ class GrossMassAmountRejectionController @Inject() (
       rejectionService.getRejectedValueAsString(arrivalId, request.userAnswers)(GrossMassAmountPage) flatMap {
         case Some(originalAttrValue) =>
           val json = Json.obj(
-            "form"      -> form.fill(originalAttrValue),
-            "arrivalId" -> arrivalId
+            "form"        -> form.fill(originalAttrValue),
+            "onSubmitUrl" -> routes.GrossMassAmountRejectionController.onSubmit(arrivalId).url
           )
           renderer.render("grossMassAmount.njk", json).map(Ok(_))
         case None => renderTechnicalDifficultiesPage
@@ -73,8 +73,8 @@ class GrossMassAmountRejectionController @Inject() (
           formWithErrors => {
 
             val json = Json.obj(
-              "form"      -> formWithErrors,
-              "arrivalId" -> arrivalId
+              "form"        -> formWithErrors,
+              "onSubmitUrl" -> routes.GrossMassAmountRejectionController.onSubmit(arrivalId).url
             )
 
             renderer.render("grossMassAmount.njk", json).map(BadRequest(_))
