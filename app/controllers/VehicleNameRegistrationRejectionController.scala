@@ -58,8 +58,8 @@ class VehicleNameRegistrationRejectionController @Inject() (
       rejectionService.getRejectedValueAsString(arrivalId, request.userAnswers)(VehicleNameRegistrationReferencePage) flatMap {
         case Some(originalAttrValue) =>
           val json = Json.obj(
-            "form"      -> form.fill(originalAttrValue),
-            "arrivalId" -> arrivalId
+            "form"        -> form.fill(originalAttrValue),
+            "onSubmitUrl" -> routes.VehicleNameRegistrationRejectionController.onSubmit(arrivalId).url
           )
           renderer.render("vehicleNameRegistrationReference.njk", json).map(Ok(_))
         case None => renderTechnicalDifficultiesPage
@@ -73,8 +73,8 @@ class VehicleNameRegistrationRejectionController @Inject() (
         .fold(
           formWithErrors => {
             val json = Json.obj(
-              "form"      -> formWithErrors,
-              "arrivalId" -> arrivalId
+              "form"        -> formWithErrors,
+              "onSubmitUrl" -> routes.VehicleNameRegistrationRejectionController.onSubmit(arrivalId).url
             )
             renderer.render("vehicleNameRegistrationReference.njk", json).map(BadRequest(_))
           },

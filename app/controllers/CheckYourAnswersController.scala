@@ -24,7 +24,7 @@ import handlers.ErrorHandler
 import models.ArrivalId
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import renderer.Renderer
 import services.{ReferenceDataService, UnloadingPermissionService, UnloadingRemarksService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -54,9 +54,6 @@ class CheckYourAnswersController @Inject() (
     with NunjucksSupport
     with TechnicalDifficultiesPage {
 
-  private val redirectUrl: ArrivalId => Call =
-    arrivalId => controllers.routes.ConfirmationController.onPageLoad(arrivalId)
-
   def onPageLoad(arrivalId: ArrivalId): Action[AnyContent] =
     (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
@@ -71,10 +68,10 @@ class CheckYourAnswersController @Inject() (
                 renderer
                   .render(
                     "check-your-answers.njk",
-                    Json.obj("mrn"         -> request.userAnswers.mrn,
-                             "arrivalId"   -> arrivalId,
-                             "sections"    -> Json.toJson(answers),
-                             "redirectUrl" -> redirectUrl(arrivalId).url
+                    Json.obj(
+                      "mrn"       -> request.userAnswers.mrn,
+                      "arrivalId" -> arrivalId,
+                      "sections"  -> Json.toJson(answers)
                     )
                   )
                   .map(Ok(_))

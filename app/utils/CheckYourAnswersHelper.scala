@@ -26,66 +26,6 @@ import utils.Format._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
-  def totalNumberOfPackages: Option[Row] = userAnswers.get(TotalNumberOfPackagesPage) map {
-    answer =>
-      Row(
-        key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(Literal(answer.toString)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.TotalNumberOfPackagesController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"totalNumberOfPackages.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
-  def totalNumberOfItems: Option[Row] = userAnswers.get(TotalNumberOfItemsPage) map {
-    answer =>
-      Row(
-        key = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(Literal(answer.toString)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.TotalNumberOfItemsController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"totalNumberOfItems.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
-  def changesToReport: Option[Row] = userAnswers.get(ChangesToReportPage) map {
-    answer =>
-      Row(
-        key = Key(msg"changesToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.ChangesToReportController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"changesToReport.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
-  def anythingElseToReport: Option[Row] = userAnswers.get(AnythingElseToReportPage) map {
-    answer =>
-      Row(
-        key = Key(msg"anythingElseToReport.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(yesOrNo(answer)),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.AnythingElseToReportController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"anythingElseToReport.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
   def areAnySealsBroken: Option[Row] = userAnswers.get(AreAnySealsBrokenPage) map {
     answer =>
       Row(
@@ -130,51 +70,6 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     case _ => None
   }
 
-  def grossMassAmount: Option[Row] = userAnswers.get(GrossMassAmountPage) map {
-    answer =>
-      Row(
-        key = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.GrossMassAmountController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"grossMassAmount.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
-  def vehicleRegistrationCountry: Option[Row] = userAnswers.get(VehicleRegistrationCountryPage) map {
-    answer =>
-      Row(
-        key = Key(msg"vehicleRegistrationCountry.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.VehicleRegistrationCountryController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"vehicleRegistrationCountry.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
-  val vehicleNameRegistrationReference: Option[Row] = userAnswers.get(VehicleNameRegistrationReferencePage) map {
-    answer =>
-      Row(
-        key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
-        value = Value(lit"$answer"),
-        actions = List(
-          Action(
-            content = msg"site.edit",
-            href = routes.VehicleNameRegistrationReferenceController.onPageLoad(userAnswers.id, CheckMode).url,
-            visuallyHiddenText = Some(msg"vehicleNameRegistrationReference.checkYourAnswersLabel")
-          )
-        )
-      )
-  }
-
   def dateGoodsUnloaded: Option[Row] = userAnswers.get(DateGoodsUnloadedPage) map {
     answer =>
       Row(
@@ -198,5 +93,3 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
       msg"site.no"
     }
 }
-
-object CheckYourAnswersHelper

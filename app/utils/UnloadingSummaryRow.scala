@@ -32,7 +32,7 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.NewSealNumberController.onPageLoad(arrivalId, index, CheckMode).url,
             visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display, value)),
-            attributes = Map("id" -> s"""change-seal-${index.position}""")
+            attributes = Map("id" -> s"change-seal-${index.position}")
           )
         )
       )
@@ -48,13 +48,13 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.NewSealNumberController.onPageLoad(arrivalId, index, CheckMode).url,
             visuallyHiddenText = Some(msg"changeSeal.sealList.change.hidden".withArgs(index.display, value)),
-            attributes = Map("id" -> s"""change-seal-${index.position}""")
+            attributes = Map("id" -> s"change-seal-${index.position}")
           ),
           Action(
             content = msg"site.delete",
             href = controllers.routes.ConfirmRemoveSealController.onPageLoad(arrivalId, index, NormalMode).url,
             visuallyHiddenText = Some(msg"changeSeal.sealList.remove.hidden".withArgs(index.display, value)),
-            attributes = Map("id" -> s"""remove-seal-${index.position}""")
+            attributes = Map("id" -> s"remove-seal-${index.position}")
           )
         )
       )
@@ -79,7 +79,7 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.VehicleNameRegistrationReferenceController.onPageLoad(arrivalId, CheckMode).url,
             visuallyHiddenText = Some(msg"changeVehicle.reference.change.hidden"),
-            attributes = Map("id" -> s"""change-vehicle-reference""")
+            attributes = Map("id" -> "change-vehicle-reference")
           )
         )
       )
@@ -95,7 +95,7 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.VehicleRegistrationCountryController.onPageLoad(arrivalId, CheckMode).url,
             visuallyHiddenText = Some(msg"changeVehicle.registeredCountry.change.hidden"),
-            attributes = Map("id" -> s"""change-vehicle-reference""")
+            attributes = Map("id" -> "change-vehicle-country")
           )
         )
       )
@@ -111,7 +111,7 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.GrossMassAmountController.onPageLoad(arrivalId, CheckMode).url,
             visuallyHiddenText = Some(msg"changeItems.grossMass.change.hidden"),
-            attributes = Map("id" -> s"""change-gross-mass""")
+            attributes = Map("id" -> "change-gross-mass")
           )
         )
       )
@@ -127,7 +127,7 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.TotalNumberOfItemsController.onPageLoad(arrivalId, CheckMode).url,
             visuallyHiddenText = Some(msg"changeItems.totalNumberOfItems.change.hidden"),
-            attributes = Map("id" -> s"""change-total-number-of-items""")
+            attributes = Map("id" -> "change-total-number-of-items")
           )
         )
       )
@@ -143,7 +143,7 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.TotalNumberOfPackagesController.onPageLoad(arrivalId, CheckMode).url,
             visuallyHiddenText = Some(msg"changeItems.totalNumberOfPackages.change.hidden"),
-            attributes = Map("id" -> s"""change-total-number-of-packages""")
+            attributes = Map("id" -> "change-total-number-of-packages")
           )
         )
       )
@@ -159,13 +159,13 @@ class UnloadingSummaryRow(userAnswers: UserAnswers) {
             content = msg"site.edit",
             href = controllers.routes.ChangesToReportController.onPageLoad(arrivalId, NormalMode).url,
             visuallyHiddenText = Some(msg"changeItems.comments.change.hidden"),
-            attributes = Map("id" -> s"""change-comments""")
+            attributes = Map("id" -> "change-comments")
           ),
           Action(
             content = msg"site.delete",
             href = controllers.routes.ConfirmRemoveCommentsController.onPageLoad(arrivalId, NormalMode).url,
             visuallyHiddenText = Some(msg"changeItems.comments.remove.hidden"),
-            attributes = Map("id" -> s"""remove-comment""")
+            attributes = Map("id" -> "remove-comment")
           )
         )
       )

@@ -61,10 +61,9 @@ class TotalNumberOfPackagesControllerSpec extends SpecBase with AppWithDefaultMo
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> form,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> form,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.TotalNumberOfPackagesController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfPackages.njk"
@@ -92,10 +91,9 @@ class TotalNumberOfPackagesControllerSpec extends SpecBase with AppWithDefaultMo
       val filledForm = form.bind(Map("value" -> validAnswer.toString))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> filledForm,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.TotalNumberOfPackagesController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfPackages.njk"
@@ -138,10 +136,9 @@ class TotalNumberOfPackagesControllerSpec extends SpecBase with AppWithDefaultMo
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "mrn"       -> mrn,
-        "arrivalId" -> arrivalId,
-        "mode"      -> NormalMode
+        "form"        -> boundForm,
+        "mrn"         -> mrn,
+        "onSubmitUrl" -> routes.TotalNumberOfPackagesController.onSubmit(arrivalId, NormalMode).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfPackages.njk"

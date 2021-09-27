@@ -116,9 +116,9 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
       val viewModel = DateInput.localDate(filledForm("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> filledForm,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"
@@ -201,9 +201,9 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
       val viewModel = DateInput.localDate(boundForm("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> boundForm,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"
@@ -242,9 +242,9 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
       val viewModel = DateInput.localDate(boundForm("value"))
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "arrivalId" -> arrivalId,
-        "date"      -> viewModel
+        "form"        -> boundForm,
+        "date"        -> viewModel,
+        "onSubmitUrl" -> routes.DateGoodsUnloadedRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "dateGoodsUnloaded.njk"

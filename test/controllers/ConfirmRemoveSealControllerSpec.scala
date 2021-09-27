@@ -66,7 +66,8 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
         "mode"      -> NormalMode,
         "mrn"       -> mrn,
         "arrivalId" -> arrivalId,
-        "radios"    -> Radios.yesNo(form("value"))
+        "radios"    -> Radios.yesNo(form("value")),
+        "index"     -> index.display
       )
 
       templateCaptor.getValue mustEqual "confirmRemoveSeal.njk"
@@ -117,7 +118,8 @@ class ConfirmRemoveSealControllerSpec extends SpecBase with AppWithDefaultMockFi
         "mode"      -> NormalMode,
         "mrn"       -> mrn,
         "arrivalId" -> arrivalId,
-        "radios"    -> Radios.yesNo(boundForm("value"))
+        "radios"    -> Radios.yesNo(boundForm("value")),
+        "index"     -> index.display
       )
 
       templateCaptor.getValue mustEqual "confirmRemoveSeal.njk"

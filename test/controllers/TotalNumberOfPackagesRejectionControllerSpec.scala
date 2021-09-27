@@ -16,8 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
 import forms.TotalNumberOfPackagesFormProvider
@@ -37,6 +35,7 @@ import play.twirl.api.Html
 import services.UnloadingRemarksRejectionService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
@@ -83,8 +82,8 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
       val filledForm = form.bind(Map("value" -> validAnswer.toString))
 
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "arrivalId" -> arrivalId
+        "form"        -> filledForm,
+        "onSubmitUrl" -> routes.TotalNumberOfPackagesRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfPackages.njk"
@@ -154,8 +153,8 @@ class TotalNumberOfPackagesRejectionControllerSpec extends SpecBase with AppWith
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "arrivalId" -> arrivalId
+        "form"        -> boundForm,
+        "onSubmitUrl" -> routes.TotalNumberOfPackagesRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "totalNumberOfPackages.njk"

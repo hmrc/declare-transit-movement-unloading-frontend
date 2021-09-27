@@ -57,8 +57,8 @@ class TotalNumberOfPackagesRejectionController @Inject() (
       rejectionService.getRejectedValueAsInt(arrivalId, request.userAnswers)(TotalNumberOfPackagesPage) flatMap {
         case Some(originalAttrValue) =>
           val json = Json.obj(
-            "form"      -> form.fill(originalAttrValue),
-            "arrivalId" -> arrivalId
+            "form"        -> form.fill(originalAttrValue),
+            "onSubmitUrl" -> routes.TotalNumberOfPackagesRejectionController.onSubmit(arrivalId).url
           )
           renderer.render("totalNumberOfPackages.njk", json).map(Ok(_))
         case None => renderTechnicalDifficultiesPage
@@ -73,8 +73,8 @@ class TotalNumberOfPackagesRejectionController @Inject() (
           formWithErrors => {
 
             val json = Json.obj(
-              "form"      -> formWithErrors,
-              "arrivalId" -> arrivalId
+              "form"        -> formWithErrors,
+              "onSubmitUrl" -> routes.TotalNumberOfPackagesRejectionController.onSubmit(arrivalId).url
             )
 
             renderer.render("totalNumberOfPackages.njk", json).map(BadRequest(_))

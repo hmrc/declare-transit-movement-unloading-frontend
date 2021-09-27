@@ -85,8 +85,8 @@ class VehicleNameRegistrationRejectionControllerSpec
 
       val filledForm = form.bind(Map("value" -> originalValue))
       val expectedJson = Json.obj(
-        "form"      -> filledForm,
-        "arrivalId" -> arrivalId
+        "form"        -> filledForm,
+        "onSubmitUrl" -> routes.VehicleNameRegistrationRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "vehicleNameRegistrationReference.njk"
@@ -134,8 +134,8 @@ class VehicleNameRegistrationRejectionControllerSpec
       verify(mockRenderer, times(1)).render(templateCaptor.capture(), jsonCaptor.capture())(any())
 
       val expectedJson = Json.obj(
-        "form"      -> boundForm,
-        "arrivalId" -> arrivalId
+        "form"        -> boundForm,
+        "onSubmitUrl" -> routes.VehicleNameRegistrationRejectionController.onSubmit(arrivalId).url
       )
 
       templateCaptor.getValue mustEqual "vehicleNameRegistrationReference.njk"
