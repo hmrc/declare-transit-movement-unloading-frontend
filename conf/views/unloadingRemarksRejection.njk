@@ -12,7 +12,7 @@
 
 {% block mainContent %}
 
-{{ govukBackLink({
+  {{ govukBackLink({
     text: messages("site.back")
   }) }}
 
@@ -29,11 +29,11 @@
         {% endfor %}
 
         <p class="govuk-body">
-           {{ messages("unloadingRemarksRejection.review") }} <a class="govuk-link" href={{declareUnloadingRemarksUrl}} >{{ messages("unloadingRemarksRejection.newUnloadingRemarks") }}</a>.
+          {{ messages("unloadingRemarksRejection.review") }} <a class="govuk-link" href={{declareUnloadingRemarksUrl}} >{{ messages("unloadingRemarksRejection.newUnloadingRemarks") }}</a>.
         </p>
 
-        <p class="govuk-body">
-            {{ messages("unloadingRemarksRejection.youCan") }} <a class="govuk-link" href={{contactUrl}} target="_blank">{{ messages("unloadingRemarksRejection.contact") }}</a>.
+        <p class="govuk-body">{{ messages("unloadingRemarksRejection.youCan") }}
+          <a class="govuk-link" href={{ contactUrl }} target="_blank" rel="noopener noreferrer">{{ messages("unloadingRemarksRejection.contact") }}</a>.
         </p>
 
       </div>
