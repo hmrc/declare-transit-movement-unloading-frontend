@@ -11,7 +11,7 @@
 
 {% block mainContent %}
 
-{{ govukBackLink({
+  {{ govukBackLink({
     text: messages("site.back")
   }) }}
 
@@ -23,35 +23,35 @@
           {{ messages("unloadingRemarksRejection.heading") }}
         </h1>
 
-   {% for error in errors %}
+        {% for error in errors %}
 
           <dl class="govuk-summary-list">
-                  <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                     {{ messages("unloadingRemarksRejection.errorCode") }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                      {{ error.errorType }}
-                      </dd>
-                  </div>
-                  <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
-                     {{ messages("unloadingRemarksRejection.pointer") }}
-                      </dt>
-                      <dd class="govuk-summary-list__value">
-                      {{ error.pointer }}
-                      </dd>
-                  </div>
-              </dl>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {{ messages("unloadingRemarksRejection.errorCode") }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ error.errorType }}
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {{ messages("unloadingRemarksRejection.pointer") }}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{ error.pointer }}
+              </dd>
+            </div>
+          </dl>
 
         {% endfor %}
 
-        <p class="govuk-body">
-           {{ messages("unloadingRemarksRejection.review") }} <a class="govuk-link" href={{declareUnloadingRemarksUrl}} >{{ messages("unloadingRemarksRejection.newUnloadingRemarks") }}</a>.
+        <p class="govuk-body">{{ messages("unloadingRemarksRejection.review") }}
+          <a class="govuk-link" href={{declareUnloadingRemarksUrl}} >{{ messages("unloadingRemarksRejection.newUnloadingRemarks") }}</a>.
         </p>
 
-        <p class="govuk-body">
-            {{ messages("unloadingRemarksRejection.youCan") }} <a class="govuk-link" href={{contactUrl}} target="_blank">{{ messages("unloadingRemarksRejection.contact") }}</a>.
+        <p class="govuk-body">{{ messages("unloadingRemarksRejection.youCan") }}
+          <a class="govuk-link" href={{contactUrl}} target="_blank" rel="noopener noreferrer">{{ messages("unloadingRemarksRejection.contact") }}</a>.
         </p>
 
       </div>
