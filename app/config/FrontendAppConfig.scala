@@ -37,12 +37,18 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val betaFeedbackUnauthenticatedUrl = s"$contactFrontendUrl/beta-feedback-unauthenticated"
   val signOutUrl: String             = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
-  lazy val loginUrl: String                            = configuration.get[String]("microservice.services.auth.login")
-  lazy val loginContinueUrl: String                    = configuration.get[String]("microservice.services.auth.loginContinue")
-  lazy val enrolmentKey: String                        = configuration.get[String]("microservice.services.auth.enrolmentKey")
-  lazy val enrolmentIdentifierKey: String              = configuration.get[String]("microservice.services.auth.enrolmentIdentifierKey")
-  lazy val enrolmentProxyUrl: String                   = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
-  lazy val enrolmentManagementFrontendEnrolUrl: String = configuration.get[String]("urls.enrolmentManagementFrontendEnrolUrl")
+  lazy val loginUrl: String               = configuration.get[String]("microservice.services.auth.login")
+  lazy val loginContinueUrl: String       = configuration.get[String]("microservice.services.auth.loginContinue")
+  lazy val enrolmentKey: String           = configuration.get[String]("microservice.services.auth.enrolmentKey")
+  lazy val enrolmentIdentifierKey: String = configuration.get[String]("microservice.services.auth.enrolmentIdentifierKey")
+
+  lazy val legacyEnrolmentKey: String           = configuration.get[String]("microservice.services.auth.enrolmentKey")
+  lazy val legacyEnrolmentIdentifierKey: String = configuration.get[String]("microservice.services.auth.enrolmentIdentifierKey")
+  lazy val newEnrolmentKey: String              = configuration.get[String]("microservice.services.auth.legacy.enrolmentKey")
+  lazy val newEnrolmentIdentifierKey: String    = configuration.get[String]("microservice.services.auth.legacy.enrolmentIdentifierKey")
+  lazy val eccEnrolmentSplashPage: String       = configuration.get[String]("urls.eccEnrolmentSplashPage")
+
+  lazy val enrolmentProxyUrl: String = configuration.get[Service]("microservice.services.enrolment-store-proxy").fullServiceUrl
 
   lazy val loginHmrcServiceUrl: String = configuration.get[String]("urls.loginHmrcService")
 
