@@ -14,7 +14,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-allowlist-filter"         % "1.0.0-play-28",
     "uk.gov.hmrc"       %% "play-nunjucks"                 % "0.32.0-play-28",
     "uk.gov.hmrc"       %% "play-nunjucks-viewmodel"       % "0.15.0-play-28",
-    "org.webjars.npm"   % "govuk-frontend"                 % "3.10.1",
+    "org.webjars.npm"   % "govuk-frontend"                 % "3.13.0",
     "org.webjars.npm"   % "hmrc-frontend"                  % "1.22.0",
     "com.lucidchart"    %% "xtract"                        % "2.2.1"
   )
