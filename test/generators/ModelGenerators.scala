@@ -21,9 +21,9 @@ import java.time.LocalDate
 import models.messages._
 import models.reference.Country
 import models.{UnloadingPermission, _}
-import org.scalacheck.Arbitrary.{arbitrary, _}
-import org.scalacheck.{Arbitrary, Gen}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen.choose
+import org.scalacheck.{Arbitrary, Gen}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait ModelGenerators {

@@ -19,6 +19,8 @@ package base
 import cats.data.NonEmptyList
 import models.{ArrivalId, EoriNumber, GoodsItem, MovementReferenceNumber, Packages, ProducedDocument, UserAnswers}
 import org.scalatest._
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -28,8 +30,8 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.{FakeRequest, Helpers}
 
 trait SpecBase
-    extends FreeSpec
-    with MustMatchers
+    extends AnyFreeSpec
+    with Matchers
     with ScalaCheckPropertyChecks
     with OptionValues
     with TryValues

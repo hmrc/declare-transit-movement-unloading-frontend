@@ -20,10 +20,11 @@ import com.lucidchart.open.xtract.{ParseFailure, ParseSuccess}
 import generators.MessagesModelGenerators
 import models.ErrorType.UnknownErrorCode
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class ErrorTypeSpec extends FreeSpec with ScalaCheckPropertyChecks with MustMatchers with MessagesModelGenerators {
+class ErrorTypeSpec extends AnyFreeSpec with ScalaCheckPropertyChecks with Matchers with MessagesModelGenerators {
 
   "ErrorType" - {
     "read integer as object" in {

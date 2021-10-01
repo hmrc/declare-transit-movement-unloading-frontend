@@ -34,6 +34,14 @@ object Mode {
     }
   }
 
+  implicit val normalWrites: Writes[NormalMode.type] = Writes {
+    _ => JsString("NormalMode")
+  }
+
+  implicit val checkWrites: Writes[CheckMode.type] = Writes {
+    _ => JsString("CheckMode")
+  }
+
   implicit val writes: Writes[Mode] = Writes {
     case NormalMode => JsString("NormalMode")
     case CheckMode  => JsString("CheckMode")

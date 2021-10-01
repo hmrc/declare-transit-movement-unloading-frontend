@@ -16,11 +16,14 @@
 
 package views
 
+import java.io.File
+
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import models.{Mode, NormalMode}
 import org.jsoup.Jsoup
 import org.jsoup.select.Elements
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{FreeSpec, MustMatchers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.Json
 import play.api.mvc.RequestHeader
@@ -33,8 +36,8 @@ import java.io.File
 import scala.collection.JavaConverters._
 
 class TemplatesCompileSpec
-  extends FreeSpec
-    with MustMatchers
+  extends AnyFreeSpec
+    with Matchers
     with ScalaFutures
     with IntegrationPatience
     with GuiceOneAppPerSuite {
