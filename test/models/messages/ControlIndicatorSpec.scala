@@ -19,13 +19,14 @@ package models.messages
 import generators.{Generators, ModelGenerators}
 import models.XMLWrites._
 import org.scalacheck.Arbitrary._
-import org.scalatest.{FreeSpec, MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import scala.xml.Node
 import scala.xml.Utility.trim
 
-class ControlIndicatorSpec extends FreeSpec with MustMatchers with Generators with ModelGenerators with ScalaCheckPropertyChecks {
+class ControlIndicatorSpec extends AnyFreeSpec with Matchers with Generators with ModelGenerators with ScalaCheckPropertyChecks {
 
   "ControlIndicatorSpec" - {
     "must serialize ControlIndicator to xml" in {

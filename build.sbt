@@ -93,5 +93,3 @@ lazy val itSettings = Defaults.itSettings ++ Seq(
     "-Dlogger.resource=logback-it.xml"
   )
 )
-
-dependencyOverrides ++= AppDependencies.overrides

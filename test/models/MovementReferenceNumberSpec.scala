@@ -20,14 +20,16 @@ import com.lucidchart.open.xtract.XmlReader
 import generators.Generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
-import org.scalatest.{EitherValues, FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.{EitherValues, OptionValues}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsString, Json}
 import play.api.mvc.PathBindable
 
 import scala.xml.Node
 
-class MovementReferenceNumberSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with EitherValues with OptionValues {
+class MovementReferenceNumberSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with EitherValues with OptionValues {
 
   "a Movement Reference Number" - {
 
@@ -39,7 +41,7 @@ class MovementReferenceNumberSpec extends FreeSpec with MustMatchers with ScalaC
 
       val result = pathBindable.bind("mrn", "99IT9876AB88901209")
 
-      result.right.value mustEqual mrn.value
+      result.value mustEqual mrn.value
     }
 
     "must deserialise" in {

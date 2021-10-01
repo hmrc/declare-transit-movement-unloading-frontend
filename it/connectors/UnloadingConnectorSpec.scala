@@ -26,7 +26,9 @@ import models.messages.UnloadingRemarksRequest
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues, StreamlinedXmlEquality}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.{OptionValues, StreamlinedXmlEquality}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.http.Status._
 import play.api.libs.json._
@@ -38,11 +40,11 @@ import scala.concurrent.Future
 import scala.xml.NodeSeq
 
 class UnloadingConnectorSpec
-    extends FreeSpec
+    extends AnyFreeSpec
     with ScalaFutures
     with IntegrationPatience
     with WireMockSuite
-    with MustMatchers
+    with Matchers
     with OptionValues
     with MessagesModelGenerators
     with StreamlinedXmlEquality

@@ -23,7 +23,6 @@ import reactivemongo.api._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
 
 object MongoSuite {
 
@@ -33,11 +32,10 @@ object MongoSuite {
         "config.resource"
       )))
 
-  private lazy val parsedUri: Future[MongoConnection.ParsedURI] = Future.fromTry {
-    MongoConnection.parseURI(config.get[String]("mongodb.uri"))
-  }
+  private lazy val parsedUri: Future[MongoConnection.ParsedURI] =
+    MongoConnection.fromString(config.get[String]("mongodb.uri"))
 
-  lazy val connection: Future[Try[MongoConnection]] = parsedUri.map { MongoDriver().connection(_, strictUri = false) }
+  lazy val connection: Future[MongoConnection] = parsedUri.flatMap { AsyncDriver().connect(_, Some("connectionName")) }
 }
 
 trait MongoSuite {
@@ -46,8 +44,7 @@ trait MongoSuite {
   def database: Future[DefaultDB] =
     for {
       uri              <- MongoSuite.parsedUri
-      connectionFuture <- MongoSuite.connection
-      connection       <- Future.fromTry(connectionFuture)
+      connection       <- MongoSuite.connection
       database         <- connection.database(uri.db.get)
     } yield database
 

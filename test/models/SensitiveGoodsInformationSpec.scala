@@ -18,14 +18,16 @@ package models
 
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import generators.Generators
+import models.XMLWrites._
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.{FreeSpec, MustMatchers, StreamlinedXmlEquality}
+import org.scalatest.StreamlinedXmlEquality
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 import scala.xml.NodeSeq
-import models.XMLWrites._
 
-class SensitiveGoodsInformationSpec extends FreeSpec with MustMatchers with Generators with ScalaCheckPropertyChecks with StreamlinedXmlEquality {
+class SensitiveGoodsInformationSpec extends AnyFreeSpec with Matchers with Generators with ScalaCheckPropertyChecks with StreamlinedXmlEquality {
 
   "SensitiveGoodsInformation" - {
 

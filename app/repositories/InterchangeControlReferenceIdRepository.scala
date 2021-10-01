@@ -21,7 +21,7 @@ import models.messages.InterchangeControlReference
 import play.api.libs.json.{Json, Reads}
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.api.WriteConcern
-import reactivemongo.play.json._
+import reactivemongo.play.json.compat._
 import reactivemongo.play.json.collection._
 import services.DateTimeService
 

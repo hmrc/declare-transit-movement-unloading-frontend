@@ -19,8 +19,10 @@ package connectors
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, okJson, urlEqualTo}
 import models.reference.Country
 import org.scalacheck.Gen
+import org.scalatest.Assertion
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
-import org.scalatest.{Assertion, FreeSpec, MustMatchers}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.test.Helpers.running
 import uk.gov.hmrc.http.HeaderCarrier
@@ -29,10 +31,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class ReferenceDataConnectorSpec
-    extends FreeSpec
+    extends AnyFreeSpec
     with ScalaFutures
     with WireMockSuite
-    with MustMatchers
+    with Matchers
     with ScalaCheckPropertyChecks
     with IntegrationPatience {
 
