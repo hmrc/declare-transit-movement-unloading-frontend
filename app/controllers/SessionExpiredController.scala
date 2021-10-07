@@ -39,8 +39,8 @@ class SessionExpiredController @Inject() (
 
     implicit request =>
       val json = Json.obj(
-        "nextPageUrl" -> s"${config.serviceUrl}"
+        "signInUrl" -> s"${config.serviceUrl}"
       )
-      renderer.render("session-expired.njk", json).map(Ok(_))
+      renderer.render("session-expired.njk", json).map(Ok(_).withNewSession)
   }
 }

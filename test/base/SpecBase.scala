@@ -41,6 +41,8 @@ trait SpecBase
 
   val arrivalId: ArrivalId = ArrivalId(1)
 
+  val configKey = "config"
+
   val mrn: MovementReferenceNumber  = MovementReferenceNumber("19", "GB", "1234567890123")
   val eoriNumber: EoriNumber        = EoriNumber("id")
   def emptyUserAnswers: UserAnswers = UserAnswers(arrivalId, mrn, eoriNumber, Json.obj())
