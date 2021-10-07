@@ -49,6 +49,9 @@ class Renderer @Inject() (appConfig: FrontendAppConfig, renderer: NunjucksRender
     "countdownSeconds"               -> appConfig.countdownSeconds,
     "trackingConsentUrl"             -> appConfig.trackingConsentUrl,
     "gtmContainer"                   -> appConfig.gtmContainer,
-    "serviceUrl"                     -> appConfig.serviceUrl
+    "serviceUrl"                     -> appConfig.serviceUrl,
+    "userResearchUrl"                -> appConfig.userResearchUrl,
+    "showPhaseBanner"                -> appConfig.showPhaseBanner,
+    "showUserResearchBanner"         -> appConfig.showUserResearchBanner
   )
 }
