@@ -37,6 +37,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.ArrivalSubmitted" - {
     "must transition for specific cases" in {
       ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
@@ -53,6 +54,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.UnloadingPermission" - {
     "must transition for specific cases" in {
       ArrivalStatus.UnloadingPermission.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.UnloadingPermission)
@@ -65,6 +67,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.GoodsReleased" - {
     "must transition to self in all cases" in {
       ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Right(ArrivalStatus.GoodsReleased)
@@ -76,6 +79,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Right(ArrivalStatus.GoodsReleased)
     }
   }
+
   "ArrivalStatus.ArrivalRejected" - {
     "must transition for specific cases" in {
       ArrivalStatus.ArrivalRejected.transition(MessageReceivedEvent.ArrivalRejected) mustBe Right(ArrivalStatus.ArrivalRejected)
@@ -87,6 +91,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement" - {
     "must transition for specific cases" in {
       ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
@@ -100,6 +105,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement" - {
     "must transition for specific cases" in {
       ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
@@ -115,6 +121,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.UnloadingRemarksSubmitted" - {
     "must transition for specific cases" in {
       ArrivalStatus.UnloadingRemarksSubmitted.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.UnloadingRemarksRejected)
@@ -130,6 +137,7 @@ class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
       )
     }
   }
+
   "ArrivalStatus.UnloadingRemarksRejected" - {
     "must transition for specific cases" in {
       ArrivalStatus.UnloadingRemarksRejected.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.UnloadingRemarksRejected)
