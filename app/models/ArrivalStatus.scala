@@ -55,7 +55,7 @@ object ArrivalStatus extends Enumerable.Implicits with MongoDateTimeFormats {
       case MessageReceivedEvent.UnloadingPermission       => Right(UnloadingPermission)
       case MessageReceivedEvent.UnloadingRemarksSubmitted => Right(UnloadingRemarksSubmitted)
       case MessageReceivedEvent.GoodsReleased             => Right(GoodsReleased)
-      case _                                              => Left(TransitionError(s"Tried to transition from ArrivalSubmitted to $messageReceived."))
+      case _                                              => Left(TransitionError(s"Tried to transition from UnloadingPermission to $messageReceived."))
     }
   }
 
