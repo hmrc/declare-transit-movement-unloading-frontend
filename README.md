@@ -3,6 +3,8 @@
 
 This service allows a user to report that transit movement goods have been unloaded.
 
+Service manager port: 9488
+
 ## How to run this service locally
 
 ### Start service manager with the following command
