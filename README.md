@@ -1,10 +1,7 @@
 
 # declare-transit-movement-unloading-frontend
 
-
-### License
-
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
+This service allows a user to report that transit movement goods have been unloaded.
 
 ## How to run this service locally
 
@@ -26,4 +23,7 @@ This code is open source software licensed under the [Apache 2.0 License]("http:
 You now should be able to access [View arrivals]("http://localhost:9485/manage-transit-movements/view-arrivals")  
 and access */manage-transit-movements-unloading-remarks* locally
     
+### License
+
+This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
 
