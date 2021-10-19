@@ -10,7 +10,7 @@ object AppDependencies {
     "com.typesafe.play" %% "play-iteratees"                % "2.6.1",
     "uk.gov.hmrc"       %% "logback-json-logger"           % "5.1.0",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping" % "1.9.0-play-28",
-    "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "5.14.0",
+    "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"    % "5.16.0",
     "uk.gov.hmrc"       %% "play-allowlist-filter"         % "1.0.0-play-28",
     "uk.gov.hmrc"       %% "play-nunjucks"                 % "0.33.0-play-28",
     "uk.gov.hmrc"       %% "play-nunjucks-viewmodel"       % "0.15.0-play-28",
