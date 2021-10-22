@@ -4,7 +4,7 @@
 {% from "govuk/components/summary-list/macro.njk"  import govukSummaryList %}
 {% from "govuk/components/button/macro.njk"        import govukButton %}
 {% from "macros/title.njk"                         import title %}
-{% from "macros/section-no-border.njk"             import section as sectionMacro %}
+{% from "macros/section-no-border.njk"             import noBorderSection %}
 
 {% block pageTitle %}
   {{ title(messages("checkYourAnswers.title")) }}
@@ -23,7 +23,7 @@
         {{ csrf() | safe }}
 
         {% for section in sections %}
-          {{ sectionMacro(section.sectionTitle, section.rows) }}
+          {{ noBorderSection(section.sectionTitle, section.rows) }}
         {% endfor %}
 
         <h2 class="govuk-heading-m">{{ messages("checkYourAnswers.confirmation.heading") }}</h2>
@@ -31,13 +31,13 @@
         <p class="govuk-body">{{ messages("checkYourAnswers.confirmation.paragraph") }}</p>
 
         <form action="{{ routes.controllers.CheckYourAnswersController.onSubmit(arrivalId).url }}" method="post">
-            {{ csrf() | safe }}
+          {{ csrf() | safe }}
 
-            {{ govukButton({
-              text: messages("site.confirmAndSend"),
-              preventDoubleClick: true,
-              attributes: {id:"submit"}
-            }) }}
+          {{ govukButton({
+            text: messages("site.confirmAndSend"),
+            preventDoubleClick: true,
+            attributes: {id: "submit"}
+          }) }}
 
          </form>
       </div>

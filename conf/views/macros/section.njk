@@ -1,6 +1,6 @@
-{% from "govuk/components/summary-list/macro.njk"  import govukSummaryList %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro section(sectionTitle, rows) %}
+{% macro section(sectionTitle, rows, listClass='govuk-summary-list') %}
 
   {% if rows | length %}
 
@@ -10,9 +10,11 @@
         <h2 class="govuk-heading-m">{{ sectionTitle }}</h2>
       {%  endif %}
 
+      {% set classes = [listClass, 'govuk-!-margin-bottom-9', 'ctc-add-to-a-list'] | join(" ") %}
+
       {{ govukSummaryList({
         rows: rows,
-        classes:"govuk-summary-list govuk-!-margin-bottom-9 ctc-add-to-a-list"
+        classes: classes
       }) }}
 
     </div>
