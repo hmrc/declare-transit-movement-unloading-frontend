@@ -29,7 +29,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def areAnySealsBroken: Option[Row] = userAnswers.get(AreAnySealsBrokenPage) map {
     answer =>
       Row(
-        key = Key(msg"areAnySealsBroken.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"areAnySealsBroken.checkYourAnswersLabel"),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
@@ -45,7 +45,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def canSealsBeRead: Option[Row] = userAnswers.get(CanSealsBeReadPage) map {
     answer =>
       Row(
-        key = Key(msg"canSealsBeRead.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"canSealsBeRead.checkYourAnswersLabel"),
         value = Value(yesOrNo(answer)),
         actions = List(
           Action(
@@ -62,7 +62,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
     case _ :: _ =>
       Some(
         Row(
-          key = Key(msg"checkYourAnswers.seals.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+          key = Key(msg"checkYourAnswers.seals.checkYourAnswersLabel"),
           value = Value(Html(seals.mkString("<br>"))),
           actions = Nil
         )
@@ -73,7 +73,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers) {
   def dateGoodsUnloaded: Option[Row] = userAnswers.get(DateGoodsUnloadedPage) map {
     answer =>
       Row(
-        key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel"),
         value = Value(Literal(answer.format(cyaDateFormatter))),
         actions = List(
           Action(

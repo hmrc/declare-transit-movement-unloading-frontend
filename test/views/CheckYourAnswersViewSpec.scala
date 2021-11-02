@@ -46,7 +46,6 @@ class CheckYourAnswersViewSpec extends SingleViewSpec("check-your-answers.njk", 
 
         summaryList.classNames().toList mustEqual List(
           "govuk-summary-list",
-          "govuk-summary-list--no-border",
           "govuk-!-margin-bottom-9",
           "ctc-add-to-a-list"
         )
