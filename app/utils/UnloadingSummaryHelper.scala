@@ -20,7 +20,7 @@ import models.{ArrivalId, CheckMode, Index, NormalMode, UserAnswers}
 import uk.gov.hmrc.viewmodels.SummaryList._
 import uk.gov.hmrc.viewmodels._
 
-class UnloadingSummaryRow(userAnswers: UserAnswers) {
+class UnloadingSummaryHelper(userAnswers: UserAnswers) {
 
   val seals: (Index, String) => Row = {
     (index, value) =>

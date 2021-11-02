@@ -23,7 +23,7 @@ import pages._
 import queries.SealsQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
-import utils.{CheckYourAnswersHelper, UnloadingSummaryRow}
+import utils.{CheckYourAnswersHelper, UnloadingSummaryHelper}
 import viewModels.sections.Section
 
 case class CheckYourAnswersViewModel(sections: Seq[Section])
@@ -62,7 +62,7 @@ object CheckYourAnswersViewModel {
 
   private def itemsSection(userAnswers: UserAnswers, unloadingPermission: UnloadingPermission, summaryTransportCountry: Option[Country]): Section = {
 
-    val unloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
+    val unloadingSummaryRow = new UnloadingSummaryHelper(userAnswers)
 
     val transportIdentityAnswer: Option[String] = userAnswers.get(VehicleNameRegistrationReferencePage)
     val transportIdentityRow: Seq[Row]          = SummaryRow.row(transportIdentityAnswer)(unloadingPermission.transportIdentity)(unloadingSummaryRow.vehicleUsed)

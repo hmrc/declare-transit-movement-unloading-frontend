@@ -22,7 +22,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import uk.gov.hmrc.viewmodels.MessageInterpolators
 import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 
-class UnloadingSummaryRowSpec extends SpecBase {
+class UnloadingSummaryHelperSpec extends SpecBase {
 
   "must return summary list row" - {
 
@@ -32,7 +32,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
         (str, position) =>
           val userAnswers = emptyUserAnswers
           val index       = Index(position)
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.seals(index, str)
 
           result mustEqual Row(
@@ -56,7 +56,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
         (str, position) =>
           val userAnswers = emptyUserAnswers
           val index       = Index(position)
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.sealsWithRemove(index, str)
 
           result mustEqual Row(
@@ -86,7 +86,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
         (str, position) =>
           val userAnswers = emptyUserAnswers
           val index       = Index(position)
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.items(index, str)
 
           result mustEqual Row(
@@ -102,7 +102,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
       forAll(arbitrary[String]) {
         str =>
           val userAnswers = emptyUserAnswers
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.vehicleUsed(str)
 
           result mustEqual Row(
@@ -125,7 +125,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
       forAll(arbitrary[String]) {
         str =>
           val userAnswers = emptyUserAnswers
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.registeredCountry(str)
 
           result mustEqual Row(
@@ -148,7 +148,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
       forAll(arbitrary[String]) {
         str =>
           val userAnswers = emptyUserAnswers
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.grossMass(str)
 
           result mustEqual Row(
@@ -171,7 +171,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
       forAll(arbitrary[Int]) {
         int =>
           val userAnswers = emptyUserAnswers
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.totalNumberOfItems(int)
 
           result mustEqual Row(
@@ -194,7 +194,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
       forAll(arbitrary[Int]) {
         int =>
           val userAnswers = emptyUserAnswers
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.totalNumberOfPackages(int)
 
           result mustEqual Row(
@@ -217,7 +217,7 @@ class UnloadingSummaryRowSpec extends SpecBase {
       forAll(arbitrary[String]) {
         str =>
           val userAnswers = emptyUserAnswers
-          val helper      = new UnloadingSummaryRow(userAnswers)
+          val helper      = new UnloadingSummaryHelper(userAnswers)
           val result      = helper.comments(str)
 
           result mustEqual Row(

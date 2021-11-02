@@ -22,7 +22,7 @@ import models.{TraderAtDestination, UnloadingPermission}
 import models.reference.Country
 import pages.{VehicleNameRegistrationReferencePage, VehicleRegistrationCountryPage}
 import uk.gov.hmrc.viewmodels.Text.Literal
-import utils.UnloadingSummaryRow
+import utils.UnloadingSummaryHelper
 import viewModels.sections.Section
 
 import java.time.LocalDate
@@ -50,28 +50,28 @@ class TransportSectionSpec extends SpecBase {
       "correct transport identity number from unloading permission" in {
 
         val regNumber          = unloadingPermission.copy(transportIdentity = Some("RegNumber1"))
-        val data: Seq[Section] = TransportSection(emptyUserAnswers, None)(regNumber, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = TransportSection(emptyUserAnswers, None)(regNumber, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("RegNumber1")
       }
 
       "correct transport country from unloading permission " in {
 
         val regNumber          = unloadingPermission.copy(transportCountry = Some("France"))
-        val data: Seq[Section] = TransportSection(emptyUserAnswers, None)(regNumber, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = TransportSection(emptyUserAnswers, None)(regNumber, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("France")
       }
 
       "correct country from Country object    " in {
 
         val regNumber          = unloadingPermission.copy(transportCountry = Some("FR"))
-        val data: Seq[Section] = TransportSection(emptyUserAnswers, Some(Country("FR", "France")))(regNumber, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = TransportSection(emptyUserAnswers, Some(Country("FR", "France")))(regNumber, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("France")
       }
 
       "no sections if identity and country don't exist" in {
 
         val noTransport        = unloadingPermission.copy(transportCountry = None, transportIdentity = None)
-        val data: Seq[Section] = TransportSection(emptyUserAnswers, None)(noTransport, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = TransportSection(emptyUserAnswers, None)(noTransport, new UnloadingSummaryHelper(emptyUserAnswers))
         data mustBe Nil
       }
 
@@ -88,7 +88,7 @@ class TransportSectionSpec extends SpecBase {
           .success
           .value
 
-        val data: Seq[Section] = TransportSection(updatedUserAnswers, None)(regNumber, new UnloadingSummaryRow(updatedUserAnswers))
+        val data: Seq[Section] = TransportSection(updatedUserAnswers, None)(regNumber, new UnloadingSummaryHelper(updatedUserAnswers))
         data.head.rows.head.value.content mustBe Literal("RegNumber2")
       }
 
@@ -101,7 +101,7 @@ class TransportSectionSpec extends SpecBase {
           .success
           .value
 
-        val data: Seq[Section] = TransportSection(updatedUserAnswers, None)(regCountry, new UnloadingSummaryRow(updatedUserAnswers))
+        val data: Seq[Section] = TransportSection(updatedUserAnswers, None)(regCountry, new UnloadingSummaryHelper(updatedUserAnswers))
         data.head.rows.head.value.content mustBe Literal("France")
       }
     }

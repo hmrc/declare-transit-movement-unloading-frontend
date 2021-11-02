@@ -21,7 +21,7 @@ import cats.data.NonEmptyList
 import models.{TraderAtDestination, UnloadingPermission}
 import pages.{ChangesToReportPage, GrossMassAmountPage}
 import uk.gov.hmrc.viewmodels.Text.Literal
-import utils.UnloadingSummaryRow
+import utils.UnloadingSummaryHelper
 import viewModels.sections.Section
 
 import java.time.LocalDate
@@ -47,14 +47,14 @@ class ItemsSectionSpec extends SpecBase {
       "Correct Gross mass when no changes have been made" in {
 
         val grossMassAmount    = unloadingPermission.copy(grossMass = "1000")
-        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(grossMassAmount, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(grossMassAmount, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("1000")
         data.head.rows(3).value.content mustBe Literal("Flowers")
       }
       "Correct number of items when no changes have been made" in {
 
         val numberOfItems      = unloadingPermission.copy(grossMass = "1000", numberOfItems = 10)
-        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(numberOfItems, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = ItemsSection(emptyUserAnswers)(numberOfItems, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows(1).value.content mustBe Literal("10")
       }
 
@@ -66,7 +66,7 @@ class ItemsSectionSpec extends SpecBase {
           .success
           .value
 
-        val data: Seq[Section] = ItemsSection(updatedAnswers)(grossMassAmount, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = ItemsSection(updatedAnswers)(grossMassAmount, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows.head.value.content mustBe Literal("2000")
         data.head.rows(3).value.content mustBe Literal("Flowers")
       }
@@ -77,7 +77,7 @@ class ItemsSectionSpec extends SpecBase {
           .success
           .value
 
-        val data: Seq[Section] = ItemsSection(updatedAnswers)(unloadingPermission, new UnloadingSummaryRow(emptyUserAnswers))
+        val data: Seq[Section] = ItemsSection(updatedAnswers)(unloadingPermission, new UnloadingSummaryHelper(emptyUserAnswers))
         data.head.rows(4).value.content mustBe Literal("Test")
       }
 
