@@ -37,7 +37,7 @@ class UnloadingRemarksRejectionHelperSpec extends SpecBase {
           val result      = helper.vehicleNameRegistrationReference(userAnswers.id, str)
 
           result mustEqual Row(
-            key = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"changeVehicle.reference.label"),
             value = Value(lit"$str"),
             actions = List(
               Action(
@@ -60,7 +60,7 @@ class UnloadingRemarksRejectionHelperSpec extends SpecBase {
           val result      = helper.totalNumberOfPackages(userAnswers.id, str)
 
           result mustEqual Row(
-            key = Key(msg"changeItems.totalNumberOfPackages.label", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"changeItems.totalNumberOfPackages.label"),
             value = Value(lit"$str"),
             actions = List(
               Action(
@@ -82,7 +82,7 @@ class UnloadingRemarksRejectionHelperSpec extends SpecBase {
           val result      = helper.totalNumberOfItems(userAnswers.id, str)
 
           result mustEqual Row(
-            key = Key(msg"changeItems.totalNumberOfItems.label", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"changeItems.totalNumberOfItems.label"),
             value = Value(lit"$str"),
             actions = List(
               Action(
@@ -104,7 +104,7 @@ class UnloadingRemarksRejectionHelperSpec extends SpecBase {
           val result      = helper.grossMassAmount(userAnswers.id, str)
 
           result mustEqual Row(
-            key = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"changeItems.grossMass.label"),
             value = Value(lit"$str"),
             actions = List(
               Action(
@@ -124,7 +124,7 @@ class UnloadingRemarksRejectionHelperSpec extends SpecBase {
       val result      = helper.unloadingDate(userAnswers.id, LocalDate.parse("2000-01-01"))
 
       result mustEqual Row(
-        key = Key(msg"changeItems.dateGoodsUnloaded.label", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"changeItems.dateGoodsUnloaded.label"),
         value = Value(lit"1 January 2000"),
         actions = List(
           Action(

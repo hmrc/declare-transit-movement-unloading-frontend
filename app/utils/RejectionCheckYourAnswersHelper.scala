@@ -29,7 +29,7 @@ class RejectionCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def vehicleNameRegistrationRejection: Option[Row] = userAnswers.get(VehicleNameRegistrationReferencePage) map {
     answer =>
       Row(
-        key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel"),
         value = Value(lit"$answer"),
         actions = List(
           Action(
@@ -45,7 +45,7 @@ class RejectionCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def dateGoodsUnloaded: Option[Row] = userAnswers.get(DateGoodsUnloadedPage) map {
     answer =>
       Row(
-        key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel"),
         value = Value(Literal(answer.format(cyaDateFormatter))),
         actions = List(
           Action(
@@ -61,7 +61,7 @@ class RejectionCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def totalNumberOfPackages: Option[Row] = userAnswers.get(TotalNumberOfPackagesPage) map {
     answer =>
       Row(
-        key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel"),
         value = Value(Literal(answer.toString)),
         actions = List(
           Action(
@@ -76,7 +76,7 @@ class RejectionCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def totalNumberOfItems: Option[Row] = userAnswers.get(TotalNumberOfItemsPage) map {
     answer =>
       Row(
-        key = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"totalNumberOfItems.checkYourAnswersLabel"),
         value = Value(Literal(answer.toString)),
         actions = List(
           Action(
@@ -91,7 +91,7 @@ class RejectionCheckYourAnswersHelper(userAnswers: UserAnswers) {
   def grossMassAmount: Option[Row] = userAnswers.get(GrossMassAmountPage) map {
     answer =>
       Row(
-        key = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+        key = Key(msg"grossMassAmount.checkYourAnswersLabel"),
         value = Value(lit"$answer"),
         actions = List(
           Action(

@@ -23,13 +23,12 @@ import uk.gov.hmrc.viewmodels.SummaryList.{Action, Key, Row, Value}
 import uk.gov.hmrc.viewmodels.Text.Literal
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class UnloadingRemarksRejectionHelper {
 
   def vehicleNameRegistrationReference(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key = Key(msg"changeVehicle.reference.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeVehicle.reference.label"),
       value = Value(lit"$value"),
       actions = List(
         Action(
@@ -43,7 +42,7 @@ class UnloadingRemarksRejectionHelper {
 
   def totalNumberOfPackages(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key = Key(msg"changeItems.totalNumberOfPackages.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.totalNumberOfPackages.label"),
       value = Value(lit"$value"),
       actions = List(
         Action(
@@ -56,7 +55,7 @@ class UnloadingRemarksRejectionHelper {
 
   def totalNumberOfItems(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key = Key(msg"changeItems.totalNumberOfItems.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.totalNumberOfItems.label"),
       value = Value(lit"$value"),
       actions = List(
         Action(
@@ -69,7 +68,7 @@ class UnloadingRemarksRejectionHelper {
 
   def grossMassAmount(arrivalId: ArrivalId, value: String): Row =
     Row(
-      key = Key(msg"changeItems.grossMass.label", classes = Seq("govuk-!-width-one-half")),
+      key = Key(msg"changeItems.grossMass.label"),
       value = Value(lit"$value"),
       actions = List(
         Action(
@@ -80,11 +79,10 @@ class UnloadingRemarksRejectionHelper {
       )
     )
 
-  def unloadingDate(arrivalId: ArrivalId, value: LocalDate): Row = {
-    val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  def unloadingDate(arrivalId: ArrivalId, value: LocalDate): Row =
     Row(
-      key = Key(msg"changeItems.dateGoodsUnloaded.label", classes = Seq("govuk-!-width-one-half")),
-      value = Value(Literal(value.format(dateFormatter))),
+      key = Key(msg"changeItems.dateGoodsUnloaded.label"),
+      value = Value(Literal(value.format(Format.cyaDateFormatter))),
       actions = List(
         Action(
           content = msg"site.edit",
@@ -94,5 +92,4 @@ class UnloadingRemarksRejectionHelper {
         )
       )
     )
-  }
 }

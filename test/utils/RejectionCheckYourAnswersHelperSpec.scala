@@ -52,7 +52,7 @@ class RejectionCheckYourAnswersHelperSpec extends SpecBase {
 
             result mustBe Some(
               Row(
-                key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(msg"vehicleNameRegistrationReference.checkYourAnswersLabel"),
                 value = Value(lit"$str"),
                 actions = List(
                   Action(
@@ -91,7 +91,7 @@ class RejectionCheckYourAnswersHelperSpec extends SpecBase {
 
         result mustBe Some(
           Row(
-            key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+            key = Key(msg"dateGoodsUnloaded.checkYourAnswersLabel"),
             value = Value(lit"1 January 2000"),
             actions = List(
               Action(
@@ -131,7 +131,7 @@ class RejectionCheckYourAnswersHelperSpec extends SpecBase {
 
             result mustBe Some(
               Row(
-                key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(msg"totalNumberOfPackages.checkYourAnswersLabel"),
                 value = Value(lit"$int"),
                 actions = List(
                   Action(
@@ -171,7 +171,7 @@ class RejectionCheckYourAnswersHelperSpec extends SpecBase {
 
             result mustBe Some(
               Row(
-                key = Key(msg"totalNumberOfItems.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(msg"totalNumberOfItems.checkYourAnswersLabel"),
                 value = Value(lit"$int"),
                 actions = List(
                   Action(
@@ -211,7 +211,7 @@ class RejectionCheckYourAnswersHelperSpec extends SpecBase {
 
             result mustBe Some(
               Row(
-                key = Key(msg"grossMassAmount.checkYourAnswersLabel", classes = Seq("govuk-!-width-one-half")),
+                key = Key(msg"grossMassAmount.checkYourAnswersLabel"),
                 value = Value(lit"$str"),
                 actions = List(
                   Action(
