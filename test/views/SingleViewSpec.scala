@@ -21,7 +21,6 @@ import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.RequestHeader
 import play.api.test.Helpers
@@ -41,8 +40,6 @@ abstract class SingleViewSpec(protected val viewUnderTest: String, hasSignOutLin
     with GuiceOneAppPerSuite {
 
   require(viewUnderTest.endsWith(".njk"), "Expected view with file extension of `.njk`")
-
-  override val messages: Messages = Helpers.stubMessages()
 
   private def asDocument(html: Html): Document = Jsoup.parse(html.toString())
 

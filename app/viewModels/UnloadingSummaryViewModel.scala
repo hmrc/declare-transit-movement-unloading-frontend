@@ -23,7 +23,7 @@ import pages._
 import queries.SealsQuery
 import uk.gov.hmrc.viewmodels.SummaryList.Row
 import uk.gov.hmrc.viewmodels._
-import utils.UnloadingSummaryRow
+import utils.UnloadingSummaryHelper
 import viewModels.sections.Section
 
 case class UnloadingSummaryViewModel(sections: Seq[Section])
@@ -32,7 +32,7 @@ object UnloadingSummaryViewModel {
 
   def apply(userAnswers: UserAnswers, transportCountry: Option[Country])(implicit unloadingPermission: UnloadingPermission): UnloadingSummaryViewModel = {
 
-    implicit val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(userAnswers)
+    implicit val unloadingSummaryRow: UnloadingSummaryHelper = new UnloadingSummaryHelper(userAnswers)
 
     UnloadingSummaryViewModel(TransportSection(userAnswers, transportCountry) ++ ItemsSection(userAnswers))
   }
@@ -41,7 +41,7 @@ object UnloadingSummaryViewModel {
 
 object SealsSection {
 
-  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Option[Seq[Section]] =
+  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryHelper): Option[Seq[Section]] =
     userAnswers.get(SealsQuery) match {
       case Some(seals) =>
         val rows: Seq[Row] = seals.zipWithIndex.map {
@@ -76,7 +76,7 @@ object TransportSection {
 
   def apply(userAnswers: UserAnswers, summaryTransportCountry: Option[Country])(implicit
     unloadingPermission: UnloadingPermission,
-    unloadingSummaryRow: UnloadingSummaryRow
+    unloadingSummaryRow: UnloadingSummaryHelper
   ): Seq[Section] = {
 
     val vehicleAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(VehicleNameRegistrationReferencePage)
@@ -100,7 +100,7 @@ object TransportSection {
 
 object ItemsSection {
 
-  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryRow): Seq[Section] = {
+  def apply(userAnswers: UserAnswers)(implicit unloadingPermission: UnloadingPermission, unloadingSummaryRow: UnloadingSummaryHelper): Seq[Section] = {
     val grossMassAnswer: Option[String] = SummaryRow.userAnswerString(userAnswers)(GrossMassAmountPage)
     val grossMassRow: Seq[Row]          = SummaryRow.row(grossMassAnswer)(Some(unloadingPermission.grossMass))(unloadingSummaryRow.grossMass)
 
