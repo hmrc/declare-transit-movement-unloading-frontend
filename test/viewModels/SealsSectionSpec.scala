@@ -21,7 +21,7 @@ import cats.data.NonEmptyList
 import models.{Index, Seals, TraderAtDestination, UnloadingPermission}
 import pages.NewSealNumberPage
 import uk.gov.hmrc.viewmodels.Text.Literal
-import utils.UnloadingSummaryRow
+import utils.UnloadingSummaryHelper
 import viewModels.sections.Section
 
 import java.time.LocalDate
@@ -48,7 +48,7 @@ class SealsSectionSpec extends SpecBase {
 
       val withSeals = unloadingPermission.copy(seals = Some(Seals(1, Seq("seal 1", "seal 2"))))
 
-      val data: Seq[Section] = SealsSection(emptyUserAnswers)(withSeals, new UnloadingSummaryRow(emptyUserAnswers)).head
+      val data: Seq[Section] = SealsSection(emptyUserAnswers)(withSeals, new UnloadingSummaryHelper(emptyUserAnswers)).head
       data.head.rows(0).value.content mustBe Literal("seal 1")
       data.head.rows(1).value.content mustBe Literal("seal 2")
     }
@@ -65,7 +65,7 @@ class SealsSectionSpec extends SpecBase {
         .success
         .value
 
-      val data: Seq[Section] = SealsSection(updatedUserAnswers)(withSeals, new UnloadingSummaryRow(updatedUserAnswers)).head
+      val data: Seq[Section] = SealsSection(updatedUserAnswers)(withSeals, new UnloadingSummaryHelper(updatedUserAnswers)).head
       data.head.rows(0).value.content mustBe Literal("new seal value 1")
       data.head.rows(1).value.content mustBe Literal("new seal value 2")
     }
@@ -74,7 +74,7 @@ class SealsSectionSpec extends SpecBase {
 
       val noSeals = unloadingPermission.copy(seals = None)
 
-      val data: Option[Seq[Section]] = SealsSection(emptyUserAnswers)(noSeals, new UnloadingSummaryRow(emptyUserAnswers))
+      val data: Option[Seq[Section]] = SealsSection(emptyUserAnswers)(noSeals, new UnloadingSummaryHelper(emptyUserAnswers))
       data mustBe None
     }
 

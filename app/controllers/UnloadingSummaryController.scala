@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import renderer.Renderer
 import services.{ReferenceDataService, UnloadingPermissionService, UnloadingPermissionServiceImpl}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.UnloadingSummaryRow
+import utils.UnloadingSummaryHelper
 import viewModels.{SealsSection, UnloadingSummaryViewModel}
 
 import scala.concurrent.ExecutionContext
@@ -61,8 +61,8 @@ class UnloadingSummaryController @Inject() (
         unloadingPermissionService.getUnloadingPermission(arrivalId).flatMap {
           case Some(unloadingPermission) =>
             //TODO: Move unloading summary into UnloadingSummaryViewModel
-            val unloadingSummaryRow: UnloadingSummaryRow = new UnloadingSummaryRow(request.userAnswers)
-            val sealsSection                             = SealsSection(request.userAnswers)(unloadingPermission, unloadingSummaryRow)
+            val unloadingSummaryRow: UnloadingSummaryHelper = new UnloadingSummaryHelper(request.userAnswers)
+            val sealsSection                                = SealsSection(request.userAnswers)(unloadingPermission, unloadingSummaryRow)
 
             val numberOfSeals = request.userAnswers.get(DeriveNumberOfSeals) match {
               case Some(sealsNum) => sealsNum

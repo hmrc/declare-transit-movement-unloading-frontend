@@ -21,7 +21,6 @@ import config.FrontendAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.RequestHeader
 import play.api.test.Helpers
@@ -34,11 +33,13 @@ import uk.gov.hmrc.viewmodels.NunjucksSupport
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-abstract class SingleViewSpec(protected val viewUnderTest: String) extends SpecBase with ViewSpecAssertions with NunjucksSupport with GuiceOneAppPerSuite {
+abstract class SingleViewSpec(protected val viewUnderTest: String, hasSignOutLink: Boolean = true)
+    extends SpecBase
+    with ViewSpecAssertions
+    with NunjucksSupport
+    with GuiceOneAppPerSuite {
 
   require(viewUnderTest.endsWith(".njk"), "Expected view with file extension of `.njk`")
-
-  override val messages: Messages = Helpers.stubMessages()
 
   private def asDocument(html: Html): Document = Jsoup.parse(html.toString())
 
@@ -70,4 +71,25 @@ abstract class SingleViewSpec(protected val viewUnderTest: String) extends SpecB
       .render(viewUnderTest, json)
       .map(asDocument)
   }
+
+  if (hasSignOutLink) {
+    "must render sign out link in header" in {
+      val doc: Document = renderDocument().futureValue
+
+      assertPageHasSignOutLink(
+        doc = doc,
+        expectedText = "Sign out",
+        expectedHref = "http://localhost:9553/bas-gateway/sign-out-without-state?continue=http://localhost:9514/feedback/manage-transit-movements"
+      )
+    }
+  } else {
+    "must not render sign out link in header" in {
+      val doc: Document = renderDocument(
+        Json.obj("signInUrl" -> "/manage-transit-movements/what-do-you-want-to-do")
+      ).futureValue
+
+      assertPageHasNoSignOutLink(doc)
+    }
+  }
+
 }
