@@ -21,7 +21,7 @@ import controllers.actions._
 import forms.VehicleRegistrationCountryFormProvider
 import javax.inject.Inject
 import models.reference.Country
-import models.{ArrivalId, Mode, MovementReferenceNumber}
+import models.{ArrivalId, CountryList, Mode, MovementReferenceNumber}
 import navigation.Navigator
 import pages.VehicleRegistrationCountryPage
 import play.api.data.Form
@@ -75,7 +75,7 @@ class VehicleRegistrationCountryController @Inject() (
       "mrn"       -> mrn,
       "mode"      -> mode,
       "arrivalId" -> arrivalId,
-      "countries" -> countryJsonList(form.value, countries)
+      "countries" -> countryJsonList(form.value, CountryList(countries).fullList)
     )
     renderer.render("vehicleRegistrationCountry.njk", json).map(status(_))
   }
