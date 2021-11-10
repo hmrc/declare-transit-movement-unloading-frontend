@@ -24,7 +24,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 
 class DataTimeServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
 
-  // val dataTimeService: DateTimeService = app.injector.instanceOf[DateTimeService]
+  val dataTimeService: DateTimeService = app.injector.instanceOf[DateTimeService]
 
   "currentDateTime" - {
 
@@ -33,7 +33,7 @@ class DataTimeServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
       val clockOne: Clock = Clock.system(ZoneId.of("Australia/Darwin"))
       val clockTwo: Clock = Clock.system(ZoneId.of("America/New_York"))
 
-      // dataTimeService.currentDateTime(clockOne).isEqual(dataTimeService.currentDateTime(clockTwo)) mustBe false
+      dataTimeService.currentDateTime(clockOne).isEqual(dataTimeService.currentDateTime(clockTwo)) mustBe false
 
     }
   }
@@ -42,7 +42,7 @@ class DataTimeServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
 
     "must return a string of 8 digits" in {
 
-      //   dataTimeService.dateFormatted().matches("\\d{8}") mustBe true
+      dataTimeService.dateFormatted().matches("\\d{8}") mustBe true
 
     }
   }
