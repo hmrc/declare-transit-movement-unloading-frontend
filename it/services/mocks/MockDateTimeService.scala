@@ -31,7 +31,7 @@ trait MockDateTimeService extends MockitoSugar with BeforeAndAfterEach {
   }
 
   def mockDateFormatted(response: String): Unit = {
-    when(mockTimeService.dateFormatted)
+    when(mockTimeService.dateFormatted())
       .thenReturn(response)
   }
 

@@ -50,7 +50,7 @@ class MetaServiceSpec extends SpecBase with AppWithDefaultMockFixtures with Mess
         interchangeControlReference =>
           val localDateTime = LocalDateTime.now()
 
-          when(mockDateTimeService.currentDateTime).thenReturn(localDateTime)
+          when(mockDateTimeService.currentDateTime()).thenReturn(localDateTime)
 
           metaService.build(interchangeControlReference) mustBe Meta(
             interchangeControlReference,

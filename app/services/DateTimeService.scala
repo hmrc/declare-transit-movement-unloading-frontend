@@ -16,24 +16,22 @@
 
 package services
 
-import java.time.LocalDateTime
-
 import com.google.inject.Singleton
 import utils.Format
+import java.time.{Clock, LocalDateTime}
 
 @Singleton
 class DateTimeServiceImpl extends DateTimeService {
 
-  @deprecated("Will be removed. Use LocalDateTime.now(clock), with the system clock", "next")
-  override def currentDateTime: LocalDateTime = LocalDateTime.now()
+  def currentDateTime(clock: Clock = Clock.systemDefaultZone()): LocalDateTime = LocalDateTime.now(clock)
 
-  @deprecated("Will be removed. Use LocalDateTime.now(clock), with the system clock and then format", "next")
-  def dateFormatted: String = currentDateTime.format(Format.dateFormatter)
+  def dateFormatted(clock: Clock = Clock.systemDefaultZone()): String = currentDateTime(clock).format(Format.dateFormatter)
 }
 
 trait DateTimeService {
 
-  def currentDateTime: LocalDateTime
+  def currentDateTime(clock: Clock = Clock.systemDefaultZone()): LocalDateTime
 
-  def dateFormatted: String
+  def dateFormatted(clock: Clock = Clock.systemDefaultZone()): String
+
 }

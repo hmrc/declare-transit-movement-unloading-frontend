@@ -32,7 +32,7 @@ import play.api.http.Status._
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import repositories.InterchangeControlReferenceIdRepository
-import services.UnloadingRemarksRequestServiceSpec.header
+import UnloadingRemarksRequestServiceSpec.header
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.Future
