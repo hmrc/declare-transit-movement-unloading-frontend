@@ -27,7 +27,7 @@ class DateTimeServiceImpl @Inject() (clock: Clock) extends DateTimeService {
 
   def currentDateTime(): LocalDateTime = LocalDateTime.now(clock)
 
-  def dateFormatted(): String = currentDateTime().format(Format.dateFormatter)
+  def dateFormatted(): String = currentDateTime.format(Format.dateFormatter)
 }
 
 trait DateTimeService {

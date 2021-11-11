@@ -48,7 +48,7 @@ class InterchangeControlReferenceIdRepository @Inject() (
 
   def nextInterchangeControlReferenceId(): Future[InterchangeControlReference] = {
 
-    val date = dateTimeService.dateFormatted()
+    val date = dateTimeService.dateFormatted
 
     val update = Json.obj(
       "$inc" -> Json.obj(lastIndexKey -> 1)

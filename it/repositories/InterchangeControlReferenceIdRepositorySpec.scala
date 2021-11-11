@@ -81,7 +81,7 @@ class InterchangeControlReferenceIdRepositorySpec
             .insert(ordered = false)
             .one(
               Json.obj(
-                "_id"        -> mockTimeService.dateFormatted(),
+                "_id"        -> mockTimeService.dateFormatted,
                 "last-index" -> 1
               ))
       }.futureValue
