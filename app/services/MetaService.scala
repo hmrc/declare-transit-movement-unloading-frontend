@@ -24,7 +24,7 @@ import models.messages.{InterchangeControlReference, Meta}
 class MetaServiceImpl @Inject() (dateTimeService: DateTimeService) extends MetaService {
 
   def build(interchangeControlReference: InterchangeControlReference): Meta = {
-    val currentDateTime: LocalDateTime = dateTimeService.currentDateTime()
+    val currentDateTime: LocalDateTime = dateTimeService.currentDateTime
     val dateOfPreparation              = currentDateTime.toLocalDate
     val timeOfPreparation              = currentDateTime.toLocalTime
 
