@@ -16,25 +16,31 @@
 
 package services
 
-package services
-
-import java.time.{Clock, ZoneId}
+import java.time.{Clock, Instant, LocalDateTime, ZoneId, ZoneOffset}
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
+import play.api.inject.bind
+import play.api.inject.guice.GuiceApplicationBuilder
 
 class DataTimeServiceSpec extends SpecBase with AppWithDefaultMockFixtures {
+
+  //Instant.EPOCH == 1970-01-01T00:00:00Z. Stub 1 replicates clock bound from config.Module
+  private val stubClock: Clock       = Clock.fixed(Instant.EPOCH, ZoneOffset.UTC)
+  private val stubClockSystem: Clock = Clock.fixed(Instant.EPOCH, ZoneId.systemDefault)
+
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder =
+    super
+      .guiceApplicationBuilder()
+      .overrides(
+        bind[Clock].toInstance(stubClock)
+      )
 
   val dataTimeService: DateTimeService = app.injector.instanceOf[DateTimeService]
 
   "currentDateTime" - {
 
-    "must return different times based on the zone Id of the system clock" in {
-
-      val clockOne: Clock = Clock.system(ZoneId.of("Australia/Darwin"))
-      val clockTwo: Clock = Clock.system(ZoneId.of("America/New_York"))
-
-      dataTimeService.currentDateTime(clockOne).isEqual(dataTimeService.currentDateTime(clockTwo)) mustBe false
-
+    "must return an instance of LocalDateTime with UTC zoneId" in {
+      (LocalDateTime.now(stubClockSystem)) compareTo (dataTimeService.currentDateTime()) mustEqual 1
     }
   }
 

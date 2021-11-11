@@ -23,7 +23,7 @@ import java.time.{Clock, LocalDateTime}
 import javax.inject.Inject
 
 @Singleton
-class DateTimeServiceImpl @Inject() (clock:Clock) extends DateTimeService {
+class DateTimeServiceImpl @Inject() (clock: Clock) extends DateTimeService {
 
   def currentDateTime(): LocalDateTime = LocalDateTime.now(clock)
 
