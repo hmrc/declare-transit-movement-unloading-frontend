@@ -52,12 +52,12 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
   }
 
   private def fakeOkResult[A]: A => Future[Result] =
-    a => Future.successful(Ok("fake ok result value"))
+    _ => Future.successful(Ok("fake ok result value"))
 
   val validStatus = Seq(
     ArrivalStatus.UnloadingPermission,
     ArrivalStatus.UnloadingRemarksRejected,
-    ArrivalStatus.XMLNegativeAcknowledgement
+    ArrivalStatus.XMLSubmissionNegativeAcknowledgement
   )
 
   "a check cancellation status action" - {
