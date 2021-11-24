@@ -16,130 +16,48 @@
 
 package models
 
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
+import base.SpecBase
+import play.api.libs.json.{JsString, Json}
 
-class ArrivalStatusSpec extends AnyFreeSpec with Matchers {
-  "ArrivalStatus.Initialized" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Right(ArrivalStatus.ArrivalSubmitted)
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.UnloadingPermission)
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.ArrivalRejected) mustBe Right(ArrivalStatus.ArrivalRejected)
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.UnloadingRemarksRejected)
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
-        ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement
-      )
+class ArrivalStatusSpec extends SpecBase {
+
+  "ArrivalStatus" - {
+
+    "must serialise" - {
+
+      "to an UnloadingPermission" in {
+
+        val json = JsString("UnloadingPermission")
+
+        json.validate[ArrivalStatus].asOpt.value mustBe ArrivalStatus.UnloadingPermission
+      }
+
+      "to an UnloadingRemarksRejected" in {
+
+        val json = JsString("UnloadingRemarksRejected")
+
+        json.validate[ArrivalStatus].asOpt.value mustBe ArrivalStatus.UnloadingRemarksRejected
+      }
+
+      "to a XMLNegativeAcknowledgement" in {
+
+        val json = JsString("XMLNegativeAcknowledgement")
+
+        json.validate[ArrivalStatus].asOpt.value mustBe ArrivalStatus.XMLNegativeAcknowledgement
+      }
+
+      "to an OtherStatus when given an unrecognised status" in {
+
+        val json = JsString("Foo")
+
+        json.validate[ArrivalStatus].asOpt.value mustBe ArrivalStatus.OtherStatus
+      }
     }
-    "must not transition for other case" in {
-      ArrivalStatus.Initialized.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Left(
-        TransitionError(s"Tried to transition from Initialized to UnloadingRemarksSubmitted.")
-      )
-    }
-  }
-  "ArrivalStatus.ArrivalSubmitted" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.UnloadingPermission)
-      ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.ArrivalRejected) mustBe Right(ArrivalStatus.ArrivalRejected)
-      ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.UnloadingRemarksRejected)
-      ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
-        ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement
-      )
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.ArrivalSubmitted.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Left(
-        TransitionError(s"Tried to transition from ArrivalSubmitted to ArrivalSubmitted.")
-      )
-    }
-  }
-  "ArrivalStatus.UnloadingPermission" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.UnloadingPermission.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.UnloadingPermission)
-      ArrivalStatus.UnloadingPermission.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Right(ArrivalStatus.UnloadingRemarksSubmitted)
-      ArrivalStatus.UnloadingPermission.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.UnloadingPermission.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Left(
-        TransitionError(s"Tried to transition from UnloadingPermission to ArrivalSubmitted.")
-      )
-    }
-  }
-  "ArrivalStatus.GoodsReleased" - {
-    "must transition to self in all cases" in {
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.ArrivalRejected) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(ArrivalStatus.GoodsReleased)
-      ArrivalStatus.GoodsReleased.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Right(ArrivalStatus.GoodsReleased)
-    }
-  }
-  "ArrivalStatus.ArrivalRejected" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.ArrivalRejected.transition(MessageReceivedEvent.ArrivalRejected) mustBe Right(ArrivalStatus.ArrivalRejected)
-      ArrivalStatus.ArrivalRejected.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.ArrivalRejected.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Left(
-        TransitionError(s"Tried to transition from ArrivalRejected to UnloadingRemarksSubmitted.")
-      )
-    }
-  }
-  "ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
-        ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement
-      )
-      ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Right(ArrivalStatus.ArrivalSubmitted)
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.ArrivalXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.GoodsReleased) mustBe Left(
-        TransitionError(s"Tried to transition from XMLSubmissionNegativeAcknowledgement to GoodsReleased.")
-      )
-    }
-  }
-  "ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
-        ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement
-      )
-      ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Right(
-        ArrivalStatus.UnloadingRemarksSubmitted
-      )
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement.transition(MessageReceivedEvent.GoodsReleased) mustBe Left(
-        TransitionError(s"Tried to transition from XMLSubmissionNegativeAcknowledgement to GoodsReleased.")
-      )
-    }
-  }
-  "ArrivalStatus.UnloadingRemarksSubmitted" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.UnloadingRemarksSubmitted.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.UnloadingRemarksRejected)
-      ArrivalStatus.UnloadingRemarksSubmitted.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.UnloadingPermission)
-      ArrivalStatus.UnloadingRemarksSubmitted.transition(MessageReceivedEvent.XMLSubmissionNegativeAcknowledgement) mustBe Right(
-        ArrivalStatus.UnloadingRemarksXMLSubmissionNegativeAcknowledgement
-      )
-      ArrivalStatus.UnloadingRemarksSubmitted.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.UnloadingRemarksSubmitted.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Left(
-        TransitionError(s"Tried to transition from UnloadingRemarksSubmitted to ArrivalSubmitted.")
-      )
-    }
-  }
-  "ArrivalStatus.UnloadingRemarksRejected" - {
-    "must transition for specific cases" in {
-      ArrivalStatus.UnloadingRemarksRejected.transition(MessageReceivedEvent.UnloadingRemarksRejected) mustBe Right(ArrivalStatus.UnloadingRemarksRejected)
-      ArrivalStatus.UnloadingRemarksRejected.transition(MessageReceivedEvent.UnloadingRemarksSubmitted) mustBe Right(ArrivalStatus.UnloadingRemarksSubmitted)
-      ArrivalStatus.UnloadingRemarksRejected.transition(MessageReceivedEvent.UnloadingPermission) mustBe Right(ArrivalStatus.UnloadingPermission)
-      ArrivalStatus.UnloadingRemarksRejected.transition(MessageReceivedEvent.GoodsReleased) mustBe Right(ArrivalStatus.GoodsReleased)
-    }
-    "must not transition for other case" in {
-      ArrivalStatus.UnloadingRemarksRejected.transition(MessageReceivedEvent.ArrivalSubmitted) mustBe Left(
-        TransitionError(s"Tried to transition from UnloadingRemarksRejected to ArrivalSubmitted.")
+
+    "must deserialise" in {
+
+      ArrivalStatus.values.map(
+        arrivalStatus => Json.toJson(arrivalStatus) mustBe JsString(arrivalStatus.toString)
       )
     }
   }
