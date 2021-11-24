@@ -43,7 +43,7 @@ class ArrivalStatusSpec extends SpecBase {
 
         val json = JsString("XMLNegativeAcknowledgement")
 
-        json.validate[ArrivalStatus].asOpt.value mustBe ArrivalStatus.XMLNegativeAcknowledgement
+        json.validate[ArrivalStatus].asOpt.value mustBe ArrivalStatus.XMLSubmissionNegativeAcknowledgement
       }
 
       "to an OtherStatus when given an unrecognised status" in {
