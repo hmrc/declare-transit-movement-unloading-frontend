@@ -52,37 +52,47 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
   }
 
   private def fakeOkResult[A]: A => Future[Result] =
-    a => Future.successful(Ok("fake ok result value"))
+    _ => Future.successful(Ok("fake ok result value"))
+
+  val validStatus = Seq(
+    ArrivalStatus.UnloadingPermission,
+    ArrivalStatus.UnloadingRemarksRejected,
+    ArrivalStatus.XMLSubmissionNegativeAcknowledgement
+  )
 
   "a check cancellation status action" - {
-    "will get a 200 and will load the correct page when the departure status is UnloadingPermission" in {
-      val mockArrivalResponse: ResponseArrival =
-        ResponseArrival(
-          ArrivalId(1),
-          ArrivalStatus.UnloadingRemarksRejected
-        )
+    "will get a 200 and will load the correct page when the arrival status is valid" in {
 
-      when(mockRenderer.render(any(), any())(any()))
-        .thenReturn(Future.successful(Html("")))
+      validStatus.map {
+        validArrivalStatus =>
+          val mockArrivalResponse: ResponseArrival =
+            ResponseArrival(
+              ArrivalId(1),
+              validArrivalStatus
+            )
 
-      when(mockConnector.getArrival(any())(any())).thenReturn(Future.successful(Some(mockArrivalResponse)))
+          when(mockRenderer.render(any(), any())(any()))
+            .thenReturn(Future.successful(Html("")))
 
-      val checkArrivalStatusProvider = (new CheckArrivalStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(ArrivalId(1))
+          when(mockConnector.getArrival(any())(any())).thenReturn(Future.successful(Some(mockArrivalResponse)))
 
-      val testRequest = IdentifierRequest(FakeRequest(GET, "/"), EoriNumber("eori"))
+          val checkArrivalStatusProvider = (new CheckArrivalStatusProvider(mockConnector, renderer, frontendAppConfig)(implicitly))(ArrivalId(1))
 
-      val result: Future[Result] = checkArrivalStatusProvider.invokeBlock(testRequest, fakeOkResult)
+          val testRequest = IdentifierRequest(FakeRequest(GET, "/"), EoriNumber("eori"))
 
-      status(result) mustEqual OK
-      contentAsString(result) mustEqual "fake ok result value"
+          val result: Future[Result] = checkArrivalStatusProvider.invokeBlock(testRequest, fakeOkResult)
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual "fake ok result value"
+      }
     }
   }
 
-  "will get a 400 and will load the cannot cancel page when the departure status is invalid" in {
+  "will get a 400 and will load the cannot cancel page when arrival status is not valid" in {
     val mockArrivalResponse: ResponseArrival =
       ResponseArrival(
         ArrivalId(1),
-        ArrivalStatus.ArrivalSubmitted
+        ArrivalStatus.OtherStatus
       )
 
     when(mockRenderer.render(any(), any())(any()))

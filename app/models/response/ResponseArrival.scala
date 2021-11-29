@@ -16,23 +16,12 @@
 
 package models.response
 
-import models.{Arrival, ArrivalId, ArrivalStatus}
-import play.api.libs.json.{JsObject, Json, OWrites, Reads}
+import models.{ArrivalId, ArrivalStatus}
+import play.api.libs.json.{Json, OWrites, Reads}
 
 case class ResponseArrival(arrivalId: ArrivalId, status: ArrivalStatus)
 
 object ResponseArrival {
-
-  def build(arrival: Arrival): ResponseArrival =
-    ResponseArrival(
-      arrival.arrivalId,
-      arrival.status
-    )
-
-  val projection: JsObject = Json.obj(
-    "_id"    -> 1,
-    "status" -> 1
-  )
 
   implicit def reads: Reads[ResponseArrival] =
     json =>

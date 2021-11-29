@@ -18,6 +18,7 @@ package controllers.actions
 
 import config.FrontendAppConfig
 import connectors.UnloadingConnector
+import models.ArrivalStatus.OtherStatus
 import models.requests.IdentifierRequest
 import models.response.ResponseArrival
 import models.{ArrivalId, ArrivalStatus}
@@ -48,13 +49,11 @@ class ArrivalStatusAction(
 )(implicit protected val executionContext: ExecutionContext)
     extends ActionFilter[IdentifierRequest] {
 
-  final private val validStatus: Seq[ArrivalStatus] = Seq(ArrivalStatus.UnloadingPermission, ArrivalStatus.UnloadingRemarksRejected)
-
   override protected def filter[A](request: IdentifierRequest[A]): Future[Option[Result]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     unloadingConnector.getArrival(arrivalId).flatMap {
-      case Some(responseArrival: ResponseArrival) if !validStatus.contains(responseArrival.status) =>
+      case Some(ResponseArrival(_, OtherStatus)) =>
         renderer
           .render("canNotSendUnloadingRemarks.njk",
                   Json.obj(
@@ -64,10 +63,7 @@ class ArrivalStatusAction(
           .map(
             html => Option(BadRequest(html))
           )
-
-      case Some(responseArrival: ResponseArrival) if validStatus.contains(responseArrival.status) =>
-        Future.successful(None)
-
+      case Some(_) => Future.successful(None)
       case None =>
         renderer
           .render("canNotSendUnloadingRemarks.njk",
