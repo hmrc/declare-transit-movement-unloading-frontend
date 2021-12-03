@@ -18,10 +18,10 @@ package controllers.actions
 
 import config.FrontendAppConfig
 import connectors.UnloadingConnector
+import models.ArrivalId
 import models.ArrivalStatus.OtherStatus
 import models.requests.IdentifierRequest
 import models.response.ResponseArrival
-import models.{ArrivalId, ArrivalStatus}
 import play.api.libs.json.Json
 import play.api.mvc.Results._
 import play.api.mvc.{ActionFilter, Result}
