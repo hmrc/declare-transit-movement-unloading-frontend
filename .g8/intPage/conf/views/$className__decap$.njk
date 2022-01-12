@@ -27,7 +27,7 @@
           }) }}
         {% endif %}
 
-        <form action="{{ routes.controllers.$className$Controller.onSubmit(mrn, mode).url }}" method="post">
+        <form action="{{ routes.controllers.$className$Controller.onSubmit(mrn, mode).url }}" method="post" novalidate>
 
           {{ csrf() | safe }}
 
@@ -44,7 +44,8 @@
             value: form.value.value,
             classes: "govuk-input--width-10",
             errorMessage: form.value.error,
-            inputmode: "numeric"
+            inputmode: "numeric",
+            pattern: "[0-9]*"
           }) }}
 
           {{ govukButton({
