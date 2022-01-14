@@ -63,7 +63,7 @@ class ReferenceDataConnectorSpec
           )
 
           val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]
-          connector.getCountryList.futureValue mustBe expectedResult
+          connector.getCountries.futureValue mustBe expectedResult
         }
       }
 
@@ -73,7 +73,7 @@ class ReferenceDataConnectorSpec
 
         running(app) {
           val connector: ReferenceDataConnector = app.injector.instanceOf[ReferenceDataConnector]
-          checkErrorResponse(uri, connector.getCountryList)
+          checkErrorResponse(uri, connector.getCountries)
         }
       }
     }

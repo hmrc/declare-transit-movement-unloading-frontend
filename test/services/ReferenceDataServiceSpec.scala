@@ -18,7 +18,8 @@ package services
 
 import connectors.ReferenceDataConnector
 import models.reference.Country
-import org.mockito.Mockito.when
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{verify, when}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -30,46 +31,58 @@ import scala.concurrent.Future
 
 class ReferenceDataServiceSpec extends AnyFreeSpec with ScalaFutures with Matchers with MockitoSugar {
 
-  val mockConnector = mock[ReferenceDataConnector]
+  private val mockConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
+  private val uk      = Country("GB", "United Kingdom")
+  private val andorra = Country("AD", "Andorra")
+  private val france  = Country("FR", "France")
+
+  private val countries = Seq(uk, andorra, france)
+
   "ReferenceDataService" - {
+
+    "getCountries should" - {
+      "return a list of sorted countries" in {
+
+        when(mockConnector.getCountries()(any(), any())).thenReturn(Future.successful(countries))
+
+        val service = new ReferenceDataServiceImpl(mockConnector)
+
+        service.getCountries().futureValue mustBe
+          Seq(andorra, france, uk)
+
+        verify(mockConnector).getCountries()(any(), any())
+      }
+    }
 
     "getCountryByCode should" - {
 
       "return None if country can't be found" in {
 
-        when(mockConnector.getCountryList()).thenReturn(
-          Future.successful(Nil)
-        )
+        when(mockConnector.getCountries()).thenReturn(Future.successful(Nil))
 
         val service = new ReferenceDataServiceImpl(mockConnector)
+
         service.getCountryByCode(Some("GB")).futureValue mustBe None
       }
 
       "return None if country code is not passed in" in {
 
-        when(mockConnector.getCountryList()).thenReturn(
-          Future.successful(Nil)
-        )
+        when(mockConnector.getCountries()).thenReturn(Future.successful(Nil))
 
         val service = new ReferenceDataServiceImpl(mockConnector)
+
         service.getCountryByCode(None).futureValue mustBe None
       }
 
       "return Country if country code exists" in {
 
-        when(mockConnector.getCountryList()).thenReturn(
-          Future.successful(
-            Seq(
-              Country("GB", "United Kingdom"),
-              Country("AD", "Andorra")
-            )
-          )
-        )
+        when(mockConnector.getCountries()).thenReturn(Future.successful(countries))
 
         val service = new ReferenceDataServiceImpl(mockConnector)
+
         service.getCountryByCode(Some("GB")).futureValue mustBe Some(
           Country("GB", "United Kingdom")
         )

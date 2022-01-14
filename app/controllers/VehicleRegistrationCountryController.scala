@@ -16,12 +16,10 @@
 
 package controllers
 
-import connectors.ReferenceDataConnector
 import controllers.actions._
 import forms.VehicleRegistrationCountryFormProvider
-import javax.inject.Inject
 import models.reference.Country
-import models.{ArrivalId, CountryList, Mode, MovementReferenceNumber}
+import models.{ArrivalId, Mode, MovementReferenceNumber}
 import navigation.Navigator
 import pages.VehicleRegistrationCountryPage
 import play.api.data.Form
@@ -30,9 +28,11 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.mvc._
 import renderer.Renderer
 import repositories.SessionRepository
+import services.ReferenceDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class VehicleRegistrationCountryController @Inject() (
@@ -43,7 +43,7 @@ class VehicleRegistrationCountryController @Inject() (
   getData: DataRetrievalActionProvider,
   requireData: DataRequiredAction,
   formProvider: VehicleRegistrationCountryFormProvider,
-  referenceDataConnector: ReferenceDataConnector,
+  referenceDataService: ReferenceDataService,
   val controllerComponents: MessagesControllerComponents,
   renderer: Renderer,
   checkArrivalStatus: CheckArrivalStatusProvider
@@ -55,7 +55,7 @@ class VehicleRegistrationCountryController @Inject() (
   def onPageLoad(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
     (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        referenceDataService.getCountries() flatMap {
           countries =>
             val form = formProvider(countries)
             val preparedForm = request.userAnswers.get(VehicleRegistrationCountryPage) match {
@@ -75,7 +75,7 @@ class VehicleRegistrationCountryController @Inject() (
       "mrn"       -> mrn,
       "mode"      -> mode,
       "arrivalId" -> arrivalId,
-      "countries" -> countryJsonList(form.value, CountryList(countries).fullList)
+      "countries" -> countryJsonList(form.value, countries)
     )
     renderer.render("vehicleRegistrationCountry.njk", json).map(status(_))
   }
@@ -92,7 +92,7 @@ class VehicleRegistrationCountryController @Inject() (
   def onSubmit(arrivalId: ArrivalId, mode: Mode): Action[AnyContent] =
     (identify andThen checkArrivalStatus(arrivalId) andThen getData(arrivalId) andThen requireData).async {
       implicit request =>
-        referenceDataConnector.getCountryList() flatMap {
+        referenceDataService.getCountries() flatMap {
           countries =>
             val form = formProvider(countries)
             form
