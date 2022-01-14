@@ -28,14 +28,14 @@ class ReferenceDataServiceImpl @Inject() (connector: ReferenceDataConnector) ext
   def getCountries()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Seq[Country]] =
     connector.getCountries().map(sort)
 
-  private def sort(countries: Seq[Country]): Seq[Country] =
-    countries.sortBy(_.description)
-
   def getCountryByCode(code: Option[String])(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Option[Country]] =
     code match {
-      case Some(countryCode) => connector.getCountries().map(_.find(_.code.equals(countryCode)))
+      case Some(countryCode) => getCountries().map(_.find(_.code.equals(countryCode)))
       case None              => Future.successful(None)
     }
+
+  private def sort(countries: Seq[Country]): Seq[Country] =
+    countries.sortBy(_.description.toLowerCase)
 }
 
 trait ReferenceDataService {
