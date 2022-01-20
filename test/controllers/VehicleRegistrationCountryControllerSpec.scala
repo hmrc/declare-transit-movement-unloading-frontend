@@ -17,7 +17,6 @@
 package controllers
 
 import base.{AppWithDefaultMockFixtures, SpecBase}
-import connectors.ReferenceDataConnector
 import forms.VehicleRegistrationCountryFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
@@ -33,18 +32,19 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
+import services.ReferenceDataService
 import uk.gov.hmrc.viewmodels.NunjucksSupport
 
 import scala.concurrent.Future
 
 class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefaultMockFixtures with NunjucksSupport with JsonMatchers {
 
-  val formProvider                                       = new VehicleRegistrationCountryFormProvider()
-  private val country: Country                           = Country("GB", "United Kingdom")
-  val countries                                          = Seq(country)
-  val form: Form[Country]                                = formProvider(countries)
-  val mockReferenceDataConnector: ReferenceDataConnector = mock[ReferenceDataConnector]
-  lazy val vehicleRegistrationCountryRoute               = routes.VehicleRegistrationCountryController.onPageLoad(arrivalId, NormalMode).url
+  val formProvider                                   = new VehicleRegistrationCountryFormProvider()
+  private val country: Country                       = Country("GB", "United Kingdom")
+  val countries                                      = Seq(country)
+  val form: Form[Country]                            = formProvider(countries)
+  val mockReferenceDataService: ReferenceDataService = mock[ReferenceDataService]
+  lazy val vehicleRegistrationCountryRoute: String   = routes.VehicleRegistrationCountryController.onPageLoad(arrivalId, NormalMode).url
 
   def countriesJson(selected: Boolean = false) = Seq(
     Json.obj("text" -> "", "value"               -> ""),
@@ -53,13 +53,13 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockReferenceDataConnector)
+    reset(mockReferenceDataService)
   }
 
   override def guiceApplicationBuilder(): GuiceApplicationBuilder =
     super
       .guiceApplicationBuilder()
-      .overrides(bind[ReferenceDataConnector].toInstance(mockReferenceDataConnector))
+      .overrides(bind[ReferenceDataService].toInstance(mockReferenceDataService))
 
   "VehicleRegistrationCountry Controller" - {
 
@@ -68,7 +68,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataService.getCountries()(any(), any())).thenReturn(Future.successful(countries))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -99,7 +99,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
       when(mockRenderer.render(any(), any())(any()))
         .thenReturn(Future.successful(Html("")))
 
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(
+      when(mockReferenceDataService.getCountries()(any(), any())).thenReturn(
         Future.successful(countries)
       )
 
@@ -130,7 +130,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     "must redirect to the next page when valid data is submitted" in {
       checkArrivalStatus()
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataService.getCountries()(any(), any())).thenReturn(Future.successful(countries))
 
       setExistingUserAnswers(emptyUserAnswers)
 
@@ -147,7 +147,7 @@ class VehicleRegistrationCountryControllerSpec extends SpecBase with AppWithDefa
     "must return a Bad Request and errors when invalid data is submitted" in {
       checkArrivalStatus()
       when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
-      when(mockReferenceDataConnector.getCountryList()(any(), any())).thenReturn(Future.successful(countries))
+      when(mockReferenceDataService.getCountries()(any(), any())).thenReturn(Future.successful(countries))
 
       setExistingUserAnswers(emptyUserAnswers)
 

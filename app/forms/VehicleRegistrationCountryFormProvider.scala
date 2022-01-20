@@ -23,10 +23,10 @@ import play.api.data.Form
 
 class VehicleRegistrationCountryFormProvider @Inject() extends Mappings {
 
-  def apply(countryList: Seq[Country]): Form[Country] =
+  def apply(countries: Seq[Country]): Form[Country] =
     Form(
       "value" -> text("vehicleRegistrationCountry.error.required")
-        .verifying("vehicleRegistrationCountry.error.required", value => countryList.exists(_.code == value))
-        .transform[Country](value => countryList.find(_.code == value).get, _.code)
+        .verifying("vehicleRegistrationCountry.error.required", value => countries.exists(_.code == value))
+        .transform[Country](value => countries.find(_.code == value).get, _.code)
     )
 }
