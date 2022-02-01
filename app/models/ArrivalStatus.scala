@@ -24,7 +24,7 @@ sealed trait ArrivalStatus
 
 object ArrivalStatus extends Enumerable.Implicits {
 
-  case object XMLSubmissionNegativeAcknowledgement extends ArrivalStatus
+  case object UnloadingRemarksSubmittedNegativeAcknowledgement extends ArrivalStatus
   case object UnloadingPermission extends ArrivalStatus
   case object UnloadingRemarksRejected extends ArrivalStatus
   case object OtherStatus extends ArrivalStatus
@@ -32,7 +32,7 @@ object ArrivalStatus extends Enumerable.Implicits {
   val values: Seq[ArrivalStatus] = Seq(
     UnloadingPermission,
     UnloadingRemarksRejected,
-    XMLSubmissionNegativeAcknowledgement
+    UnloadingRemarksSubmittedNegativeAcknowledgement
   )
 
   implicit val enumerable: Enumerable[ArrivalStatus] =

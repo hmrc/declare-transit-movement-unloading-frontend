@@ -57,7 +57,7 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
   val validStatus = Seq(
     ArrivalStatus.UnloadingPermission,
     ArrivalStatus.UnloadingRemarksRejected,
-    ArrivalStatus.XMLSubmissionNegativeAcknowledgement
+    ArrivalStatus.UnloadingRemarksSubmittedNegativeAcknowledgement
   )
 
   "a check cancellation status action" - {
