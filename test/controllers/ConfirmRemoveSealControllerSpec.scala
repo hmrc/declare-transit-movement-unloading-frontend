@@ -21,7 +21,7 @@ import forms.ConfirmRemoveSealFormProvider
 import matchers.JsonMatchers
 import models.{Index, NormalMode}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import pages.NewSealNumberPage
 import play.api.libs.json.{JsObject, Json}

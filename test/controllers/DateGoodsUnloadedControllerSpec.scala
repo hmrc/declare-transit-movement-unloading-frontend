@@ -24,7 +24,7 @@ import matchers.JsonMatchers
 import models.{NormalMode, TraderAtDestination, UnloadingPermission}
 import navigation.{FakeUnloadingPermissionNavigator, NavigatorUnloadingPermission}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import pages.DateGoodsUnloadedPage
 import play.api.inject.bind

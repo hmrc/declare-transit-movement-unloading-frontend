@@ -23,7 +23,7 @@ import connectors.UnloadingConnector
 import generators.MessagesModelGenerators
 import models.UnloadingPermission
 import models.messages.{InterchangeControlReference, _}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{when, _}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

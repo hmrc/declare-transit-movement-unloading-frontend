@@ -21,7 +21,7 @@ import forms.NewSealNumberFormProvider
 import matchers.JsonMatchers
 import models.{Index, MovementReferenceNumber, NormalMode, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import pages.NewSealNumberPage
 import play.api.inject.bind

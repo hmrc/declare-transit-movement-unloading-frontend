@@ -22,7 +22,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import connectors.UnloadingConnector
 import models.ErrorType.IncorrectValue
 import models.{ArrivalId, DefaultPointer, FunctionalError, MessagesLocation, MessagesSummary, MovementReferenceNumber, UnloadingRemarksRejectionMessage}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import pages.{DateGoodsUnloadedPage, TotalNumberOfItemsPage, VehicleNameRegistrationReferencePage}
 import play.api.inject.bind
