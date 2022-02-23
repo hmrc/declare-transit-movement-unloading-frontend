@@ -24,7 +24,7 @@ import generators.MessagesModelGenerators
 import matchers.JsonMatchers
 import models.{FunctionalError, UnloadingRemarksRejectionMessage}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import play.api.inject.bind

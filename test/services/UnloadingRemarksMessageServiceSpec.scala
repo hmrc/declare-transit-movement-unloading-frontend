@@ -21,7 +21,7 @@ import connectors.UnloadingConnector
 import generators.MessagesModelGenerators
 import models.messages.UnloadingRemarksRequest
 import models.{MessagesLocation, MessagesSummary}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import play.api.inject.bind
 import org.scalacheck.Arbitrary.arbitrary

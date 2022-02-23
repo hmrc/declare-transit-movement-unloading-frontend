@@ -25,7 +25,7 @@ import config.FrontendAppConfig
 import matchers.JsonMatchers.containJson
 import models.{TraderAtDestination, UnloadingPermission}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import play.api.http.Status.ACCEPTED
 import play.api.inject.bind

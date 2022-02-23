@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.UnloadingConnector
 import generators.Generators
 import models.{MessagesLocation, MessagesSummary, Seals, UnloadingPermission, UserAnswers}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach

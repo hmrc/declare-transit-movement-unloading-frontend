@@ -20,7 +20,7 @@ import base.{AppWithDefaultMockFixtures, SpecBase}
 import generators.Generators
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import models.{EoriNumber, MovementReferenceNumber, UserAnswers}
-import org.mockito.Matchers._
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito._
 import play.api.mvc.{AnyContent, Request, Results}
 import play.api.test.FakeRequest

@@ -22,7 +22,7 @@ import connectors.UnloadingConnector
 import models.requests.IdentifierRequest
 import models.response.ResponseArrival
 import models.{ArrivalId, ArrivalStatus, EoriNumber}
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import org.mockito.{ArgumentCaptor, Mockito}
 import org.scalatest.BeforeAndAfterEach

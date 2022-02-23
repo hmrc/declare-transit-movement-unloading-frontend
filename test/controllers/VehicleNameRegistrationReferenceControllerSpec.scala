@@ -21,7 +21,7 @@ import forms.VehicleNameRegistrationReferenceFormProvider
 import matchers.JsonMatchers
 import models.NormalMode
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify, when}
 import pages.VehicleNameRegistrationReferencePage
 import play.api.libs.json.{JsObject, Json}
