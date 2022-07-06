@@ -76,10 +76,9 @@ object UnloadingRemarksRejectionViewModel {
       row =>
         def json: JsObject =
           Json.obj(
-            "sections"                   -> Json.toJson(Seq(Section(Seq(row)))),
-            "arrivalId"                  -> arrivalId,
-            "contactUrl"                 -> nctsEnquiriesUrl,
-            "declareUnloadingRemarksUrl" -> routes.IndexController.onPageLoad(arrivalId).url
+            "sections"   -> Json.toJson(Seq(Section(Seq(row)))),
+            "arrivalId"  -> arrivalId,
+            "contactUrl" -> nctsEnquiriesUrl
           )
         UnloadingRemarksRejectionViewModel("unloadingRemarksRejection.njk", json)
     }

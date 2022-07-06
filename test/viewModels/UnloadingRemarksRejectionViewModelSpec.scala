@@ -70,9 +70,8 @@ class UnloadingRemarksRejectionViewModelSpec extends SpecBase with MessagesModel
 
       val expectedJson =
         Json.obj(
-          "errors"                     -> errors,
-          "contactUrl"                 -> "url",
-          "declareUnloadingRemarksUrl" -> routes.IndexController.onPageLoad(arrivalId).url
+          "errors"     -> errors,
+          "contactUrl" -> "url"
         )
 
       data.page mustBe "unloadingRemarksMultipleErrorsRejection.njk"
@@ -108,9 +107,8 @@ class UnloadingRemarksRejectionViewModelSpec extends SpecBase with MessagesModel
 
       val expectedJson =
         Json.obj(
-          "errors"                     -> errors,
-          "contactUrl"                 -> "url",
-          "declareUnloadingRemarksUrl" -> routes.IndexController.onPageLoad(arrivalId).url
+          "errors"     -> errors,
+          "contactUrl" -> "url"
         )
 
       data.page mustBe "unloadingRemarksMultipleErrorsRejection.njk"
