@@ -17,12 +17,12 @@
 package renderer
 
 import config.FrontendAppConfig
-import javax.inject.Inject
 import play.api.libs.json.{JsObject, Json, OWrites}
 import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.nunjucks.NunjucksRenderer
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class Renderer @Inject() (appConfig: FrontendAppConfig, renderer: NunjucksRenderer) {
@@ -39,19 +39,19 @@ class Renderer @Inject() (appConfig: FrontendAppConfig, renderer: NunjucksRender
   private def renderTemplate(template: String, ctx: JsObject)(implicit request: RequestHeader): Future[Html] =
     renderer.render(template, ctx ++ Json.obj("config" -> config))
 
-  private lazy val config: JsObject = Json.obj(
-    "betaFeedbackUnauthenticatedUrl" -> appConfig.betaFeedbackUnauthenticatedUrl,
-    "serviceIdentifier"              -> appConfig.contactFormServiceIdentifier,
-    "contactHost"                    -> appConfig.contactHost,
-    "signOutUrl"                     -> appConfig.signOutUrl,
-    "manageTransitMovementsUrl"      -> appConfig.manageTransitMovementsUrl,
-    "timeoutSeconds"                 -> appConfig.timeoutSeconds,
-    "countdownSeconds"               -> appConfig.countdownSeconds,
-    "trackingConsentUrl"             -> appConfig.trackingConsentUrl,
-    "gtmContainer"                   -> appConfig.gtmContainer,
-    "serviceUrl"                     -> appConfig.serviceUrl,
-    "userResearchUrl"                -> appConfig.userResearchUrl,
-    "showPhaseBanner"                -> appConfig.showPhaseBanner,
-    "showUserResearchBanner"         -> appConfig.showUserResearchBanner
+  private def config(implicit requestHeader: RequestHeader): JsObject = Json.obj(
+    "feedbackUrl"               -> appConfig.feedbackUrl,
+    "serviceIdentifier"         -> appConfig.contactFormServiceIdentifier,
+    "contactHost"               -> appConfig.contactHost,
+    "signOutUrl"                -> appConfig.signOutUrl,
+    "manageTransitMovementsUrl" -> appConfig.manageTransitMovementsUrl,
+    "timeoutSeconds"            -> appConfig.timeoutSeconds,
+    "countdownSeconds"          -> appConfig.countdownSeconds,
+    "trackingConsentUrl"        -> appConfig.trackingConsentUrl,
+    "gtmContainer"              -> appConfig.gtmContainer,
+    "serviceUrl"                -> appConfig.serviceUrl,
+    "userResearchUrl"           -> appConfig.userResearchUrl,
+    "showPhaseBanner"           -> appConfig.showPhaseBanner,
+    "showUserResearchBanner"    -> appConfig.showUserResearchBanner
   )
 }
