@@ -18,7 +18,6 @@ package models
 
 import generators.MessagesModelGenerators
 import models.XMLWrites._
-import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.StreamlinedXmlEquality
 import org.scalatest.freespec.AnyFreeSpec
@@ -34,7 +33,7 @@ class TraderAtDestinationSpec extends AnyFreeSpec with Matchers with ScalaCheckP
         trader =>
           val expectedResult =
             <TRADESTRD>
-              <NamTRD7>{escapeXml(trader.name)}</NamTRD7>
+              <NamTRD7>{trader.name}</NamTRD7>
               <StrAndNumTRD22>{trader.streetAndNumber}</StrAndNumTRD22>
               <PosCodTRD23>{trader.postCode}</PosCodTRD23>
               <CitTRD24>{trader.city}</CitTRD24>

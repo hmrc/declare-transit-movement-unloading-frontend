@@ -19,7 +19,6 @@ package models
 import com.lucidchart.open.xtract.{ParseSuccess, XmlReader}
 import generators.Generators
 import models.XMLWrites._
-import models.messages.escapeXml
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.StreamlinedXmlEquality
 import org.scalatest.freespec.AnyFreeSpec
@@ -103,7 +102,7 @@ class PackagesSpec extends AnyFreeSpec with Matchers with Generators with ScalaC
           val expectedResult: Node =
             <PACGS2>
               {marksAndNumberPackage.getOrElse(NodeSeq.Empty)}
-              <KinOfPacGS23>{escapeXml(packages.kindOfPackage)}</KinOfPacGS23>
+              <KinOfPacGS23>{packages.kindOfPackage}</KinOfPacGS23>
               {numberOfPackage.getOrElse(NodeSeq.Empty)}
               {numberOfPieces.getOrElse(NodeSeq.Empty)}
             </PACGS2>
