@@ -40,14 +40,14 @@ object Header {
         {
         header.transportIdentity.fold(NodeSeq.Empty) {
           transportIdentity =>
-            <IdeOfMeaOfTraAtDHEA78>{escapeXml(transportIdentity)}</IdeOfMeaOfTraAtDHEA78>
+            <IdeOfMeaOfTraAtDHEA78>{transportIdentity}</IdeOfMeaOfTraAtDHEA78>
             <IdeOfMeaOfTraAtDHEA78LNG>{LanguageCodeEnglish.code}</IdeOfMeaOfTraAtDHEA78LNG>
         }
       }
         {
         header.transportCountry.fold(NodeSeq.Empty) {
           transportCountry =>
-            <NatOfMeaOfTraAtDHEA80>{escapeXml(transportCountry)}</NatOfMeaOfTraAtDHEA80>
+            <NatOfMeaOfTraAtDHEA80>{transportCountry}</NatOfMeaOfTraAtDHEA80>
         }
       }
         <TotNumOfIteHEA305>{header.numberOfItems}</TotNumOfIteHEA305>
@@ -57,7 +57,7 @@ object Header {
             <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
         }
       }
-        <TotGroMasHEA307>{escapeXml(header.grossMass)}</TotGroMasHEA307>
+        <TotGroMasHEA307>{header.grossMass}</TotGroMasHEA307>
       </HEAHEA>
   }
 

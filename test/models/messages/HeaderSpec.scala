@@ -35,17 +35,17 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
       forAll(arbitrary[Header]) {
         header =>
           val transportIdentity = header.transportIdentity.map(
-            transportIdentity => <IdeOfMeaOfTraAtDHEA78>{escapeXml(transportIdentity)}</IdeOfMeaOfTraAtDHEA78>
+            transportIdentity => <IdeOfMeaOfTraAtDHEA78>{transportIdentity}</IdeOfMeaOfTraAtDHEA78>
             <IdeOfMeaOfTraAtDHEA78LNG>EN</IdeOfMeaOfTraAtDHEA78LNG>
           )
 
           val transportCountry = header.transportCountry.map(
-            transportCountry => <NatOfMeaOfTraAtDHEA80>{escapeXml(transportCountry)}</NatOfMeaOfTraAtDHEA80>
+            transportCountry => <NatOfMeaOfTraAtDHEA80>{transportCountry}</NatOfMeaOfTraAtDHEA80>
           )
 
           val expectedResult: NodeSeq =
             <HEAHEA>
-            <DocNumHEA5>{escapeXml(header.movementReferenceNumber)}</DocNumHEA5>
+            <DocNumHEA5>{header.movementReferenceNumber}</DocNumHEA5>
             {transportIdentity.getOrElse(NodeSeq.Empty)}
             {transportCountry.getOrElse(NodeSeq.Empty)}
             <TotNumOfIteHEA305>{header.numberOfItems}</TotNumOfIteHEA305>
@@ -55,7 +55,7 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
                   <TotNumOfPacHEA306>{numberOfPackages}</TotNumOfPacHEA306>
               }
             }
-            <TotGroMasHEA307>{escapeXml(header.grossMass)}</TotGroMasHEA307>
+            <TotGroMasHEA307>{header.grossMass}</TotGroMasHEA307>
           </HEAHEA>
 
           header.toXml mustEqual expectedResult
@@ -70,9 +70,6 @@ class HeaderSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks
 
           result mustBe header
       }
-
     }
-
   }
-
 }

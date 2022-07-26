@@ -18,6 +18,7 @@ package models.messages
 
 import com.lucidchart.open.xtract.XmlReader
 import generators.MessagesModelGenerators
+import models.TraderAtDestination
 import models.XMLWrites._
 import org.scalacheck.Arbitrary._
 import org.scalatest.freespec.AnyFreeSpec
@@ -58,6 +59,37 @@ class UnloadingRemarksRequestSpec
           unloadingRemarksRequest.toXml.map(trim) mustBe expectedResult.map(trim)
       }
 
+    }
+
+    "must serialise UnloadingRemarks to xml with special characters" in {
+
+      forAll(arbitrary[UnloadingRemarksRequest]) {
+        unloadingRemarksRequest =>
+          val traderAtDestinatonWithSpecialCharacters =
+            TraderAtDestination(
+              "Test & eori",
+              "Test > name",
+              "Test < street",
+              "Test \" postcode",
+              "Test city",
+              "GB"
+            )
+
+          val unloadingRemarksWithSpecialCharacters =
+            unloadingRemarksRequest.copy(traderAtDestination = traderAtDestinatonWithSpecialCharacters)
+
+          val expectedResult = "<TRADESTRD>" +
+            "<NamTRD7>Test &gt; name</NamTRD7>" +
+            "<StrAndNumTRD22>Test &lt; street</StrAndNumTRD22>" +
+            "<PosCodTRD23>Test &quot; postcode</PosCodTRD23>" +
+            "<CitTRD24>Test city</CitTRD24>" +
+            "<CouTRD25>GB</CouTRD25>" +
+            "<NADLNGRD>EN</NADLNGRD>" +
+            "<TINTRD59>Test &amp; eori</TINTRD59>" +
+            "</TRADESTRD>"
+
+          (unloadingRemarksWithSpecialCharacters.toXml \ "TRADESTRD").map(trim).toString mustBe expectedResult
+      }
     }
 
     "must de-serialise xml to UnloadingRemarks" in {
