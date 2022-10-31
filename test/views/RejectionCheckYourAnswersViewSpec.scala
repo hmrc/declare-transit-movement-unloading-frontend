@@ -17,10 +17,9 @@
 package views
 
 import play.api.libs.json.{JsObject, Json}
+import play.twirl.api.TwirlHelperImports.twirlJavaCollectionToScala
 import uk.gov.hmrc.viewmodels.SummaryList.{Key, Row, Value}
 import viewModels.sections.Section
-
-import scala.collection.convert.ImplicitConversions._
 
 class RejectionCheckYourAnswersViewSpec extends SingleViewSpec("rejection-check-your-answers.njk", hasSignOutLink = true) {
 

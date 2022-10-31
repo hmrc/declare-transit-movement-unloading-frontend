@@ -48,6 +48,7 @@ class TemplatesCompileSpec
       d.listFiles.flatMap {
         case file if file.isFile    => List(file)
         case dir if dir.isDirectory => getListOfFiles(dir.getPath)
+        case _ => Nil
       }.toList
     } else {
       List[File]()
@@ -79,7 +80,7 @@ class TemplatesCompileSpec
         html mustBe an[Html]
         val document = Jsoup.parse(html.toString())
         val forms: Elements = document.getElementsByTag("form")
-        asScalaBuffer(forms).map {
+        asScala(forms).map {
           form =>
             val action = form.attr("action")
             action mustNot be("")
