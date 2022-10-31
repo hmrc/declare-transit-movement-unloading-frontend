@@ -83,7 +83,8 @@ class DateGoodsUnloadedRejectionControllerSpec extends SpecBase with AppWithDefa
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    reset(mockRejectionService, mockUnloadingPermissionService)
+    reset(mockRejectionService)
+    reset(mockUnloadingPermissionService)
   }
 
   "DateGoodsUnloadedRejectionController" - {

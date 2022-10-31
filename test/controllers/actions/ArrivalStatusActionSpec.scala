@@ -46,8 +46,8 @@ class ArrivalStatusActionSpec extends SpecBase with BeforeAndAfterEach with AppW
 
   val renderer: Renderer = app.injector.instanceOf[Renderer]
 
-  override def beforeEach: Unit = {
-    super.beforeEach
+  override def beforeEach(): Unit = {
+    super.beforeEach()
     Mockito.reset(mockConnector)
   }
 

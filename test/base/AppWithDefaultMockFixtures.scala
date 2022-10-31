@@ -40,13 +40,12 @@ import scala.concurrent.{ExecutionContext, Future}
 trait AppWithDefaultMockFixtures extends BeforeAndAfterEach with GuiceOneAppPerSuite with GuiceFakeApplicationFactory with MockitoSugar {
   self: TestSuite =>
 
-  override def beforeEach(): Unit =
-    Mockito.reset(
-      mockRenderer,
-      mockSessionRepository,
-      mockDataRetrievalActionProvider,
-      mockCheckArrivalStatusProvider
-    )
+  override def beforeEach(): Unit = {
+    Mockito.reset(mockRenderer)
+    Mockito.reset(mockSessionRepository)
+    Mockito.reset(mockDataRetrievalActionProvider)
+    Mockito.reset(mockCheckArrivalStatusProvider)
+  }
 
   final val mockRenderer: NunjucksRenderer                             = mock[NunjucksRenderer]
   final val mockSessionRepository: SessionRepository                   = mock[SessionRepository]
