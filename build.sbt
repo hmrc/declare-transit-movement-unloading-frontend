@@ -42,10 +42,7 @@ lazy val root = (project in file("."))
     scalacOptions ++= Seq("-feature", "-Wconf:src=routes/.*:s"),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    resolvers ++= Seq(
-      Resolver.bintrayRepo("hmrc", "releases"),
-      Resolver.jcenterRepo
-    ),
+    resolvers ++= Seq(Resolver.jcenterRepo),
     Concat.groups := Seq(
       "javascripts/application.js" -> group(
         Seq("lib/govuk-frontend/govuk/all.js", "lib/hmrc-frontend/hmrc/all.js", "javascripts/ctc.js")
