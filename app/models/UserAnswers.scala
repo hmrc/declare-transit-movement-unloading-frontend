@@ -91,6 +91,7 @@ final case class UserAnswers(id: ArrivalId,
 }
 
 object UserAnswers {
+
   import play.api.libs.functional.syntax._
 
   private val localDateTimeReads: Reads[LocalDateTime] =
@@ -106,15 +107,7 @@ object UserAnswers {
       .contramap(_.toInstant(ZoneOffset.UTC).toEpochMilli.toString)
 
   implicit lazy val reads: Reads[UserAnswers] = {
-    implicit val localDateTimeReader: Reads[LocalDateTime] = {
-      val reactiveMongoReads = (__ \ "$date").read[Long].map {
-        millis =>
-          LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC)
-      }
-      val hmrcMongoReads = localDateTimeReads
-      hmrcMongoReads orElse reactiveMongoReads
-    }
-
+    implicit val localDateTimeReader: Reads[LocalDateTime] = localDateTimeReads
     (
       (__ \ "_id").read[ArrivalId] and
         (__ \ "mrn").read[MovementReferenceNumber] and

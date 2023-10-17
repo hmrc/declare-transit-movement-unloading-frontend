@@ -28,26 +28,7 @@ class UserAnswersSpec extends SpecBase {
     LocalDateTime.of(2000: Int, 1, 1, 0, 0)
   )
 
-  "must read old date format" in {
-
-    val json = Json.parse(s"""
-        |{
-        |    "_id" : ${arrivalId.value},
-        |    "mrn" : "$mrn",
-        |    "eoriNumber" : "${eoriNumber.value}",
-        |    "data" : {},
-        |    "autoData" : {},
-        |    "lastUpdated" : {
-        |        "$$date" : $instant
-        |    }
-        |}""".stripMargin)
-
-    val result = json.as[UserAnswers]
-
-    result mustBe UserAnswers(arrivalId, mrn, eoriNumber, Json.obj(), Json.obj(), dateTime)
-  }
-
-  "must read new date format" in {
+  "must read date format" in {
 
     val json = Json.parse(s"""
         |{
