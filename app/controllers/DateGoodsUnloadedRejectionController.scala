@@ -21,7 +21,6 @@ import config.FrontendAppConfig
 import controllers.actions._
 import forms.DateGoodsUnloadedFormProvider
 import models.{ArrivalId, UserAnswers}
-import navigation.NavigatorUnloadingPermission
 import pages.DateGoodsUnloadedPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -38,7 +37,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class DateGoodsUnloadedRejectionController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: NavigatorUnloadingPermission,
   identify: IdentifierAction,
   getData: DataRetrievalActionProvider,
   formProvider: DateGoodsUnloadedFormProvider,
