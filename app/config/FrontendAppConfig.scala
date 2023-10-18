@@ -19,7 +19,8 @@ package config
 import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.mvc.RequestHeader
-import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
+import uk.gov.hmrc.http.StringContextOps
+import java.net.URL
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
@@ -39,8 +40,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   private val host: String = configuration.get[String]("host")
 
-  def feedbackUrl(implicit request: RequestHeader): String =
-    s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
+  def feedbackUrl(implicit request: RequestHeader): URL =
+    url"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
   val signOutUrl: String = configuration.get[String]("urls.logoutContinue") + configuration.get[String]("urls.feedback")
 
@@ -73,8 +74,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   lazy val arrivalsBackend: String         = configuration.get[Service]("microservice.services.arrivals-backend").fullServiceUrl
   lazy val arrivalsBackendBaseUrl: String  = configuration.get[Service]("microservice.services.arrivals-backend").baseUrl
   lazy val arrivalNotificationsUrl: String = configuration.get[String]("urls.arrivalNotifications")
-
-  lazy val languageTranslationEnabled: Boolean = configuration.get[Boolean]("microservice.services.features.welsh-translation")
 
   lazy val cacheTtl: Int           = configuration.get[Int]("mongodb.timeToLiveInSeconds")
   lazy val replaceIndexes: Boolean = configuration.get[Boolean]("mongodb.replaceIndexes")
