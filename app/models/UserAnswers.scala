@@ -20,16 +20,18 @@ import derivable.Derivable
 import pages._
 import play.api.libs.json._
 import queries.Gettable
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
-import java.time.{Instant, LocalDateTime, ZoneOffset}
+import java.time.Instant
 import scala.util.{Failure, Success, Try}
 
-final case class UserAnswers(id: ArrivalId,
-                             mrn: MovementReferenceNumber,
-                             eoriNumber: EoriNumber,
-                             data: JsObject = Json.obj(),
-                             prepopulateData: JsObject = Json.obj(),
-                             lastUpdated: LocalDateTime = LocalDateTime.now
+final case class UserAnswers(
+  id: ArrivalId,
+  mrn: MovementReferenceNumber,
+  eoriNumber: EoriNumber,
+  data: JsObject = Json.obj(),
+  prepopulateData: JsObject = Json.obj(),
+  lastUpdated: Instant = Instant.now()
 ) {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
@@ -94,29 +96,15 @@ object UserAnswers {
 
   import play.api.libs.functional.syntax._
 
-  private val localDateTimeReads: Reads[LocalDateTime] =
-    Reads
-      .at[String](__ \ "$date" \ "$numberLong")
-      .map(
-        dateTime => Instant.ofEpochMilli(dateTime.toLong).atZone(ZoneOffset.UTC).toLocalDateTime
-      )
-
-  private val localDateTimeWrites: Writes[LocalDateTime] =
-    Writes
-      .at[String](__ \ "$date" \ "$numberLong")
-      .contramap(_.toInstant(ZoneOffset.UTC).toEpochMilli.toString)
-
-  implicit lazy val reads: Reads[UserAnswers] = {
-    implicit val localDateTimeReader: Reads[LocalDateTime] = localDateTimeReads
+  implicit lazy val reads: Reads[UserAnswers] =
     (
       (__ \ "_id").read[ArrivalId] and
         (__ \ "mrn").read[MovementReferenceNumber] and
         (__ \ "eoriNumber").read[EoriNumber] and
         (__ \ "data").read[JsObject] and
         (__ \ "autoData").read[JsObject] and
-        (__ \ "lastUpdated").read[LocalDateTime]
+        (__ \ "lastUpdated").read[Instant](MongoJavatimeFormats.instantReads)
     )(UserAnswers.apply _)
-  }
 
   implicit lazy val writes: OWrites[UserAnswers] =
     (
@@ -125,7 +113,7 @@ object UserAnswers {
         (__ \ "eoriNumber").write[EoriNumber] and
         (__ \ "data").write[JsObject] and
         (__ \ "autoData").write[JsObject] and
-        (__ \ "lastUpdated").write(localDateTimeWrites)
+        (__ \ "lastUpdated").write[Instant](MongoJavatimeFormats.instantWrites)
     )(unlift(UserAnswers.unapply))
 
   implicit lazy val format: Format[UserAnswers] = Format(reads, writes)
