@@ -38,6 +38,7 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageHighlighting  := true,
     scalacOptions ++= Seq("-feature", "-Wconf:src=routes/.*:s"),
     libraryDependencies ++= AppDependencies(),
+    dependencyOverrides ++= AppDependencies.overrides,
     retrieveManaged := true,
     resolvers ++= Seq(Resolver.jcenterRepo),
     Concat.groups := Seq(
