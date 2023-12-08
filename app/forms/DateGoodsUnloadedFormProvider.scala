@@ -30,6 +30,7 @@ class DateGoodsUnloadedFormProvider @Inject() (clock: Clock) extends Mappings {
   def apply(dateOfPrep: LocalDate): Form[LocalDate] =
     Form(
       "value" -> localDate(
+        numericKey = "dateGoodsUnloaded.error.numeric",
         invalidKey = "dateGoodsUnloaded.error.invalid",
         allRequiredKey = "dateGoodsUnloaded.error.required.all",
         twoRequiredKey = "dateGoodsUnloaded.error.required.two",

@@ -42,5 +42,6 @@ class DateGoodsUnloadedFormProviderSpec extends DateBehaviours {
 
     behave like dateFieldWithMax(form, "value", max = maxDate, FormError("value", "dateGoodsUnloaded.error.max.date"))
 
+    behave like dateFieldNumeric(form, "value", FormError("value", "dateGoodsUnloaded.error.numeric"))
   }
 }

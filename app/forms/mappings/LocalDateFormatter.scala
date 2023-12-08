@@ -24,6 +24,7 @@ import play.api.data.format.Formatter
 import scala.util.{Failure, Success, Try}
 
 private[mappings] class LocalDateFormatter(
+  numericKey: String,
   invalidKey: String,
   allRequiredKey: String,
   twoRequiredKey: String,
@@ -46,8 +47,8 @@ private[mappings] class LocalDateFormatter(
 
     val int = intFormatter(
       requiredKey = invalidKey,
-      wholeNumberKey = invalidKey,
-      nonNumericKey = invalidKey,
+      wholeNumberKey = numericKey,
+      nonNumericKey = numericKey,
       args
     )
 
