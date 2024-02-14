@@ -16,7 +16,7 @@
 
 package controllers
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import base.{AppWithDefaultMockFixtures, SpecBase}
 import config.FrontendAppConfig
 import connectors.UnloadingConnector
